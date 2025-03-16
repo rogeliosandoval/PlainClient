@@ -10,6 +10,7 @@ import { SharedService } from '../../services/shared.service'
 import { DropdownModule } from 'primeng/dropdown'
 import { PhoneNumberDirective } from '../../directives/phone-number.directive'
 import { AuthService } from '../../services/auth.service'
+import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper'
 
 @Component({
   selector: 'tcd-client-form',
@@ -24,7 +25,8 @@ import { AuthService } from '../../services/auth.service'
     InputTextModule,
     InputTextareaModule,
     DropdownModule,
-    PhoneNumberDirective
+    PhoneNumberDirective,
+    ImageCropperComponent
   ],
   templateUrl: './client-form.component.html',
   styleUrl: './client-form.component.scss'
@@ -40,8 +42,8 @@ export class ClientFormDialog {
   public dialogLoading = input<boolean>()
   public fillingForm = signal<boolean>(true)
   public showUploadAvatarButton = signal<boolean>(false)
-  public avatar: File | any = null
-  public avatarUrl: any
+  public imageChangedEvent: Event | null = null
+  public croppedImage: File | any = null
   public connections = signal<string[]>([
     'Facebook',
     'Instagram',
@@ -64,7 +66,7 @@ export class ClientFormDialog {
   public clientForm = new FormGroup({
     client_name: new FormControl('', Validators.required),
     connected_by: new FormControl(''),
-    client_email: new FormControl(''),
+    client_email: new FormControl('', Validators.email),
     client_phone: new FormControl(''),
     client_location: new FormControl(''),
     note: new FormControl('')
@@ -87,23 +89,25 @@ export class ClientFormDialog {
     }
   }
 
-  public avatarUpload(event: any): void {
-    this.clientForm.markAsDirty()
-    const file: File = event.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.avatarUrl = reader.result
-      }
-      reader.readAsDataURL(file)
-      this.avatar = file
+  public fileChangeEvent(event: Event): void {
+    this.imageChangedEvent = event
+  }
+
+  public imageCropped(event: ImageCroppedEvent) {
+    if (event.objectUrl) {
+      fetch(event.objectUrl)
+        .then(res => res.blob()) // Convert blob URL to Blob
+        .then(blob => {
+          this.croppedImage = new File([blob], 'cropped-image.png', { type: blob.type }) // Convert Blob to File
+        })
+        .catch(error => console.error('Error converting blob URL to file:', error))
     }
   }
 
   public resetForm(): void {
     this.clientForm.reset()
-    this.avatar = null
-    this.avatarUrl = null
+    this.imageChangedEvent = null
+    this.croppedImage = null
     this.showUploadAvatarButton.set(false)
   }
 
@@ -117,7 +121,7 @@ export class ClientFormDialog {
     const data = {
       avatarTouched: this.showUploadAvatarButton(),
       formData: this.clientForm.value,
-      file: this.avatar,
+      file: this.croppedImage,
       type
     }
     this.onSubmit.emit(data)

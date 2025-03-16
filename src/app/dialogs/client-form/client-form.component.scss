@@ -71,13 +71,28 @@ $breakpoints: variables.$breakpoints;
   font-size: 0.8rem;
 }
 
-.avatar-preview {
-  height: 150px;
-  width: 150px;
-  object-fit: contain;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  animation: fadeIn 0.2s linear;
+.avatar-preview-container {
+  position: relative;
+  max-width: 300px;
+
+  .pi {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    border: 2px solid black;
+    padding: 10px;
+    color: white;
+    border-radius: 50%;
+    background-color: rgb(255, 39, 39);
+    z-index: 2;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(237, 0, 0);
+    }
+  }
 }
 
 .custom-id-input {
@@ -120,4 +135,10 @@ $breakpoints: variables.$breakpoints;
       cursor: pointer;
     }
   }
+}
+
+.input-error {
+  font-size: 0.9rem;
+  font-family: "Outfit", sans-serif;
+  color: rgb(255, 113, 113);
 }

@@ -15,9 +15,12 @@
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="client_email">Client Email</label>
+      @if (clientForm.get('client_email')?.invalid && clientForm.get('client_email')?.touched) {
+        <div class="input-error">Please enter a valid email</div>
+      }
       <input id="client_email" type="email" pInputText variant="filled" placeholder="Email" formControlName="client_email" autocomplete="email"/>
     </div>
-
+    
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="client_phone">Client Phone</label>
       <input id="client_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="client_phone" phoneNumber autocomplete="tel"/>
@@ -29,14 +32,19 @@
     </div>
 
     @if (showUploadAvatarButton()) {
-      @if (avatarUrl) {
-        <div class="avatar-container" [class.disabled]="dialogLoading()">
-          <img class="avatar-preview" [src]="avatarUrl" alt="avatar image preview">
-          <i class="pi pi-trash" (click)="avatarUrl = null; "></i>
+      @if (imageChangedEvent !== null) {
+        <div class="avatar-preview-container" [class.disabled]="dialogLoading()">
+          <i class="pi pi-trash" (click)="imageChangedEvent = null; croppedImage = null"></i>
+          <image-cropper [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="1 / 1"
+            format="png"
+            (imageCropped)="imageCropped($event)">
+          </image-cropper>
         </div>
       } @else {
         <div class="custom-id-input" [class.disabled]="dialogLoading()">
-          <input type="file" id="avatar" accept="image/*" (change)="avatarUpload($event)">
+          <input type="file" id="avatar" accept="image/*" (change)="fileChangeEvent($event)">
           <label style="font-size: 0.9rem;" for="avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Avatar</label>
         </div>
       }
