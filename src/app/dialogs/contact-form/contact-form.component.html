@@ -7,6 +7,9 @@
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="contact_email">Contact Email</label>
+      @if (contactForm.get('contact_email')?.invalid && contactForm.get('contact_email')?.touched) {
+        <div class="input-error">Please enter a valid email</div>
+      }
       <input id="contact_email" type="email" pInputText variant="filled" placeholder="Email" formControlName="contact_email" autocomplete="email"/>
     </div>
 

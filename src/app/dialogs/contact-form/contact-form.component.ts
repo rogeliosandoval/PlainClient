@@ -33,7 +33,7 @@ export class ContactFormDialog {
   public fillingForm = signal<boolean>(true)
   public contactForm = new FormGroup({
     contact_name: new FormControl('', Validators.required),
-    contact_email: new FormControl(''),
+    contact_email: new FormControl('', Validators.email),
     contact_position: new FormControl(''),
     contact_phone: new FormControl('')
   })
