@@ -16,7 +16,7 @@ p-progressSpinner {
   align-items: center;
   flex-direction: column;
   height: 100%;
-  padding: 15px;
+  padding: 15px 15px 0;
 }
 
 .avatar-container {
@@ -48,16 +48,6 @@ p-progressSpinner {
   margin-bottom: 10px;
   border-radius: 15px;
   font-size: 0.8rem;
-}
-
-.avatar-preview {
-  height: 200px;
-  width: 200px;
-  object-fit: contain;
-  margin-bottom: 10px;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  animation: fadeIn 0.2s linear;
 }
 
 .custom-id-input {
@@ -98,6 +88,29 @@ p-progressSpinner {
 
     &:hover {
       cursor: pointer;
+    }
+  }
+}
+
+.avatar-preview-container {
+  position: relative;
+
+  .pi {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    border: 2px solid black;
+    padding: 10px;
+    color: white;
+    border-radius: 50%;
+    background-color: rgb(255, 39, 39);
+    z-index: 2;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(237, 0, 0);
     }
   }
 }

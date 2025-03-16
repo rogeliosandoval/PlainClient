@@ -7,6 +7,11 @@ $breakpoints: (
   'desktop': 1024px
 );
 
+:root {
+  --cropper-outline-color: transparent;
+  --cropper-overlay-color: transparent;
+}
+
 body {
   margin: 0;
   padding: 0;

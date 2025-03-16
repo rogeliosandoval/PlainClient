@@ -4,6 +4,7 @@ import { SharedService } from '../../services/shared.service'
 import { AuthService } from '../../services/auth.service'
 import { ButtonModule } from 'primeng/button'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper'
 
 @Component({
   selector: 'tcd-avatar-upload',
@@ -11,7 +12,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
   imports: [
     DialogModule,
     ButtonModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ImageCropperComponent
   ],
   templateUrl: './avatar-upload.component.html',
   styleUrl: './avatar-upload.component.scss'
@@ -25,19 +27,22 @@ export class AvatarUploadDialog {
   @Input() type: string = ''
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
-  public avatar: File | any = null
-  public avatarUrl: any = null
   public showUploadAvatarButton = signal<boolean>(false)
+  public imageChangedEvent: Event | null = null
+  public croppedImage: File | any = null
 
-  public avatarUpload(event: any): void {
-    const file: File = event.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        this.avatarUrl = reader.result
-      }
-      reader.readAsDataURL(file)
-      this.avatar = file
+  public fileChangeEvent(event: Event): void {
+    this.imageChangedEvent = event
+  }
+
+  public imageCropped(event: ImageCroppedEvent) {
+    if (event.objectUrl) {
+      fetch(event.objectUrl)
+        .then(res => res.blob()) // Convert blob URL to Blob
+        .then(blob => {
+          this.croppedImage = new File([blob], 'cropped-image.png', { type: blob.type }) // Convert Blob to File
+        })
+        .catch(error => console.error('Error converting blob URL to file:', error))
     }
   }
 
@@ -49,7 +54,7 @@ export class AvatarUploadDialog {
   public submitDialog(type: string): void {
     const data = {
       type,
-      file: this.avatar
+      file: this.croppedImage
     }
     this.onSubmit.emit(data)
   }

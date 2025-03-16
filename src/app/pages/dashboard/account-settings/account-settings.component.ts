@@ -168,8 +168,8 @@ export class AccountSettings implements OnInit {
     }
 
     setTimeout(() => {
-      this.avatarUploadDialog.avatar = null
-      this.avatarUploadDialog.avatarUrl = null
+      this.avatarUploadDialog.imageChangedEvent = null
+      this.avatarUploadDialog.croppedImage = null
       this.avatarUploadDialog.showUploadAvatarButton.set(false)
       this.dialogLoading.set(false)
     }, 1000)

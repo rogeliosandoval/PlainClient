@@ -4,32 +4,37 @@
   </span>
   <div class="avatar-upload-container" style="margin-top: 10px;">
     @if (showUploadAvatarButton()) {
-      @if (avatarUrl) {
-        <div class="avatar-container" [class.disabled]="dialogLoading()">
-          <img class="avatar-preview" [src]="avatarUrl" alt="avatar image preview">
-          <i class="pi pi-trash" (click)="avatar = null; avatarUrl = null"></i>
+      @if (imageChangedEvent === null) {
+        <div class="custom-id-input" [class.disabled]="dialogLoading()">
+          <input type="file" id="avatar" accept="image/*" (change)="fileChangeEvent($event)" />
+          <label style="font-size: 0.9rem;" for="avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Avatar</label>
         </div>
       } @else {
-        <div class="custom-id-input" [class.disabled]="dialogLoading()">
-          <input type="file" id="avatar" accept="image/*" (change)="avatarUpload($event)">
-          <label style="font-size: 0.9rem;" for="avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Avatar</label>
+        <div class="avatar-preview-container">
+          <i class="pi pi-trash" (click)="imageChangedEvent = null; croppedImage = null"></i>
+          <image-cropper [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="1 / 1"
+            format="png"
+            (imageCropped)="imageCropped($event)">
+          </image-cropper>
         </div>
       }
     } @else {
       @if (type === 'profile' ? authService.coreUserData()?.avatarUrl : authService.coreBusinessData().avatarUrl) {
         <div class="avatar-container" [class.disabled]="dialogLoading()">
           <img class="avatar" [src]="type === 'profile' ? authService.coreUserData()?.avatarUrl : authService.coreBusinessData().avatarUrl" alt="avatar">
-          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); avatar = null; avatarUrl = null"></i>
+          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); imageChangedEvent = null; croppedImage = null"></i>
         </div>
       } @else {
         <div class="avatar-container" [class.disabled]="dialogLoading()">
           <img class="avatar" [src]="type === 'profile' ? 'assets/avatars/default-avatar.png' : 'assets/avatars/default-business-avatar.png'" alt="avatar">
-          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); avatar = null; avatarUrl = null"></i>
+          <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); imageChangedEvent = null; croppedImage = null"></i>
         </div>
       }
     }
     @if (type === 'profile' ? !authService.coreUserData()?.avatarUrl : !authService.coreBusinessData().avatarUrl) {
-      <p-button label="{{dialogLoading() ? 'Saving...' : 'Save'}}" (onClick)="type === 'profile' ? submitDialog('profile') : submitDialog('business')" [disabled]="!avatarUrl || dialogLoading()"></p-button>
+      <p-button label="{{dialogLoading() ? 'Saving...' : 'Save'}}" (onClick)="type === 'profile' ? submitDialog('profile') : submitDialog('business')" [disabled]="!croppedImage|| dialogLoading()"></p-button>
     } @else {
       <p-button label="{{dialogLoading() ? 'Saving...' : 'Save'}}" (onClick)="type === 'profile' ? submitDialog('profile') : submitDialog('business')" [disabled]="!showUploadAvatarButton() || dialogLoading()"></p-button>
     }
