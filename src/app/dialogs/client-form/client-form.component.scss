@@ -25,7 +25,7 @@ $breakpoints: variables.$breakpoints;
   align-items: baseline;
   flex-direction: column;
 
-  label {
+  label, .nonlabel {
     font-size: 1rem;
     font-family: "Outfit", sans-serif;
   }
