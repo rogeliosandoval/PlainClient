@@ -11,3 +11,5 @@ TODOS:
 - remove/uninstall primeflex and remove any primeflex styles and only use scss for style. Dont get it confused with prime themeing system like p-text-secondary
 
 - collapse the screen size vertically just to see if there are overflow issues (like sidebar). If so, add overflow scroll and make it seamless
+
+- redesign toasts
