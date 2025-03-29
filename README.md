@@ -1,2 +1,2 @@
 # TidyClient
-WIP
+A mini CRM for small businesses
