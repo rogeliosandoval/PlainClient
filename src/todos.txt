@@ -15,3 +15,5 @@ TODOS:
 - redesign toasts
 
 - redesign register page
+
+- redesign home page
