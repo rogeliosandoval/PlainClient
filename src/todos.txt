@@ -14,6 +14,8 @@ TODOS:
 
 - redesign toasts
 
+- clean up styles.scss (make sure nested styles make sense)
+
 - redesign register page
 
 - redesign home page
