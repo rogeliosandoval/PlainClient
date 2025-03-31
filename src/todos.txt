@@ -14,7 +14,7 @@ TODOS:
 
 - redesign toasts
 
-- clean up styles.scss (make sure nested styles make sense)
+- clean up styles.scss (make sure nested styles make sense) & remove fonts that are repated in divs. Try to rely on global font
 
 - redesign register page
 
