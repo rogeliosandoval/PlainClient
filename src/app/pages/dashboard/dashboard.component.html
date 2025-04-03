@@ -114,7 +114,7 @@
         </div>
         <div class="side-nav-logo">
           @if (authService.coreBusinessData()?.avatarUrl) {
-            <img [src]="authService.coreBusinessData().avatarUrl" alt="business logo">
+            <img [src]="authService.coreBusinessData()?.avatarUrl" alt="business logo">
           } @else {
             <img src="assets/avatars/default-business-avatar.png" alt="business logo">
           }

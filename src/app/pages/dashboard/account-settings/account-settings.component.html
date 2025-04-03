@@ -54,9 +54,9 @@
       }
       <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Business Info</div>
       <form [formGroup]="businessForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveBusinessChanges()">
-        @if (authService.coreBusinessData().avatarUrl) {
+        @if (authService.coreBusinessData()?.avatarUrl) {
           <div class="avatar-container">
-            <img class="avatar" [src]="authService.coreBusinessData().avatarUrl" alt="avatar">
+            <img class="avatar" [src]="authService.coreBusinessData()?.avatarUrl" alt="avatar">
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('business')"></i>
           </div>
         } @else {

@@ -55,7 +55,7 @@ export class AccountSettings implements OnInit {
   })
   public defaultBusinessForm: any
   public businessForm = new FormGroup({
-    name: new FormControl(this.authService.coreBusinessData().name)
+    name: new FormControl(this.authService.coreBusinessData()?.name)
   })
 
   ngOnInit(): void {

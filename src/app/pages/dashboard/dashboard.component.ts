@@ -205,7 +205,7 @@ export class Dashboard implements OnInit {
         await uploadBytesResumable(storageRef, file)
         avatarUrl = await getDownloadURL(storageRef)
       } else if (!data.file && this.sharedService.dialogClient().avatarUrl && data.avatarTouched) {
-        await this.authService.deleteClientAvatar(this.authService.coreBusinessData().id, this.sharedService.dialogClient().id)
+        await this.authService.deleteClientAvatar(this.authService.coreBusinessData()!.id, this.sharedService.dialogClient().id)
         avatarUrl = ''
       }
 
@@ -275,9 +275,9 @@ export class Dashboard implements OnInit {
           await setDoc(businessRef, {
             id: businessId,
             name: businessName,
-            clients: 0,
+            numberOfClients: 0,
             members: 1, // Initial member count
-            owner: uid, // Reference the owner
+            ownerId: uid, // Reference the owner
           })
 
           await setDoc(userRef, { businessId: businessId }, { merge: true })

@@ -21,9 +21,9 @@
         </div>
       }
     } @else {
-      @if (type === 'profile' ? authService.coreUserData()?.avatarUrl : authService.coreBusinessData().avatarUrl) {
+      @if (type === 'profile' ? authService.coreUserData()?.avatarUrl : authService.coreBusinessData()?.avatarUrl) {
         <div class="avatar-container" [class.disabled]="dialogLoading()">
-          <img class="avatar" [src]="type === 'profile' ? authService.coreUserData()?.avatarUrl : authService.coreBusinessData().avatarUrl" alt="avatar">
+          <img class="avatar" [src]="type === 'profile' ? authService.coreUserData()?.avatarUrl : authService.coreBusinessData()?.avatarUrl" alt="avatar">
           <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); imageChangedEvent = null; croppedImage = null"></i>
         </div>
       } @else {
@@ -33,7 +33,7 @@
         </div>
       }
     }
-    @if (type === 'profile' ? !authService.coreUserData()?.avatarUrl : !authService.coreBusinessData().avatarUrl) {
+    @if (type === 'profile' ? !authService.coreUserData()?.avatarUrl : !authService.coreBusinessData()?.avatarUrl) {
       <p-button label="{{dialogLoading() ? 'Saving...' : 'Save'}}" (onClick)="type === 'profile' ? submitDialog('profile') : submitDialog('business')" [disabled]="!croppedImage|| dialogLoading()"></p-button>
     } @else {
       <p-button label="{{dialogLoading() ? 'Saving...' : 'Save'}}" (onClick)="type === 'profile' ? submitDialog('profile') : submitDialog('business')" [disabled]="!showUploadAvatarButton() || dialogLoading()"></p-button>

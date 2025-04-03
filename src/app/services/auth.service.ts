@@ -4,7 +4,7 @@ import { Observable, from } from 'rxjs'
 import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 import { v4 as uuidv4 } from 'uuid'
-import { UserData } from '../interfaces/user.interface'
+import { UserData, BusinessData, ClientData, Contact } from '../interfaces/user.interface'
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class AuthService {
   user$ = user(this.firebaseAuth)
   currentUserSignal = signal<any>(undefined)
   coreUserData = signal<UserData | null>(null)
-  coreBusinessData = signal<any>(undefined)
+  coreBusinessData = signal<BusinessData | null>(null)
   businessClientAvatars = signal<string[] | null>([])
   dialogClient = signal<any>(null)
 
@@ -88,54 +88,69 @@ export class AuthService {
       const userDocSnap = await getDoc(userRef)
   
       if (userDocSnap.exists()) {
-        const userData = userDocSnap.data()
+        const userData = userDocSnap.data() as UserData
   
-        if (userData['businessId']) {
-          const businessId = userData['businessId']
+        if (userData.businessId) {
+          const businessId = userData.businessId
           const businessRef = doc(this.firestore, `businesses/${businessId}`)
           const businessDocSnap = await getDoc(businessRef)
   
           if (businessDocSnap.exists()) {
-            const businessData = businessDocSnap.data()
+            const businessData = businessDocSnap.data() as BusinessData
   
             // Fetch clients subcollection
             const clientsRef = collection(this.firestore, `businesses/${businessId}/clients`)
             try {
               const clientsSnap = await getDocs(clientsRef)
-              const clients = await Promise.all(
+              const clients: ClientData[] = await Promise.all(
                 clientsSnap.docs.map(async (clientDoc) => {
-                  const clientData = {
-                    id: clientDoc.id,
-                    ...clientDoc.data(),
-                  }
+                  const clientData = clientDoc.data() as Partial<ClientData>
   
                   // Fetch the contacts subcollection for each client
                   const contactsRef = collection(this.firestore, `businesses/${businessId}/clients/${clientDoc.id}/contacts`)
                   const contactsSnap = await getDocs(contactsRef)
-  
-                  const contacts = contactsSnap.docs.map(contactDoc => ({
-                    id: contactDoc.id,
-                    ...contactDoc.data(),
-                  }))
-  
+
+                  const contacts: Contact[] = contactsSnap.docs.map((contactDoc) => {
+                    const contactData = contactDoc.data() as Partial<Contact>
+                  
+                    return {
+                      id: contactDoc.id,
+                      name: contactData.name || 'Unknown',
+                      ...contactData
+                    }
+                  })
+
                   return {
-                    ...clientData,
-                    contacts, // Add the contacts to the client data
+                    id: clientDoc.id,
+                    contacts: contacts || [],
+                    name: clientData.name || 'Unknown',
+                    ...clientData
                   }
                 })
               )
-  
-              // Add clients (with contacts) to the business data object
+
               this.coreBusinessData.set({
-                ...businessData,
-                clients, // Include clients with contacts
+                avatarUrl: businessData.avatarUrl || '',
+                clients: clients || [],
+                numberOfClients: businessData.numberOfClients || 0,
+                id: businessData.id || '',
+                members: businessData.members || 0,
+                name: businessData.name || '',
+                ownerID: businessData.ownerID || ''
               })
+
               this.fetchBusinessClientAvatars()
             } catch (error) {
               console.error('Error fetching clients or contacts data:', error)
               this.coreBusinessData.set({
                 ...businessData,
-                clients: [], // Default to an empty array if error
+                clients: [],
+                avatarUrl: '',
+                numberOfClients: 0,
+                id: '',
+                members: 0,
+                name: '',
+                ownerID: ''
               })
             }
           } else {
@@ -252,12 +267,12 @@ export class AuthService {
   }
 
   public async fetchClientDataById(id: string | null): Promise<void> {
-    const clientRef = doc(this.firestore, `businesses/${this.coreBusinessData().id}/clients/${id}`)
+    const clientRef = doc(this.firestore, `businesses/${this.coreBusinessData()!.id}/clients/${id}`)
     const clientDocSnap = await getDoc(clientRef)
     const clientData = clientDocSnap.data()
 
     // Fetch the contacts subcollection
-    const contactsRef = collection(this.firestore, `businesses/${this.coreBusinessData().id}/clients/${id}/contacts`)
+    const contactsRef = collection(this.firestore, `businesses/${this.coreBusinessData()!.id}/clients/${id}/contacts`)
     const contactsSnap = await getDocs(contactsRef)
 
     const contacts = contactsSnap.docs.map((doc) => ({

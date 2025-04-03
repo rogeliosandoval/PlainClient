@@ -1,6 +1,6 @@
 TODOS: 
 
-- create interface and typecheck for "coreBusinessData" in Auth service like user data
+- make sure when you delete client, it also deletes it's collections
 
 - use [ngSrc] for avatar
 
