@@ -5,10 +5,11 @@
     <img class="logo" src="assets/logo.svg" alt="logo" width="250" height="60" draggable="false">
   }
   <div class="nav-links">
-    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/home">Home</div>
+    <!-- <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/home">Home</div> -->
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'">Pricing</div>
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/signup">Register</div>
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/login">Login</div>
+    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/docs">Docs</div>
     @if (sharedService.darkMode() === false) {
       <i class="pi pi-moon" (click)="sharedService.toggleTheme()"></i>
     } @else {

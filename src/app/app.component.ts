@@ -14,6 +14,7 @@ import { AuthService } from './services/auth.service'
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
+
 export class AppComponent implements OnInit {
   public authService = inject(AuthService)
   public sharedService = inject(SharedService)

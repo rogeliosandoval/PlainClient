@@ -42,7 +42,7 @@ export class Clients implements OnInit {
   private storage = inject(Storage)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
-  public loadingClients = signal<boolean>(true)
+  public loadingClients = signal<boolean>(false)
   public showConfirmDialog = signal<boolean>(false)
   public clientOptions: MenuItem[] | undefined
   public dialogMessage = signal<string>('')
@@ -52,9 +52,9 @@ export class Clients implements OnInit {
   public showContactListDialog = signal<boolean>(false)
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.loadingClients.set(false)
-    }, 700)
+    // setTimeout(() => {
+    //   this.loadingClients.set(false)
+    // }, 700)
     this.clientOptions =  [
       {
         label: 'View Details',
@@ -154,7 +154,7 @@ export class Clients implements OnInit {
           summary: 'Success',
           detail: 'Contact has been added to the client!',
           key: 'br',
-          life: 6000,
+          life: 6000
         })
         
         this.contactFormDialog.resetForm()
