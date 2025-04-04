@@ -227,7 +227,7 @@ export class AuthService {
     }
   }
 
-  public async deleteClient(clientId: string): Promise<void> {
+  async deleteClient(clientId: string): Promise<void> {
     try {
       const businessId = this.coreUserData()?.businessId
   
@@ -244,6 +244,8 @@ export class AuthService {
       } catch (error) {
         console.warn('Avatar not found or already deleted:', error)
       }
+
+      await this.deleteSubcollections(clientDocRef, ['contacts'])
   
       // Delete the client document from Firestore
       await deleteDoc(clientDocRef)
@@ -255,7 +257,19 @@ export class AuthService {
     }
   }
 
-  public async deleteClientAvatar(businessId: string, clientId: string): Promise<any> {
+  // Recursive function to delete all subcollections
+  async deleteSubcollections(parentDocRef: any, collectionsRef: string[]) {
+    const subcollections = collectionsRef
+
+    for (const subcollection of subcollections) {
+      const subcollectionRef = collection(parentDocRef, subcollection)
+      const snapshot = await getDocs(subcollectionRef)
+      const deletePromises = snapshot.docs.map((doc) => deleteDoc(doc.ref))
+      await Promise.all(deletePromises)
+    }
+  }
+
+  async deleteClientAvatar(businessId: string, clientId: string): Promise<any> {
     const avatarPath = `businesses/${businessId}/clients/${clientId}/avatar`
     const avatarRef = ref(this.storage, avatarPath)
 
@@ -266,7 +280,7 @@ export class AuthService {
     }
   }
 
-  public async fetchClientDataById(id: string | null): Promise<void> {
+  async fetchClientDataById(id: string | null): Promise<void> {
     const clientRef = doc(this.firestore, `businesses/${this.coreBusinessData()!.id}/clients/${id}`)
     const clientDocSnap = await getDoc(clientRef)
     const clientData = clientDocSnap.data()
@@ -290,7 +304,7 @@ export class AuthService {
     }
   }
 
-  public async addContactToClient(formData: any, clientId: any): Promise<void> {
+  async addContactToClient(formData: any, clientId: any): Promise<void> {
     const contactId = uuidv4()
     const contactRef = doc(this.firestore, `businesses/${this.coreUserData()?.businessId}/clients/${clientId}/contacts/${contactId}`)
 

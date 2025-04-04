@@ -1,5 +1,5 @@
 <div class="route-container">
-  @if (authService.coreBusinessData()?.clients!.length <= 0) {
+  @if (authService.coreBusinessData()?.clients!.length <= 0 && !sharedService.loading()) {
     <div class="no-clients" [class.disabled]="sharedService.loading()">
       <img src="assets/working.svg" alt="business owner working" draggable="false">
       <span>You currently have no clients. <br class="phone-break">Start adding some!</span>
