@@ -9,7 +9,8 @@ import { SharedService } from '../../services/shared.service'
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
-import { CheckboxModule } from 'primeng/checkbox';
+import { CheckboxModule } from 'primeng/checkbox'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-login',
@@ -23,7 +24,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     FormsModule,
     ReactiveFormsModule,
     Footer,
-    CheckboxModule
+    CheckboxModule,
+    NgOptimizedImage
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

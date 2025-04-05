@@ -3,12 +3,14 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService } from '../../../../services/auth.service'
 import { SharedService } from '../../../../services/shared.service'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-client-details',
   standalone: true,
   imports: [
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    NgOptimizedImage
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss'
@@ -23,9 +25,21 @@ export class ClientDetails implements OnInit {
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe({
       next: async (data) => {
-        await this.authService.fetchClientDataById(data.get('id'))
-        this.sharedService.dialogClient.set(this.authService.dialogClient())
-        this.loadingClient.set(false)
+        try {
+          await this.authService.fetchClientDataById(data.get('id'))
+          .then(() => {
+            this.sharedService.dialogClient.set(this.authService.dialogClient())
+          })
+          .then(() => {
+            // Not practical but it works to avoid ngSrc optimization error... :/
+            setTimeout(() => {
+              this.loadingClient.set(false)
+            }, 500)
+          })
+        } catch (err) {
+          console.log(err)
+          this.loadingClient.set(false)
+        }
       },
       error: err => {
         console.log(err)

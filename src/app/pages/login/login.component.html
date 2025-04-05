@@ -1,9 +1,9 @@
 <div class="login-container">
   <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '#282828' : ''">
     @if(sharedService.darkMode()) {
-      <img src="assets/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75">
+      <img ngSrc="assets/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
     } @else {
-      <img src="assets/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75">
+      <img ngSrc="assets/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
     }
     @if (forgotPassword()) {
       <form id="entry-form" [formGroup]="resetPasswordForm" (ngSubmit)="sendResetLink()">
@@ -51,7 +51,7 @@
       </form>
       <div class="divider">Or:</div>
       <div class="google-button" [class.disabled]="sharedService.loading()" aria-label="login with google">
-        <img src="assets/google-icon.png" alt="google icon" width="20" height="20">
+        <img ngSrc="assets/google-icon.png" alt="google icon" width="20" height="20" draggable="false">
         <span>Login with Google</span>
       </div>
       <div class="form-actions" [class.disabled]="sharedService.loading()">

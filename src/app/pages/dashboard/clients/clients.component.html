@@ -1,7 +1,7 @@
 <div class="route-container">
-  @if (authService.coreBusinessData()?.clients!.length <= 0 && !sharedService.loading()) {
+  @if (authService.coreBusinessData()?.clients!.length <= 0) {
     <div class="no-clients" [class.disabled]="sharedService.loading()">
-      <img src="assets/working.svg" alt="business owner working" draggable="false">
+      <img ngSrc="assets/working.svg" alt="business owner working" draggable="false" width="330" height="291" priority>
       <span>You currently have no clients. <br class="phone-break">Start adding some!</span>
       <p-button label="Add Client +" (onClick)="sharedService.clientFormType.set('add') ;sharedService.showClientFormDialog.set(true)"></p-button>
     </div>
@@ -13,7 +13,7 @@
             @if(loadingClients()) {
               <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
             }
-            <img class="client-logo" [src]="client.avatarUrl || 'assets/avatars/default-business-avatar.png'" alt="client logo" draggable="false">
+            <img class="client-logo" [ngSrc]="client.avatarUrl || 'assets/avatars/default-business-avatar.png'" alt="client logo" draggable="false" width="160" height="160" priority>
             <div class="menu">
               <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); this.sharedService.dialogClient.set(client)"></i>
               <p-menu #menu [model]="clientOptions" [popup]="true"/>

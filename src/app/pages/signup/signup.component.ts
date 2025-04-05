@@ -12,6 +12,7 @@ import { Footer } from '../../components/footer/footer.component'
 import { lastValueFrom } from 'rxjs'
 import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore'
 import { UserCredential } from '@angular/fire/auth'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-signup',
@@ -24,7 +25,8 @@ import { UserCredential } from '@angular/fire/auth'
     PasswordModule,
     FormsModule,
     ReactiveFormsModule,
-    Footer
+    Footer,
+    NgOptimizedImage
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'

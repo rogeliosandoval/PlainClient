@@ -15,6 +15,7 @@ import { Router } from '@angular/router'
 import { ContactFormDialog } from '../../../dialogs/contact-form/contact-form.component'
 import { FormatPhonePipe } from '../../../pipes/format-phone.pipe'
 import { ContactListDialog } from '../../../dialogs/contact-list/contact-list.component'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-clients',
@@ -29,7 +30,8 @@ import { ContactListDialog } from '../../../dialogs/contact-list/contact-list.co
     ProgressSpinnerModule,
     ContactFormDialog,
     FormatPhonePipe,
-    ContactListDialog
+    ContactListDialog,
+    NgOptimizedImage
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'

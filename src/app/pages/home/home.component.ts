@@ -4,6 +4,7 @@ import { SharedService } from '../../services/shared.service'
 import { Navbar } from '../../components/navbar/navbar.component'
 import { RouterLink } from '@angular/router'
 import { Footer } from '../../components/footer/footer.component'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-home',
@@ -12,7 +13,8 @@ import { Footer } from '../../components/footer/footer.component'
     CommonModule,
     Navbar,
     Footer,
-    RouterLink
+    RouterLink,
+    NgOptimizedImage
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'

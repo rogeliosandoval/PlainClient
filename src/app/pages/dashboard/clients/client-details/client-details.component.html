@@ -5,9 +5,9 @@
     <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
       <div class="main">
         @if (sharedService.dialogClient().avatarUrl) {
-          <img [src]="sharedService.dialogClient().avatarUrl" alt="avatar">
+          <img [ngSrc]="sharedService.dialogClient().avatarUrl" alt="avatar" width="200" height="200" draggable="false" priority>
         } @else {
-          <img src="assets/avatars/default-business-avatar.png" alt="avatar">
+          <img ngSrc="assets/avatars/default-business-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
         }
         <div class="main-info">
           <div class="name">{{ sharedService.dialogClient().name }}</div>

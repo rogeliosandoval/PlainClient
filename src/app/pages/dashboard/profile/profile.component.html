@@ -2,9 +2,9 @@
   <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
     <div class="main">
       @if (authService.coreUserData()?.avatarUrl) {
-        <img [src]="authService.coreUserData()?.avatarUrl" alt="avatar">
+        <img [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" width="200" height="200" draggable="false" priority>
       } @else {
-        <img src="assets/avatars/default-avatar.png" alt="avatar">
+        <img ngSrc="assets/avatars/default-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
       }
       <div class="main-info">
         <div class="name">{{ authService.coreUserData()?.name }}</div>
