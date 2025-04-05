@@ -1,9 +1,5 @@
 TODOS: 
 
-- make sure when you delete client, it also deletes it's collections
-
-- use [ngSrc] for avatar
-
 - add createdAt values for clients and stuff
 
 - make sidenav stay highlighted on nested page routes
