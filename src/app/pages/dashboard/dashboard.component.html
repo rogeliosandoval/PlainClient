@@ -1,14 +1,14 @@
 <div class="dashboard-container" [style.background-color]="sharedService.darkMode() ? '' : '#f1f1f1'">
-  @if (authService.coreUserData() === null || authService.coreBusinessData() === undefined) {
+  @if (authService.coreUserData() === null || authService.coreBusinessData() === null) {
     <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
   } @else {
     <!-- Top Navbar -->
     <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
       <div class="top-nav-logo" routerLink="/dashboard/">
         @if (sharedService.darkMode()) {
-          <img class="logo" src="assets/logo-light.svg" alt="logo" draggable="false">
+          <img class="logo" ngSrc="assets/logo-light.svg" alt="logo" draggable="false" width="200" height="48">
         } @else {
-          <img class="logo" src="assets/logo.svg" alt="logo" draggable="false">
+          <img class="logo" ngSrc="assets/logo.svg" alt="logo" draggable="false" width="200" height="48">
         }
       </div>
       <div class="top-nav-search">
@@ -25,9 +25,9 @@
         }
         <div class="top-nav-avatar__dropdown" (click)="menu.toggle($event)">
           @if (authService.coreUserData()?.avatarUrl) {
-            <img class="avatar" [src]="authService.coreUserData()?.avatarUrl" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
+            <img class="avatar" [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false">
           } @else {
-            <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" loading="lazy">
+            <img class="avatar" ngSrc="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false">
           }
           <div class="name-arrow" [class.name-arrow-hover-dark]="sharedService.darkMode()">
             <span>{{ authService.coreUserData()?.name }}</span>
@@ -114,9 +114,9 @@
         </div>
         <div class="side-nav-logo">
           @if (authService.coreBusinessData()?.avatarUrl) {
-            <img [src]="authService.coreBusinessData()?.avatarUrl" alt="business logo">
+            <img [ngSrc]="authService.coreBusinessData()?.avatarUrl || ''" alt="business logo" width="120" height="120" draggable="false">
           } @else {
-            <img src="assets/avatars/default-business-avatar.png" alt="business logo">
+            <img ngSrc="assets/avatars/default-business-avatar.png" alt="business logo" width="120" height="120" draggable="false">
           }
         </div>
       </div>

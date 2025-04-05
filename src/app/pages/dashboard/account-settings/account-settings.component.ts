@@ -14,6 +14,7 @@ import { doc, Firestore, setDoc } from '@angular/fire/firestore'
 import { MessageService } from 'primeng/api'
 import { DialogModule } from 'primeng/dialog'
 import { AvatarUploadDialog } from '../../../dialogs/avatar-upload/avatar-upload.component'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-account-settings',
@@ -27,7 +28,8 @@ import { AvatarUploadDialog } from '../../../dialogs/avatar-upload/avatar-upload
     ReactiveFormsModule,
     ProgressSpinnerModule,
     DialogModule,
-    AvatarUploadDialog
+    AvatarUploadDialog,
+    NgOptimizedImage
   ],
   templateUrl: './account-settings.component.html',
   styleUrl: './account-settings.component.scss'

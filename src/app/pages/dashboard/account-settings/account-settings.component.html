@@ -8,12 +8,12 @@
       <form [formGroup]="profileForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveProfileChanges()">
         @if (authService.coreUserData()?.avatarUrl) {
           <div class="avatar-container">
-            <img class="avatar" [src]="authService.coreUserData()?.avatarUrl" alt="avatar">
+            <img class="avatar" [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" width="150" height="150" draggable="false" priority>
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('profile')"></i>
           </div>
         } @else {
           <div class="avatar-container">
-            <img class="avatar" src="assets/avatars/default-avatar.png" alt="avatar">
+            <img class="avatar" ngSrc="assets/avatars/default-avatar.png" alt="avatar" width="150" height="150" draggable="false" priority>
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('profile')"></i>
           </div>
         }
@@ -56,12 +56,12 @@
       <form [formGroup]="businessForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveBusinessChanges()">
         @if (authService.coreBusinessData()?.avatarUrl) {
           <div class="avatar-container">
-            <img class="avatar" [src]="authService.coreBusinessData()?.avatarUrl" alt="avatar">
+            <img class="avatar" [ngSrc]="authService.coreBusinessData()?.avatarUrl || ''" alt="avatar" width="150" height="150" draggable="false">
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('business')"></i>
           </div>
         } @else {
           <div class="avatar-container">
-            <img class="avatar" src="assets/avatars/default-business-avatar.png" alt="avatar">
+            <img class="avatar" ngSrc="assets/avatars/default-business-avatar.png" alt="avatar" width="150" height="150" draggable="false">
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('business')"></i>
           </div>
         }

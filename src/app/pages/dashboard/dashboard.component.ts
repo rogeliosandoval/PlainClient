@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { StartupFormDialog } from '../../dialogs/startup-form/startup-form.component'
 import { ClientFormDialog } from '../../dialogs/client-form/client-form.component'
 import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-dashboard',
@@ -39,7 +40,8 @@ import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fir
     ReactiveFormsModule,
     ToastModule,
     StartupFormDialog,
-    ClientFormDialog
+    ClientFormDialog,
+    NgOptimizedImage
   ],
   providers: [
     MessageService
