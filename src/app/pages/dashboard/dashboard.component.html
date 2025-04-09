@@ -25,9 +25,9 @@
         }
         <div class="top-nav-avatar__dropdown" (click)="menu.toggle($event)">
           @if (authService.coreUserData()?.avatarUrl) {
-            <img class="avatar" [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false">
+            <img class="avatar" [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false" priority>
           } @else {
-            <img class="avatar" ngSrc="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false">
+            <img class="avatar" ngSrc="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false" priority>
           }
           <div class="name-arrow" [class.name-arrow-hover-dark]="sharedService.darkMode()">
             <span>{{ authService.coreUserData()?.name }}</span>

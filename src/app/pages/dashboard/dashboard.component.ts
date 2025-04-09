@@ -13,7 +13,8 @@ import { ButtonModule } from 'primeng/button'
 import { DialogModule } from 'primeng/dialog'
 import { PrimeNGConfig } from 'primeng/api'
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms'
-import { doc, Firestore, setDoc } from '@angular/fire/firestore'
+import { collection, doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore'
+import { Auth } from '@angular/fire/auth'
 import { ToastModule } from 'primeng/toast'
 import { MessageService } from 'primeng/api'
 import { take } from 'rxjs'
@@ -22,6 +23,8 @@ import { StartupFormDialog } from '../../dialogs/startup-form/startup-form.compo
 import { ClientFormDialog } from '../../dialogs/client-form/client-form.component'
 import { Storage, getDownloadURL, ref, uploadBytesResumable } from '@angular/fire/storage'
 import { NgOptimizedImage } from '@angular/common'
+import { BusinessData, ClientData, UserData } from '../../interfaces/user.interface'
+import { ClientFormData } from '../../interfaces/other.interface'
 
 @Component({
   selector: 'tc-dashboard',
@@ -51,13 +54,13 @@ import { NgOptimizedImage } from '@angular/common'
 })
 
 export class Dashboard implements OnInit {
+  private auth = inject(Auth)
   private storage = inject(Storage)
   @ViewChild('addBusinessDialog') addBusinessDialog!: StartupFormDialog
   @ViewChild('addClientDialog') addClientDialog!: ClientFormDialog
   private messageService = inject(MessageService)
   private firestore = inject(Firestore)
   private router = inject(Router)
-  private uid = signal<any>('')
   public primengConfig = inject(PrimeNGConfig)
   public authService = inject(AuthService)
   public sharedService = inject(SharedService)
@@ -134,26 +137,26 @@ export class Dashboard implements OnInit {
       this.editClient(data)
     }
   }
-
-  public async addClient(data: any) {
+  
+  //Fix this, make add it to the cache
+  public async addClient(data: ClientFormData): Promise<void> {
     this.dialogLoading.set(true)
-    const clientId = uuidv4()
-    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}`)
-    let avatarUrl = ''
-
+  
     try {
+      const clientId = uuidv4()
+      const businessId = this.authService.coreUserData()?.businessId
+      const clientRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}`)
+      let avatarUrl = ''
+  
       if (data.file) {
         const file = data.file
-        const filePath = `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}/avatar`
+        const filePath = `businesses/${businessId}/clients/${clientId}/avatar`
         const storageRef = ref(this.storage, filePath)
         await uploadBytesResumable(storageRef, file)
-    
-        // Fetch the avatar URL after uploading
         avatarUrl = await getDownloadURL(storageRef)
       }
   
-      // Save the avatar URL in the client's Firestore document
-      await setDoc(clientRef, {
+      const newClient: ClientData = {
         id: clientId,
         name: data.formData.client_name,
         email: data.formData.client_email,
@@ -162,10 +165,36 @@ export class Dashboard implements OnInit {
         connectedBy: data.formData.connected_by,
         note: data.formData.note,
         createdAt: new Date().toISOString(),
-        avatarUrl: avatarUrl
-      }, { merge: true })
-    
-      await this.authService.fetchCoreBusinessData()
+        avatarUrl,
+        contacts: [] // assuming no contacts yet
+      }
+  
+      // Save the new client to Firestore
+      await setDoc(clientRef, newClient, { merge: true })
+  
+      // Manually update cache
+      const cacheKey = 'coreBusinessDataCache'
+      const cached = localStorage.getItem(cacheKey)
+  
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached)
+  
+          parsed.clients = [newClient, ...(parsed.clients || [])] // add new client to top
+          parsed.numberOfClients = (parsed.numberOfClients || 0) + 1
+  
+          localStorage.setItem(cacheKey, JSON.stringify(parsed))
+          this.authService.coreBusinessData.set(parsed) // update the signal/store directly if you're using signals
+          this.authService.fetchBusinessClientAvatars?.() // update avatars in case needed
+          console.log('Successfully added to the cache ✅')
+        } catch (e) {
+          console.warn('[addClient] Failed to update cache manually, refetching instead ❌', e)
+          await this.authService.fetchCoreBusinessData()
+        }
+      } else {
+        // fallback if cache doesn't exist
+        await this.authService.fetchCoreBusinessData()
+      }
   
       this.messageService.add({
         severity: 'success',
@@ -174,10 +203,12 @@ export class Dashboard implements OnInit {
         key: 'br',
         life: 6000,
       })
+  
       this.addClientDialog.resetForm()
       this.dialogLoading.set(false)
       this.sharedService.showClientFormDialog.set(false)
       this.router.navigateByUrl('/dashboard/clients')
+  
     } catch (err) {
       setTimeout(() => {
         this.dialogLoading.set(false)
@@ -191,27 +222,30 @@ export class Dashboard implements OnInit {
         })
       }, 2000)
     }
-  }
+  }  
 
-  public async editClient(data: any): Promise<any> {
+  public async editClient(data: ClientFormData): Promise<void> {
     this.dialogLoading.set(true)
     const clientId = this.sharedService.dialogClient().id
-    const clientRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}`)
+    const businessId = this.authService.coreBusinessData()!.id
+    const clientRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}`)
     let avatarUrl = this.sharedService.dialogClient().avatarUrl
-
+  
     try {
+      // Upload new avatar if file is present
       if (data.file) {
         const file = data.file
-        const filePath = `businesses/${this.authService.coreUserData()?.businessId}/clients/${clientId}/avatar`
+        const filePath = `businesses/${businessId}/clients/${clientId}/avatar`
         const storageRef = ref(this.storage, filePath)
         await uploadBytesResumable(storageRef, file)
         avatarUrl = await getDownloadURL(storageRef)
-      } else if (!data.file && this.sharedService.dialogClient().avatarUrl && data.avatarTouched) {
-        await this.authService.deleteClientAvatar(this.authService.coreBusinessData()!.id, this.sharedService.dialogClient().id)
+      } else if (!data.file && avatarUrl && data.avatarTouched) {
+        // Delete existing avatar if removed
+        await this.authService.deleteClientAvatar(businessId, clientId)
         avatarUrl = ''
       }
-
-      await setDoc(clientRef, {
+  
+      const updatedClient: Partial<ClientData> = {
         id: clientId,
         name: data.formData.client_name,
         email: data.formData.client_email,
@@ -219,14 +253,46 @@ export class Dashboard implements OnInit {
         location: data.formData.client_location,
         connectedBy: data.formData.connected_by,
         note: data.formData.note,
-        createdAt: new Date().toISOString(),
-        avatarUrl: avatarUrl
+        avatarUrl,
+        // Do not overwrite contacts or createdAt if not changed
+      }
+  
+      await setDoc(clientRef, {
+        ...updatedClient,
+        createdAt: new Date().toISOString() // or keep original if you prefer
       }, { merge: true })
-    
-      await this.authService.fetchCoreBusinessData()
-
+  
+      // Update cache manually
+      const cacheKey = 'coreBusinessDataCache'
+      const cached = localStorage.getItem(cacheKey)
+  
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached)
+  
+          parsed.clients = parsed.clients.map((client: ClientData) => {
+            if (client.id === clientId) {
+              return {
+                ...client,
+                ...updatedClient
+              }
+            }
+            return client
+          })
+  
+          localStorage.setItem(cacheKey, JSON.stringify(parsed))
+          this.authService.coreBusinessData.set(parsed)
+          this.authService.fetchBusinessClientAvatars?.()
+          console.log('Successfully added to the cache ✅')
+        } catch (e) {
+          console.warn('[editClient] Failed to update cache manually, refetching instead ❌', e)
+          await this.authService.fetchCoreBusinessData()
+        }
+      } else {
+        await this.authService.fetchCoreBusinessData()
+      }
+  
       await this.authService.fetchClientDataById(clientId)
-
       this.sharedService.dialogClient.set(this.authService.dialogClient())
   
       this.messageService.add({
@@ -236,6 +302,7 @@ export class Dashboard implements OnInit {
         key: 'br',
         life: 6000,
       })
+  
       this.addClientDialog.resetForm()
       this.dialogLoading.set(false)
       this.sharedService.showClientFormDialog.set(false)
@@ -246,13 +313,13 @@ export class Dashboard implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error adding a client. Try again.',
+          detail: 'There was an error updating the client. Try again.',
           key: 'br',
           life: 6000,
         })
       }, 2000)
     }
-  }
+  }  
 
   public startupFormTrigger(data: any): void {
     if (data.type === 'add') {

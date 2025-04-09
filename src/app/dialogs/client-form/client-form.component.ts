@@ -12,6 +12,7 @@ import { PhoneNumberDirective } from '../../directives/phone-number.directive'
 import { AuthService } from '../../services/auth.service'
 import { ImageCropperComponent, ImageCroppedEvent } from 'ngx-image-cropper'
 import { NgOptimizedImage } from '@angular/common'
+import { ClientFormData } from '../../interfaces/other.interface'
 
 @Component({
   selector: 'tcd-client-form',
@@ -161,7 +162,7 @@ export class ClientFormDialog {
       formData: this.clientForm.value,
       file: this.croppedImage,
       type
-    }
+    } as ClientFormData
     this.onSubmit.emit(data)
   }
 }
