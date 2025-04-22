@@ -23,3 +23,5 @@ TODOS:
 - redesign register page
 
 - redesign home page
+
+- uninstall include-media and instead use modern media queries
