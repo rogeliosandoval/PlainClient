@@ -161,9 +161,9 @@ export class AuthService {
   
           return {
             id: clientDoc.id,
-            contacts: contacts || [],
             name: clientData.name || 'Unknown',
-            ...clientData
+            ...clientData,
+            contacts: contacts || []
           }
         })
       )

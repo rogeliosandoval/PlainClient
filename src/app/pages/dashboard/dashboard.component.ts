@@ -138,7 +138,6 @@ export class Dashboard implements OnInit {
     }
   }
   
-  //Fix this, make add it to the cache
   public async addClient(data: ClientFormData): Promise<void> {
     this.dialogLoading.set(true)
   

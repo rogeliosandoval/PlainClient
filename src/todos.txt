@@ -1,5 +1,7 @@
 TODOS: 
 
+- fix bug when editing client and adding an image, form does not get marked as dirty
+
 - add createdAt values for clients and stuff
 
 - make sidenav stay highlighted on nested page routes
@@ -31,3 +33,5 @@ TODOS:
 - download and load fonts locally instead of through google fonts API
 
 - make 'images' folder in assets
+
+- add join business feature for members who register for a business

@@ -149,6 +149,8 @@ export class Clients implements OnInit {
       try {
         await this.authService.addContactToClient(data.formData, this.sharedService.dialogClient().id)
 
+        this.authService.clearBusinessDataCache.set(true)
+
         await this.authService.fetchCoreBusinessData()
   
         this.messageService.add({
