@@ -24,7 +24,7 @@ TODOS:
 
 - redesign register page
 
-- redesign home page
+- redesign home page and add fade in
 
 - uninstall include-media and instead use modern media queries
 
