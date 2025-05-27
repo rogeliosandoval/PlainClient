@@ -1,16 +1,28 @@
-@import 'include-media';
+@use 'sass:map';
+
 $breakpoints: (
   'phone': 460px,
   'tablet': 768px,
   'desktop': 1024px
 );
+
+@mixin media($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (max-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint '#{$breakpoint}' not found in \$breakpoints map.";
+  }
+}
+
 $theme-color-main: #004aad;
 $theme-color-main-light: #37b6ff;
 
 .phone-break {
   display: none;
 
-  @include media('<phone') {
+  @include media('phone') {
     display: block;
   }
 }

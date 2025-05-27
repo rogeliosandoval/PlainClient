@@ -1,6 +1,4 @@
 @use '../../../../variables.scss' as variables;
-$breakpoints: variables.$breakpoints;
-@import 'include-media';
 
 .title {
   font-size: 2rem;
@@ -8,7 +6,7 @@ $breakpoints: variables.$breakpoints;
   font-weight: 500;
   margin-bottom: 20px;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     font-size: 1.5rem;
   }
 }
@@ -33,7 +31,7 @@ $breakpoints: variables.$breakpoints;
   & form:first-of-type {
     margin-bottom: 30px;
 
-    @include media('<phone') {
+    @include variables.media('phone') {
       margin-bottom: 15px;
     }
   }
@@ -63,7 +61,7 @@ $breakpoints: variables.$breakpoints;
     transform: translate(-50%, -50%);
   }
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     padding: 35px 20px;
   }
 }

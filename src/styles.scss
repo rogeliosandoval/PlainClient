@@ -1,11 +1,6 @@
+@use './variables.scss' as variables;
 @import "primeicons/primeicons.css"; /* PrimeIcons should be first */
 @import "primeng/resources/primeng.css"; /* PrimeNG component styles */
-@import 'include-media';
-$breakpoints: (
-  'phone': 460px,
-  'tablet': 768px,
-  'desktop': 1024px
-);
 
 :root {
   --cropper-outline-color: transparent;

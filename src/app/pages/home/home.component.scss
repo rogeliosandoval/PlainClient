@@ -1,6 +1,4 @@
 @use '../../../variables.scss' as variables;
-$breakpoints: variables.$breakpoints;
-@import 'include-media';
 
 .home-container {
   position: relative;
@@ -36,7 +34,7 @@ $breakpoints: variables.$breakpoints;
     text-align: center;
     margin: 0;
 
-    @include media('<tablet') {
+    @include variables.media('tablet') {
       font-size: 2.7rem;
     }
   }
@@ -48,12 +46,12 @@ $breakpoints: variables.$breakpoints;
     font-weight: 200;
     text-align: center;
 
-    @include media('<tablet') {
+    @include variables.media('tablet') {
       font-size: 1.3rem;
     }
   }
 
-  @include media('<tablet') {
+  @include variables.media('tablet') {
     margin-top: 35px;
   }
 }
@@ -90,7 +88,7 @@ $breakpoints: variables.$breakpoints;
     box-shadow: none;
   }
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     font-size: 1rem;
     max-width: 140px;
   }
@@ -120,7 +118,7 @@ $breakpoints: variables.$breakpoints;
     box-shadow: none;
   }
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     font-size: 1rem;
     max-width: 140px;
   }
@@ -137,7 +135,7 @@ $breakpoints: variables.$breakpoints;
     height: auto;
     max-width: 450px;
 
-    @include media('<tablet') {
+    @include variables.media('tablet') {
       width: 90%;
     }
   }
@@ -146,7 +144,7 @@ $breakpoints: variables.$breakpoints;
     gap: 20px;
   }
 
-  @include media('<tablet') {
+  @include variables.media('tablet') {
     align-items: center;
     flex-direction: column-reverse;
     margin-top: 30px;
@@ -159,7 +157,7 @@ $breakpoints: variables.$breakpoints;
   top: -30px;
   max-width: 80px;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     top: -15px;
   }
 }
@@ -188,7 +186,7 @@ $breakpoints: variables.$breakpoints;
   max-width: 1300px;
   margin: 0 auto 50px;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     padding-top: 0;
     margin-bottom: 10px;
     padding-bottom: 0;

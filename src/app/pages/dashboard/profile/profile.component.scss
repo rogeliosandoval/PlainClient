@@ -1,6 +1,4 @@
 @use '../../../../variables.scss' as variables;
-$breakpoints: variables.$breakpoints;
-@import 'include-media';
 
 .profile-container {
   position: relative;
@@ -23,7 +21,7 @@ $breakpoints: variables.$breakpoints;
     opacity: 1;
   }
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     font-size: 1.5rem;
   }
 }
@@ -40,7 +38,7 @@ $breakpoints: variables.$breakpoints;
     border-radius: 10px;
     object-fit: contain;
 
-    @include media('<phone') {
+    @include variables.media('phone') {
       width: 140px;
       height: 140px;
     }
@@ -68,7 +66,7 @@ $breakpoints: variables.$breakpoints;
   font-weight: 500;
   text-transform: capitalize;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     font-size: 1.7rem;
   }
 }
@@ -80,7 +78,7 @@ $breakpoints: variables.$breakpoints;
   font-size: 1rem;
   gap: 7px;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     font-size: 0.9rem;
   }
 }
@@ -97,7 +95,7 @@ $breakpoints: variables.$breakpoints;
 .position {
   margin: 6px 0 6px;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     margin-bottom: 14px;
   }
 }
@@ -110,7 +108,7 @@ $breakpoints: variables.$breakpoints;
   margin-top: 20px;
   font-family: "Outfit", sans-serif;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     margin-top: 8px;
   }
 }
@@ -122,7 +120,7 @@ $breakpoints: variables.$breakpoints;
   max-width: 700px;
   line-height: 1.5rem;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     font-size: 0.9rem;
   }
 }

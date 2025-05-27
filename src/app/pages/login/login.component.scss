@@ -1,6 +1,4 @@
 @use '../../../variables.scss' as variables;
-$breakpoints: variables.$breakpoints;
-@import 'include-media';
 
 .login-container {
   display: flex;
@@ -10,7 +8,7 @@ $breakpoints: variables.$breakpoints;
   min-height: 100vh;
   animation: fadeIn 0.2s linear;
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     justify-content: flex-start;
     align-items: normal;
   }
@@ -61,7 +59,7 @@ $breakpoints: variables.$breakpoints;
   box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.1);
 
   img {
-    @include media('<phone') {
+    @include variables.media('phone') {
       max-width: 90%;
     }
   }
@@ -92,12 +90,12 @@ $breakpoints: variables.$breakpoints;
       margin-top: 10px;
     }
 
-    @include media('<phone') {
+    @include variables.media('phone') {
       width: 100%;
     }
   }
 
-  @include media('<phone') {
+  @include variables.media('phone') {
     border-radius: 0;
   }
 }

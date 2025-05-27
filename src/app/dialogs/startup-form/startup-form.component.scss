@@ -1,6 +1,4 @@
 @use '../../../variables.scss' as variables;
-$breakpoints: variables.$breakpoints;
-@import 'include-media';
 
 p-progressSpinner {
   position: absolute;

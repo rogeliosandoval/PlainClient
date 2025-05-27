@@ -221,7 +221,7 @@ export class Dashboard implements OnInit {
         })
       }, 2000)
     }
-  }  
+  }
 
   public async editClient(data: ClientFormData): Promise<void> {
     this.dialogLoading.set(true)

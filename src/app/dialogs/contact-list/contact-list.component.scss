@@ -1,6 +1,4 @@
 @use '../../../variables.scss' as variables;
-$breakpoints: variables.$breakpoints;
-@import 'include-media';
 
 .p-text-secondary{
   font-size: 1.1rem;
@@ -42,7 +40,7 @@ $breakpoints: variables.$breakpoints;
     }
   }
 
-  @include media('<tablet') {
+  @include variables.media('tablet') {
     padding: 0;
   }
 }

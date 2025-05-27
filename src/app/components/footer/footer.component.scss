@@ -1,6 +1,4 @@
 @use '../../../variables.scss' as variables;
-$breakpoints: variables.$breakpoints;
-@import 'include-media';
 
 .footer-container {
   width: 100%;
@@ -12,7 +10,7 @@ $breakpoints: variables.$breakpoints;
   font-family: "Outfit", sans-serif;
   padding: 20px;
 
-  @include media('<tablet') {
+  @include variables.media('tablet') {
     margin-top: 20px;
   }
 }
