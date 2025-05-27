@@ -26,8 +26,6 @@ TODOS:
 
 - redesign home page and add fade in
 
-- uninstall include-media and instead use modern media queries
-
 - change navbar to use actual html <nav>
 
 - download and load fonts locally instead of through google fonts API
