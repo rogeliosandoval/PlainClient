@@ -58,56 +58,56 @@
           <div class="side-nav-links" [class.side-nav-links-dark]="sharedService.darkMode()">
             <div class="side-nav-link"
               routerLink="/dashboard/overview"
-              [class.nav-active]="grabRoute() === '/dashboard/overview'"
-              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/overview'">
+              [class.nav-active]="grabRoute().startsWith('/dashboard/overview')"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/overview')">
               <i class="pi pi-chart-pie"
-                [class.pi-active]="grabRoute() === '/dashboard/overview'"
-                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/overview'"></i>
+                [class.pi-active]="grabRoute().startsWith('/dashboard/overview')"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/overview')"></i>
               <span>Overview</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/clients"
-              [class.nav-active]="grabRoute() === '/dashboard/clients'"
-              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/clients'">
+              [class.nav-active]="grabRoute().startsWith('/dashboard/clients')"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/clients')">
               <i class="pi pi-users"
-                [class.pi-active]="grabRoute() === '/dashboard/clients'"
-                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/clients'"></i>
+                [class.pi-active]="grabRoute().startsWith('/dashboard/clients')"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/clients')"></i>
               <span>Clients</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/team-members"
-              [class.nav-active]="grabRoute() === '/dashboard/team-members'"
-              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/team-members'">
+              [class.nav-active]="grabRoute().startsWith('/dashboard/team-members')"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/team-members')">
               <i class="pi pi-face-smile"
-                [class.pi-active]="grabRoute() === '/dashboard/team-members'"
-                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/team-members'"></i>
+                [class.pi-active]="grabRoute().startsWith('/dashboard/team-members')"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/team-members')"></i>
               <span>Team Members</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/profits"
-              [class.nav-active]="grabRoute() === '/dashboard/profits'"
-              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/profits'">
+              [class.nav-active]="grabRoute().startsWith('/dashboard/profits')"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/profits')">
               <i class="pi pi-money-bill"
-                [class.pi-active]="grabRoute() === '/dashboard/profits'"
-                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/profits'"></i>
+                [class.pi-active]="grabRoute().startsWith('/dashboard/profits')"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/profits')"></i>
               <span>Profits</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/task-manager"
-              [class.nav-active]="grabRoute() === '/dashboard/task-manager'"
-              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/task-manager'">
+              [class.nav-active]="grabRoute().startsWith('/dashboard/task-manager')"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/task-manager')">
               <i class="pi pi-list-check"
-                [class.pi-active]="grabRoute() === '/dashboard/task-manager'"
-                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/task-manager'"></i>
+                [class.pi-active]="grabRoute().startsWith('/dashboard/task-manager')"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/task-manager')"></i>
               <span>Task Manager</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/notifications"
-              [class.nav-active]="grabRoute() === '/dashboard/notifications'"
-              [class.nav-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/notifications'" >
+              [class.nav-active]="grabRoute().startsWith('/dashboard/notifications')"
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/notifications')" >
               <i class="pi pi-bell"
-                [class.pi-active]="grabRoute() === '/dashboard/notifications'"
-                [class.pi-active-dark]="sharedService.darkMode() && grabRoute() === '/dashboard/notifications'"></i>
+                [class.pi-active]="grabRoute().startsWith('/dashboard/notifications')"
+                [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/notifications')"></i>
               <span>Notifications</span>
             </div>
           </div>
@@ -127,48 +127,48 @@
             <div class="mobile-side-nav-link"
               routerLink="/dashboard/overview"
               (click)="sidebarVisible.set(false)"
-              [class.mobile-active]="grabRoute() === '/dashboard/overview'"
-              [class.mobile-active-dark]="grabRoute() === '/dashboard/overview' && sharedService.darkMode()">
+              [class.mobile-active]="grabRoute().startsWith('/dashboard/overview')"
+              [class.mobile-active-dark]="grabRoute().startsWith('/dashboard/overview') && sharedService.darkMode()">
               <i class="pi pi-chart-pie"></i>
               <span>Overview</span>
             </div>
             <div class="mobile-side-nav-link"
               routerLink="/dashboard/clients"
               (click)="sidebarVisible.set(false)"
-              [class.mobile-active]="grabRoute() === '/dashboard/clients'"
-              [class.mobile-active-dark]="grabRoute() === '/dashboard/clients' && sharedService.darkMode()">
+              [class.mobile-active]="grabRoute().startsWith('/dashboard/clients')"
+              [class.mobile-active-dark]="grabRoute().startsWith('/dashboard/clients') && sharedService.darkMode()">
               <i class="pi pi-users"></i>
               <span>Clients</span>
             </div>
             <div class="mobile-side-nav-link"
               routerLink="/dashboard/team-members"
               (click)="sidebarVisible.set(false)"
-              [class.mobile-active]="grabRoute() === '/dashboard/team-members'"
-              [class.mobile-active-dark]="grabRoute() === '/dashboard/team-members' && sharedService.darkMode()">
+              [class.mobile-active]="grabRoute().startsWith('/dashboard/team-members')"
+              [class.mobile-active-dark]="grabRoute().startsWith('/dashboard/team-members') && sharedService.darkMode()">
               <i class="pi pi-face-smile"></i>
               <span>Team Members</span>
             </div>
             <div class="mobile-side-nav-link"
               routerLink="/dashboard/profits"
               (click)="sidebarVisible.set(false)"
-              [class.mobile-active]="grabRoute() === '/dashboard/profits'"
-              [class.mobile-active-dark]="grabRoute() === '/dashboard/profits' && sharedService.darkMode()">
+              [class.mobile-active]="grabRoute().startsWith('/dashboard/profits')"
+              [class.mobile-active-dark]="grabRoute().startsWith('/dashboard/profits') && sharedService.darkMode()">
               <i class="pi pi-money-bill"></i>
               <span>Profits</span>
             </div>
             <div class="mobile-side-nav-link"
               routerLink="/dashboard/task-manager"
               (click)="sidebarVisible.set(false)"
-              [class.mobile-active]="grabRoute() === '/dashboard/task-manager'"
-              [class.mobile-active-dark]="grabRoute() === '/dashboard/task-manager' && sharedService.darkMode()">
+              [class.mobile-active]="grabRoute().startsWith('/dashboard/task-manager')"
+              [class.mobile-active-dark]="grabRoute().startsWith('/dashboard/task-manager') && sharedService.darkMode()">
               <i class="pi pi-list-check"></i>
               <span>Task Manager</span>
             </div>
             <div class="mobile-side-nav-link"
               routerLink="/dashboard/notifications"
               (click)="sidebarVisible.set(false)"
-              [class.mobile-active]="grabRoute() === '/dashboard/notifications'"
-              [class.mobile-active-dark]="grabRoute() === '/dashboard/notifications' && sharedService.darkMode()">
+              [class.mobile-active]="grabRoute().startsWith('/dashboard/notifications')"
+              [class.mobile-active-dark]="grabRoute().startsWith('/dashboard/notifications') && sharedService.darkMode()">
               <i class="pi pi-bell"></i>
               <span>Notifications</span>
             </div>
