@@ -4,8 +4,6 @@ TODOS:
 
 - add createdAt values for clients and stuff
 
-- make sidenav stay highlighted on nested page routes
-
 - remove/uninstall primeflex and remove any primeflex styles and only use scss for style. Dont get it confused with prime themeing system like p-text-secondary
 
 - implement session fetching to reduce # of reads per user (ALREADY IMPLEMENTED: Add Client, Edit Client, Delete Client, Fetch Business Data)
@@ -25,8 +23,6 @@ TODOS:
 - redesign register page
 
 - redesign home page and add fade in
-
-- change navbar to use actual html <nav>
 
 - download and load fonts locally instead of through google fonts API
 
