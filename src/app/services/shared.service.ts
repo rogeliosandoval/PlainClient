@@ -5,7 +5,7 @@ import { Injectable, signal } from '@angular/core'
 })
 
 export class SharedService {
-  darkMode = signal<boolean>(true)
+  darkMode = signal<boolean>(false)
   loading = signal<boolean>(false)
   showAvatarUploadDialog = signal<boolean>(false)
   showClientFormDialog = signal<boolean>(false)
