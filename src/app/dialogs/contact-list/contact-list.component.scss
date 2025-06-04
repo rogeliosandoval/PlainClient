@@ -1,8 +1,10 @@
 @use '../../../variables.scss' as variables;
 
 .p-text-secondary{
+  display: block;
   font-size: 1.1rem;
   line-height: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .contact-card {

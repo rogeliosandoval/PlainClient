@@ -1,5 +1,5 @@
 <p-dialog header="Contacts" [modal]="true" (onHide)="closeDialog()" [(visible)]="showContactListDialog" [style]="{ width: '25rem', maxHeight: '34rem', height: 'auto' }">
-  <span class="p-text-secondary block mb-5">Contacts for <strong>{{ sharedService.dialogClient()?.name }}</strong></span>
+  <span class="p-text-secondary">Contacts for <strong>{{ sharedService.dialogClient()?.name }}</strong></span>
   @for (contact of sharedService.dialogClient()?.contacts; track contact.id) {
     <div class="contact-card" [style.background-color]="sharedService.darkMode() ? 'rgb(30, 30, 30)' : 'rgb(245, 245, 237)'">
       <div class="contact-card-info">

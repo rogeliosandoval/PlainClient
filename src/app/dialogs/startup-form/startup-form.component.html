@@ -1,6 +1,6 @@
 <div class="startup-form">
   <p-dialog header="Welcome!" [modal]="true" (onHide)="closeDialog()" [(visible)]="showStartupFormDialog" [style]="{ width: '25rem' }">
-    <span class="p-text-secondary block mb-5">What is the name of your business?</span>
+    <span class="p-text-secondary">What is the name of your business?</span>
     <form [formGroup]="startupForm" class="startup-form" (ngSubmit)="submitDialog('add')">
       <input type="text" pInputText variant="filled" placeholder="Business Name" formControlName="business_name" [class.disabled]="dialogLoading()"/>
       <p-button label="Submit" type="submit" [class.disabled]="dialogLoading() || startupForm.invalid" [disabled]="dialogLoading() || startupForm.invalid"></p-button>

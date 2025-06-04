@@ -1,5 +1,5 @@
 <p-dialog header="Confirmation" [modal]="true" (onHide)="closeDialog()" [(visible)]="showConfirmDialog" [style]="{ width: '23rem' }">
-  <span class="p-text-secondary block mb-5">{{ message }}</span>
+  <span class="p-text-secondary">{{ message }}</span>
   <div class="dialogactions">
     <p-button label="Cancel" (onClick)="closeDialog()" severity="secondary" [disabled]="dialogLoading()"/>
     @if (type === 'delete') {

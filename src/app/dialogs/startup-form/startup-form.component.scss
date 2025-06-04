@@ -1,5 +1,10 @@
 @use '../../../variables.scss' as variables;
 
+.p-text-secondary{
+  display: block;
+  margin-bottom: 1rem;
+}
+
 p-progressSpinner {
   position: absolute;
   top: 50%;
