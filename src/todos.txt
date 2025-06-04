@@ -4,8 +4,6 @@ TODOS:
 
 - add createdAt values for clients and stuff
 
-- remove/uninstall primeflex and remove any primeflex styles and only use scss for style. Dont get it confused with prime themeing system like p-text-secondary
-
 - implement session fetching to reduce # of reads per user (ALREADY IMPLEMENTED: Add Client, Edit Client, Delete Client, Fetch Business Data)
 
 - check numberOfClients update in the datbase
