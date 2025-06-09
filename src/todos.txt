@@ -4,8 +4,6 @@ TODOS:
 
 - add createdAt values for clients and stuff
 
-- implement session fetching to reduce # of reads per user (ALREADY IMPLEMENTED: Add Client, Edit Client, Delete Client, Fetch Business Data)
-
 - check numberOfClients update in the datbase
 
 - redesign toasts

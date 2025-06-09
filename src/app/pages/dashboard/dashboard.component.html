@@ -114,9 +114,9 @@
         </div>
         <div class="side-nav-logo">
           @if (authService.coreBusinessData()?.avatarUrl) {
-            <img [ngSrc]="authService.coreBusinessData()?.avatarUrl || ''" alt="business logo" width="120" height="120" draggable="false">
+            <img [ngSrc]="authService.coreBusinessData()?.avatarUrl || ''" alt="business logo" width="120" height="120" draggable="false" priority>
           } @else {
-            <img ngSrc="assets/avatars/default-business-avatar.png" alt="business logo" width="120" height="120" draggable="false">
+            <img ngSrc="assets/avatars/default-business-avatar.png" alt="business logo" width="120" height="120" draggable="false" priority>
           }
         </div>
       </div>

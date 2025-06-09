@@ -10,7 +10,7 @@
           <label style="font-size: 0.9rem;" for="avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Avatar</label>
         </div>
       } @else {
-        <div class="avatar-preview-container">
+        <div class="avatar-preview-container" [class.disabled]="dialogLoading()">
           <i class="pi pi-trash" (click)="imageChangedEvent = null; croppedImage = null"></i>
           <image-cropper [imageChangedEvent]="imageChangedEvent"
             [maintainAspectRatio]="true"

@@ -125,19 +125,39 @@ export class AccountSettings implements OnInit {
     }
 
     if (data.file && data.type !== 'profile') {
-      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}`)
+      const businessId = this.authService.coreUserData()?.businessId
+      const businessRef = doc(this.firestore, `businesses/${businessId}`)
       const file = data.file
-      const filePath = `businesses/${this.authService.coreUserData()?.businessId}/avatar`
+      const filePath = `businesses/${businessId}/avatar`
       const storageRef = ref(this.storage, filePath)
+      
       await uploadBytesResumable(storageRef, file)
-      avatarUrl = await getDownloadURL(storageRef)
-
-      await setDoc(businessRef, {
-        avatarUrl: avatarUrl
-      }, { merge: true })
-
-      await this.authService.fetchCoreBusinessData()
-
+      const avatarUrl = await getDownloadURL(storageRef)
+      
+      // Update Firestore
+      await setDoc(businessRef, { avatarUrl }, { merge: true })
+      
+      // Update local cache
+      const cacheKey = 'coreBusinessDataCache'
+      const cached = localStorage.getItem(cacheKey)
+      
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached)
+      
+          parsed.avatarUrl = avatarUrl
+          localStorage.setItem(cacheKey, JSON.stringify(parsed))
+          this.authService.coreBusinessData.set(parsed)
+          console.log('Successfully updated avatar in cache ✅')
+        } catch (e) {
+          console.warn('[avatar upload] Failed to update cache manually, refetching instead ❌', e)
+          await this.authService.fetchCoreBusinessData()
+        }
+      } else {
+        // fallback if cache doesn't exist
+        await this.authService.fetchCoreBusinessData()
+      }
+      
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
@@ -145,19 +165,41 @@ export class AccountSettings implements OnInit {
         key: 'br',
         life: 6000,
       })
-
-      this.sharedService.showAvatarUploadDialog.set(false)
+      
+      this.sharedService.showAvatarUploadDialog.set(false)      
     } else if (!data.file && data.type !== 'profile') {
-      const businessRef = doc(this.firestore, `businesses/${this.authService.coreUserData()?.businessId}`)
-
+      const businessId = this.authService.coreUserData()?.businessId
+      const businessRef = doc(this.firestore, `businesses/${businessId}`)
+      
+      // Delete from Firebase Storage
       await this.authService.deleteBusinessAvatar()
-
+      
+      // Remove avatarUrl from Firestore
       await setDoc(businessRef, {
-        avatarUrl: avatarUrl
+        avatarUrl: ''
       }, { merge: true })
-
-      await this.authService.fetchCoreBusinessData()
-
+      
+      // Update cache
+      const cacheKey = 'coreBusinessDataCache'
+      const cached = localStorage.getItem(cacheKey)
+      
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached)
+      
+          parsed.avatarUrl = ''
+          localStorage.setItem(cacheKey, JSON.stringify(parsed))
+          this.authService.coreBusinessData.set(parsed)
+          console.log('Successfully removed avatar from cache ✅')
+        } catch (e) {
+          console.warn('[delete avatar] Failed to update cache manually, refetching instead ❌', e)
+          await this.authService.fetchCoreBusinessData()
+        }
+      } else {
+        // fallback if cache doesn't exist
+        await this.authService.fetchCoreBusinessData()
+      }
+      
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
@@ -165,8 +207,8 @@ export class AccountSettings implements OnInit {
         key: 'br',
         life: 6000,
       })
-
-      this.sharedService.showAvatarUploadDialog.set(false)
+      
+      this.sharedService.showAvatarUploadDialog.set(false)      
     }
 
     setTimeout(() => {
