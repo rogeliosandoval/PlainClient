@@ -34,7 +34,7 @@
     @if (showUploadAvatarButton()) {
       @if (imageChangedEvent !== null) {
         <div class="avatar-preview-container" [class.disabled]="dialogLoading()">
-          <i class="pi pi-trash" (click)="imageChangedEvent = null; croppedImage = null"></i>
+          <i class="pi pi-trash" (click)="imageChangedEvent = null; croppedImage = null; sharedService.dialogClient()?.avatarUrl ? '' : clientForm.markAsPristine()"></i>
           <image-cropper [imageChangedEvent]="imageChangedEvent"
             [maintainAspectRatio]="true"
             [aspectRatio]="1 / 1"
@@ -44,7 +44,7 @@
         </div>
       } @else {
         <div class="custom-id-input" [class.disabled]="dialogLoading()">
-          <input type="file" id="avatar" accept="image/*" (change)="fileChangeEvent($event)">
+          <input type="file" id="avatar" accept="image/*" (change)="fileChangeEvent($event); clientForm.markAsDirty()">
           <label style="font-size: 0.9rem;" for="avatar" [style.border]="sharedService.darkMode() ? '2px dashed white' : '2px dashed black'"><i class="pi pi-upload"></i>Upload Avatar</label>
         </div>
       }

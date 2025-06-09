@@ -1,7 +1,5 @@
 TODOS: 
 
-- fix bug when editing client and adding an image, form does not get marked as dirty
-
 - add createdAt values for clients and stuff
 
 - check numberOfClients update in the datbase
