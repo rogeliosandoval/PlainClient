@@ -189,94 +189,6 @@ export class AuthService {
       this.coreBusinessData.set(null)
     }
   }
-
-  // async fetchCoreBusinessData(): Promise<void> {
-  //   const auth = this.firebaseAuth.currentUser
-  
-  //   if (auth) {
-  //     const uid = auth.uid
-  //     const userRef = doc(this.firestore, `users/${uid}`)
-  //     const userDocSnap = await getDoc(userRef)
-  
-  //     if (userDocSnap.exists()) {
-  //       const userData = userDocSnap.data() as UserData
-  
-  //       if (userData.businessId) {
-  //         const businessId = userData.businessId
-  //         const businessRef = doc(this.firestore, `businesses/${businessId}`)
-  //         const businessDocSnap = await getDoc(businessRef)
-  
-  //         if (businessDocSnap.exists()) {
-  //           const businessData = businessDocSnap.data() as BusinessData
-  
-  //           // Fetch clients subcollection
-  //           const clientsRef = collection(this.firestore, `businesses/${businessId}/clients`)
-  //           try {
-  //             const clientsSnap = await getDocs(clientsRef)
-  //             const clients: ClientData[] = await Promise.all(
-  //               clientsSnap.docs.map(async (clientDoc) => {
-  //                 const clientData = clientDoc.data() as Partial<ClientData>
-  
-  //                 // Fetch the contacts subcollection for each client
-  //                 const contactsRef = collection(this.firestore, `businesses/${businessId}/clients/${clientDoc.id}/contacts`)
-  //                 const contactsSnap = await getDocs(contactsRef)
-
-  //                 const contacts: Contact[] = contactsSnap.docs.map((contactDoc) => {
-  //                   const contactData = contactDoc.data() as Partial<Contact>
-                  
-  //                   return {
-  //                     id: contactDoc.id,
-  //                     name: contactData.name || 'Unknown',
-  //                     ...contactData
-  //                   }
-  //                 })
-
-  //                 return {
-  //                   id: clientDoc.id,
-  //                   contacts: contacts || [],
-  //                   name: clientData.name || 'Unknown',
-  //                   ...clientData
-  //                 }
-  //               })
-  //             )
-
-  //             this.coreBusinessData.set({
-  //               avatarUrl: businessData.avatarUrl || '',
-  //               clients: clients || [],
-  //               numberOfClients: businessData.numberOfClients || 0,
-  //               id: businessData.id || '',
-  //               members: businessData.members || 0,
-  //               name: businessData.name || '',
-  //               ownerID: businessData.ownerID || ''
-  //             })
-
-  //             this.fetchBusinessClientAvatars()
-  //           } catch (error) {
-  //             console.error('Error fetching clients or contacts data:', error)
-  //             this.coreBusinessData.set({
-  //               ...businessData,
-  //               clients: [],
-  //               avatarUrl: '',
-  //               numberOfClients: 0,
-  //               id: '',
-  //               members: 0,
-  //               name: '',
-  //               ownerID: ''
-  //             })
-  //           }
-  //         } else {
-  //           this.coreBusinessData.set(null)
-  //         }
-  //       } else {
-  //         this.coreBusinessData.set(null)
-  //       }
-  //     } else {
-  //       this.coreBusinessData.set(null)
-  //     }
-  //   } else {
-  //     this.coreBusinessData.set(null)
-  //   }
-  // }
   
   async deleteProfileAvatar(): Promise<void> {
     const avatarPath = `users/${this.coreUserData()?.uid}/avatar`
@@ -386,36 +298,6 @@ export class AuthService {
       console.error('Error deleting client:', error)
     }
   }  
-
-  // async deleteClient(clientId: string): Promise<void> {
-  //   try {
-  //     const businessId = this.coreUserData()?.businessId
-  
-  //     // Path to the client's Firestore document
-  //     const clientDocRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}`)
-  
-  //     // Path to the client's avatar in Firebase Storage
-  //     const avatarPath = `businesses/${businessId}/clients/${clientId}/avatar`
-  //     const avatarRef = ref(this.storage, avatarPath)
-  
-  //     // Delete the avatar if it exists
-  //     try {
-  //       await deleteObject(avatarRef)
-  //     } catch (error) {
-  //       console.warn('Avatar not found or already deleted:', error)
-  //     }
-
-  //     await this.deleteSubcollections(clientDocRef, ['contacts'])
-  
-  //     // Delete the client document from Firestore
-  //     await deleteDoc(clientDocRef)
-  
-  //     // Fetch updated business data to refresh the client list
-  //     await this.fetchCoreBusinessData()
-  //   } catch (error) {
-  //     console.error('Error deleting client:', error)
-  //   }
-  // }
 
   // Recursive function to delete all subcollections
   async deleteSubcollections(parentDocRef: any, collectionsRef: string[]) {
