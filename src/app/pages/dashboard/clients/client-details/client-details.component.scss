@@ -62,6 +62,7 @@ p-progressSpinner {
   align-items: baseline;
   flex-direction: column;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   padding-bottom: 13px;
 
   .pi {
@@ -119,6 +120,7 @@ p-progressSpinner {
   gap: 10px;
   margin-top: 20px;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
 
   @include variables.media('phone') {
     margin-top: 8px;

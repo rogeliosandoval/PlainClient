@@ -73,6 +73,7 @@
 
     p {
       font-family: "Outfit", sans-serif;
+      font-weight: 500;
       font-size: 1rem;
       line-height: 1.5rem;
       margin-bottom: 15px;
@@ -110,6 +111,7 @@
   label {
     font-size: 1rem;
     font-family: "Outfit", sans-serif;
+    font-weight: 500;
     color: rgb(68, 68, 68);
   }
 
@@ -117,6 +119,7 @@
     margin: auto;
     width: 100%;
     font-family: "Outfit", sans-serif;
+    font-weight: 500;
   }
 }
 
@@ -125,6 +128,7 @@
   align-items: center;
   gap: 5px;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   font-size: 0.9rem;
   margin: 5px 0 0;
   color: rgb(68, 68, 68);
@@ -139,6 +143,7 @@
   font-size: 1rem;
   opacity: 0.6;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   width: 100%;
   color: black;
 
@@ -175,6 +180,7 @@
   span {
     margin: auto;
     font-family: "Outfit", sans-serif;
+    font-weight: 500;
   }
 
   &:hover {
@@ -194,6 +200,7 @@
 .action {
   font-size: 0.9rem;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   color: variables.$theme-color-main;
 
   &:hover {
@@ -205,6 +212,7 @@
 .no-receive {
   font-size: 1rem;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   color: variables.$theme-color-main;
   text-align: center;
   margin: 10px 0;
@@ -218,5 +226,6 @@
 .error {
   font-size: 0.9rem;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   color: rgb(217, 105, 105);
 }

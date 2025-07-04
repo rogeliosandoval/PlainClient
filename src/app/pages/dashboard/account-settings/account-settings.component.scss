@@ -14,7 +14,7 @@
 .form-label {
   font-size: 1.5rem;
   font-family: "Outfit", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .form-container {
@@ -76,12 +76,14 @@
   label {
     font-size: 1rem;
     font-family: "Outfit", sans-serif;
+    font-weight: 500;
   }
 
   input, textarea {
     margin: auto;
     width: 100%;
     font-family: "Outfit", sans-serif;
+    font-weight: 500;
   }
 
   textarea {
@@ -174,5 +176,6 @@
 .input-error {
   font-size: 0.9rem;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   color: rgb(255, 113, 113);
 }

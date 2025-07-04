@@ -10,13 +10,9 @@ TODOS:
 
 - double check @if(s) to see if you can use @else if
 
-- clean up styles.scss (make sure nested styles make sense) & remove fonts that are repated in divs. Try to rely on global font
-
 - redesign register page
 
 - redesign home page and add fade in
-
-- download and load fonts locally instead of through google fonts API
 
 - make 'images' folder in assets
 

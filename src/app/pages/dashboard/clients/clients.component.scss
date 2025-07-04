@@ -22,6 +22,7 @@ p-progressSpinner {
   span {
     font-size: 1.1rem;
     font-family: "Outfit", sans-serif;
+    font-weight: 500;
     margin-bottom: 1rem;
     line-height: 1.7rem;
   }
@@ -125,6 +126,7 @@ p-progressSpinner {
   gap: 10px;
   font-size: 1rem;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   max-width: 100%;
   overflow: hidden;
 }
@@ -147,6 +149,7 @@ p-progressSpinner {
 .add-link {
   font-size: 1rem;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   opacity: 0.7;
 
   &:hover {

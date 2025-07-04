@@ -25,6 +25,7 @@
   flex-direction: column;
   margin-top: 50px;
   margin: 50px 10px 50px;
+  padding: 0 20px;
 
   h1 {
     font-size: 4.2rem;
@@ -39,7 +40,7 @@
     }
   }
 
-  p {
+  h2 {
     font-size: 1.6rem;
     font-family: "Outfit", sans-serif;
     margin: 20px 0 0;
@@ -75,6 +76,7 @@
   border-radius: 10px;
   box-shadow: 0 5px rgb(160, 160, 160);
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   transition: 0.1s linear;
   color: black;
 
@@ -105,6 +107,7 @@
   border-radius: 10px;
   box-shadow: 0 5px rgb(160, 160, 160);
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
   transition: 0.1s linear;
   color: white;
 
@@ -174,7 +177,7 @@
 
 .feature {
   font-size: 1.3rem;
-  font-weight: 200;
+  font-weight: 300;
   font-family: "Outfit", sans-serif;
 }
 
@@ -220,6 +223,7 @@
   font-size: 1rem;
   margin-bottom: 15px;
   font-family: "Outfit", sans-serif;
+  font-weight: 500;
 }
 
 .reviewer {
@@ -229,7 +233,7 @@
 }
 
 .name {
-  font-weight: bold;
+  font-weight: 900;
   font-family: "Outfit", sans-serif;
 }
 
