@@ -28,7 +28,7 @@
         </div>
       } @else {
         <div class="avatar-container" [class.disabled]="dialogLoading()">
-          <img class="avatar" [ngSrc]="type === 'profile' ? 'assets/avatars/default-avatar.png' : 'assets/avatars/default-business-avatar.png'" alt="avatar" width="150" height="150" draggable="false">
+          <img class="avatar" [ngSrc]="type === 'profile' ? '/assets/images/avatars/default-avatar.png' : '/assets/images/avatars/default-business-avatar.png'" alt="avatar" width="150" height="150" draggable="false">
           <i class="pi pi-trash" (click)="showUploadAvatarButton.set(true); imageChangedEvent = null; croppedImage = null"></i>
         </div>
       }

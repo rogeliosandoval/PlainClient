@@ -6,9 +6,9 @@
     <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
       <div class="top-nav-logo" routerLink="/dashboard/">
         @if (sharedService.darkMode()) {
-          <img class="logo" ngSrc="assets/logo-light.svg" alt="logo" draggable="false" width="200" height="48">
+          <img class="logo" ngSrc="/assets/images/logo-light.svg" alt="logo" draggable="false" width="200" height="48">
         } @else {
-          <img class="logo" ngSrc="assets/logo.svg" alt="logo" draggable="false" width="200" height="48">
+          <img class="logo" ngSrc="/assets/images/logo.svg" alt="logo" draggable="false" width="200" height="48">
         }
       </div>
       <div class="top-nav-search">
@@ -27,7 +27,7 @@
           @if (authService.coreUserData()?.avatarUrl) {
             <img class="avatar" [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false" priority>
           } @else {
-            <img class="avatar" ngSrc="assets/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false" priority>
+            <img class="avatar" ngSrc="/assets/images/avatars/default-avatar.png" alt="avatar" [class.avatar-hover-dark]="sharedService.darkMode()" width="40" height="40" draggable="false" priority>
           }
           <div class="name-arrow" [class.name-arrow-hover-dark]="sharedService.darkMode()">
             <span>{{ authService.coreUserData()?.name }}</span>
@@ -116,7 +116,7 @@
           @if (authService.coreBusinessData()?.avatarUrl) {
             <img [ngSrc]="authService.coreBusinessData()?.avatarUrl || ''" alt="business logo" width="120" height="120" draggable="false" priority>
           } @else {
-            <img ngSrc="assets/avatars/default-business-avatar.png" alt="business logo" width="120" height="120" draggable="false" priority>
+            <img ngSrc="/assets/images/avatars/default-business-avatar.png" alt="business logo" width="120" height="120" draggable="false" priority>
           }
         </div>
       </div>

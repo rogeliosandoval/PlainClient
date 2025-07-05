@@ -1,9 +1,9 @@
 <div class="signup-container">
   <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '#282828' : ''">
     @if(sharedService.darkMode()) {
-      <img ngSrc="assets/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
+      <img ngSrc="/assets/images/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
     } @else {
-      <img ngSrc="assets/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
+      <img ngSrc="/assets/images/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
     }
     <form id="entry-form" [formGroup]="registerForm" (ngSubmit)="register()">
       <div class="input-container" [class.disabled]="sharedService.loading()">
@@ -30,7 +30,7 @@
     </form>
     <div class="divider">Or:</div>
     <div class="google-button" [class.disabled]="sharedService.loading()">
-      <img ngSrc="assets/google-icon.png" alt="google icon" width="20" height="20" draggable="false">
+      <img ngSrc="/assets/images/google-icon.png" alt="google icon" width="20" height="20" draggable="false">
       <span>Register with Google</span>
     </div>
     <span class="action" routerLink="/login" [class.disabled]="sharedService.loading()">Already registered?</span>
