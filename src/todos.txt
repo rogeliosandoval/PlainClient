@@ -2,7 +2,7 @@ TODOS:
 
 - add createdAt values for clients and stuff
 
-- check numberOfClients update in the datbase
+- check numberOfClients update in the database
 
 - redesign toasts
 
