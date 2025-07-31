@@ -4,7 +4,7 @@ TODOS:
 
 - check numberOfClients update in the database
 
-- redesign toasts
+- redesign toasts, make them shorter
 
 - make dark/light mode based on a variable for the user in their firestore opposed to session state
 
