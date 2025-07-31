@@ -15,3 +15,5 @@ TODOS:
 - redesign home page and add fade in
 
 - add join business feature for members who register for a business
+
+- implement google auth sign in
