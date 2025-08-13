@@ -4,7 +4,7 @@
       @if (authService.coreUserData()?.avatarUrl) {
         <img [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" width="200" height="200" draggable="false" priority>
       } @else {
-        <img ngSrc="assets/avatars/default-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
+        <img ngSrc="assets/images/avatars/default-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
       }
       <div class="main-info">
         <div class="name">{{ authService.coreUserData()?.name }}</div>
