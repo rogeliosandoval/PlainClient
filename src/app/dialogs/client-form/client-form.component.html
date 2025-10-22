@@ -23,7 +23,7 @@
     
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="client_phone">Client Phone</label>
-      <input id="client_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="client_phone" phoneNumber autocomplete="tel"/>
+      <input id="client_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="client_phone" phoneNumber autocomplete="tel" maxlength="14"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">

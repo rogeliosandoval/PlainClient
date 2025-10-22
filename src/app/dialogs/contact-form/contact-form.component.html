@@ -20,7 +20,7 @@
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="contact_phone">Contact Phone</label>
-      <input id="contact_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="contact_phone" phoneNumber autocomplete="tel"/>
+      <input id="contact_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="contact_phone" phoneNumber autocomplete="tel" maxlength="14"/>
     </div>
 
     <p-button label="{{ type === 'edit' ? 'Update Contact' : 'Add Contact' }}" type="submit" [disabled]="dialogLoading() || contactForm.invalid || !contactForm.dirty"></p-button>

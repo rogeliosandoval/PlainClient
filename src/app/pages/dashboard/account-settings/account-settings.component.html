@@ -34,7 +34,7 @@
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="phone">Phone:</label>
-          <input id="phone" type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10" autocomplete="tel"/>
+          <input id="phone" type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10" autocomplete="tel" maxlength="14"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="location">Location:</label>
