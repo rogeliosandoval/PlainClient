@@ -164,8 +164,7 @@ export class Dashboard implements OnInit {
         connectedBy: data.formData.connected_by,
         note: data.formData.note,
         createdAt: new Date().toISOString(),
-        avatarUrl,
-        contacts: [] // assuming no contacts yet
+        avatarUrl
       }
   
       // Save the new client to Firestore

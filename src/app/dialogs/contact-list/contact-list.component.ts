@@ -50,10 +50,6 @@ export class ContactListDialog implements OnInit {
     ]
   }
 
-  public test(): void {
-    console.log(this.sharedService.dialogClient())
-  }
-
   public closeDialog() {
     this.showContactListDialog = false
     this.onClose.emit(false)

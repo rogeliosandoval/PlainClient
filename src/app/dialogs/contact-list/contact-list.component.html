@@ -3,10 +3,10 @@
   @for (contact of sharedService.dialogClient()?.contacts; track contact.id) {
     <div class="contact-card" [style.background-color]="sharedService.darkMode() ? 'rgb(30, 30, 30)' : 'rgb(245, 245, 237)'">
       <div class="contact-card-info">
-        <div class="contact-card__name">Adrian Rocky</div>
-        <div class="contact-card__position">Senior Full Stack Engineer</div>
-        <div class="contact-card__email">test&#64;testing.com</div>
-        <div class="contact-card__phone">(210) 540-6838</div>
+        <div class="contact-card__name">{{ contact.name }}</div>
+        <div class="contact-card__position">{{ contact.position }}</div>
+        <div class="contact-card__email">{{ contact.email }}</div>
+        <div class="contact-card__phone">{{ contact.phone }}</div>
       </div>
       <div class="menu">
         <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>

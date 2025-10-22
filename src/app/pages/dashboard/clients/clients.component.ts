@@ -16,6 +16,7 @@ import { ContactFormDialog } from '../../../dialogs/contact-form/contact-form.co
 import { FormatPhonePipe } from '../../../pipes/format-phone.pipe'
 import { ContactListDialog } from '../../../dialogs/contact-list/contact-list.component'
 import { NgOptimizedImage } from '@angular/common'
+import { ClientFormData } from '../../../interfaces/other.interface'
 
 @Component({
   selector: 'tc-clients',
@@ -142,7 +143,7 @@ export class Clients implements OnInit {
     }
   }
 
-  public async triggerContactForm(data: any) {
+  public async triggerContactForm(data: ClientFormData) {
     this.dialogLoading.set(true)
 
     if (data.type === 'add') {
