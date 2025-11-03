@@ -28,7 +28,7 @@ export class ContactListDialog implements OnInit {
   public contactOptions: MenuItem[] | undefined
 
   ngOnInit(): void {
-    this.contactOptions =  [
+    this.contactOptions = [
       {
         label: 'Edit Contact',
         icon: 'pi pi-pencil',

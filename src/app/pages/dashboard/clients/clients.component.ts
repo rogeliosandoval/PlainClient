@@ -58,7 +58,7 @@ export class Clients implements OnInit {
     // setTimeout(() => {
     //   this.loadingClients.set(false)
     // }, 700)
-    this.clientOptions =  [
+    this.clientOptions = [
       {
         label: 'View Details',
         icon: 'pi pi-info-circle',
