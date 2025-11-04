@@ -5,6 +5,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { SharedService } from '../../services/shared.service'
 import { MenuItem } from 'primeng/api'
 import { MenuModule } from 'primeng/menu'
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
+import { ConfirmationService } from 'primeng/api'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -13,8 +15,10 @@ import { MenuModule } from 'primeng/menu'
     DialogModule,
     ButtonModule,
     ProgressSpinnerModule,
-    MenuModule
+    MenuModule,
+    ConfirmDialogModule
   ],
+  providers: [ConfirmationService],
   templateUrl: './contact-list.component.html',
   styleUrl: './contact-list.component.scss'
 })
@@ -23,9 +27,11 @@ export class ContactListDialog implements OnInit {
   @Input() showContactListDialog = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
+  public confirmationService = inject(ConfirmationService)
   public sharedService = inject(SharedService)
   public dialogLoading = input<boolean>()
   public contactOptions: MenuItem[] | undefined
+  public deletingContact = signal<boolean>(false)
 
   ngOnInit(): void {
     this.contactOptions = [
@@ -44,10 +50,27 @@ export class ContactListDialog implements OnInit {
         label: 'Delete Contact',
         icon: 'pi pi-trash',
         command: () => {
-
+          this.confirmationService.confirm({
+            message: 'Are you sure that you want to delete this contact?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            acceptIcon: 'none',
+            rejectIcon: 'none',
+            rejectButtonStyleClass: 'p-button-text',
+            accept: () => {
+              this.deleteContact()
+            },
+            reject: () => {
+              // this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+            }
+          })
         }
       }
     ]
+  }
+
+  public deleteContact(): void {
+    this.deletingContact.set(true)
   }
 
   public closeDialog() {
