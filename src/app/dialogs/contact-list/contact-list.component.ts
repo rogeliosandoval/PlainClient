@@ -70,7 +70,7 @@ export class ContactListDialog implements OnInit {
   }
 
   public deleteContact(): void {
-    this.deletingContact.set(true)
+    
   }
 
   public closeDialog() {

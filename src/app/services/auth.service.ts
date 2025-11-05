@@ -359,4 +359,10 @@ export class AuthService {
       createdAt: new Date().toISOString()
     })
   }
+
+  async deleteContactToClient(clientId: any, contactId: any): Promise<void> {
+    const contactRef = doc(this.firestore, `businesses/${this.coreUserData()?.businessId}/clients/${clientId}/contacts/${contactId}`)
+
+    console.log(contactRef)
+  }
 }
