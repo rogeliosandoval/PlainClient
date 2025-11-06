@@ -72,7 +72,7 @@
           </div>
           <div class="client-contacts">
             <i class="pi pi-address-book"></i>
-            @if (client.contacts!.length > 0) {
+            @if ((client.contacts ?? []).length > 0) {
               <span (click)="showContactListDialog.set(true); this.sharedService.dialogClient.set(client)">{{ client.contacts!.length }} {{ client.contacts!.length == 1 ? 'contact' : 'contacts' }}</span>
             } @else {
               <div class="add-link" (click)="this.sharedService.dialogClient.set(client); showContactFormDialog.set(true)" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Add contact</div>
