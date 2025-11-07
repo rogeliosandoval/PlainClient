@@ -1,0 +1,29 @@
+@use '../../../../variables.scss' as variables;
+
+.no-team-members {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  text-align: center;
+
+  img {
+    max-width: 230px;
+    height: auto;
+    opacity: 0.8;
+    margin-bottom: 2rem;
+
+    @include variables.media('phone') {
+      max-width: 190px;
+    }
+  }
+
+  span {
+    font-size: 1.1rem;
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    line-height: 1.7rem;
+  }
+}
