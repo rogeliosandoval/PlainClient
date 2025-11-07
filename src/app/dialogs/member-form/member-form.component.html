@@ -1,0 +1,31 @@
+<p-dialog header="{{ type === 'edit' ? 'Edit Member' : 'Add Member' }}" [modal]="true" (onHide)="closeDialog()" [(visible)]="showMemberFormDialog" [style]="{ width: '26rem' }">
+  <form [formGroup]="memberForm" class="member-form" (ngSubmit)="type === 'edit' ? submitDialog('edit') : submitDialog('add')">
+    <div class="input-group" [class.disabled]="dialogLoading()">
+      <label for="member_name">Member Name*</label>
+      <input id="member_name" type="text" pInputText variant="filled" placeholder="Name" formControlName="member_name" autocomplete="name"/>
+    </div>
+
+    <div class="input-group" [class.disabled]="dialogLoading()">
+      <label for="member_position">Member Position</label>
+      <input id="member_position" type="text" pInputText variant="filled" placeholder="Position" formControlName="member_position" autocomplete="off"/>
+    </div>
+
+    <div class="input-group" [class.disabled]="dialogLoading()">
+      <label for="member_email">Member Email</label>
+      @if (memberForm.get('member_email')?.invalid && memberForm.get('member_email')?.touched) {
+        <div class="input-error">Please enter a valid email</div>
+      }
+      <input id="member_email" type="email" pInputText variant="filled" placeholder="Email" formControlName="member_email" autocomplete="email"/>
+    </div>
+
+    <div class="input-group" [class.disabled]="dialogLoading()">
+      <label for="member_phone">Member Phone</label>
+      <input id="member_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="member_phone" phoneNumber autocomplete="tel" maxlength="14"/>
+    </div>
+
+    <p-button label="{{ type === 'edit' ? 'Update Member' : 'Add Member' }}" type="submit" [disabled]="dialogLoading() || memberForm.invalid || !memberForm.dirty"></p-button>
+    @if (dialogLoading()) {
+      <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+    }
+  </form>
+</p-dialog>
