@@ -360,9 +360,9 @@ export class AuthService {
     })
   }
 
-  async deleteContactToClient(clientId: any, contactId: any): Promise<void> {
-    const contactRef = doc(this.firestore, `businesses/${this.coreUserData()?.businessId}/clients/${clientId}/contacts/${contactId}`)
+  // async deleteContactToClient(clientId: any, contactId: any): Promise<void> {
+  //   const contactRef = doc(this.firestore, `businesses/${this.coreUserData()?.businessId}/clients/${clientId}/contacts/${contactId}`)
 
-    console.log(contactRef)
-  }
+  //   await deleteDoc(contactRef)
+  // }
 }

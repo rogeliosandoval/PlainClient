@@ -9,7 +9,7 @@
         <div class="contact-card__phone">{{ contact.phone }}</div>
       </div>
       <div class="menu">
-        <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+        <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedContact = contact"></i>
         <p-menu #menu [model]="contactOptions" [popup]="true" [appendTo]="'body'"/>
       </div>
     </div>

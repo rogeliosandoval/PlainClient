@@ -3,10 +3,12 @@ import { DialogModule } from 'primeng/dialog'
 import { ButtonModule } from 'primeng/button'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { SharedService } from '../../services/shared.service'
+import { AuthService } from '../../services/auth.service'
 import { MenuItem } from 'primeng/api'
 import { MenuModule } from 'primeng/menu'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ConfirmationService } from 'primeng/api'
+import { Contact } from '../../interfaces/user.interface'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -29,9 +31,11 @@ export class ContactListDialog implements OnInit {
   @Output() onSubmit = new EventEmitter<any>()
   public confirmationService = inject(ConfirmationService)
   public sharedService = inject(SharedService)
+  public authService = inject(AuthService)
   public dialogLoading = input<boolean>()
   public contactOptions: MenuItem[] | undefined
   public deletingContact = signal<boolean>(false)
+  public selectedContact: Contact | null = null
 
   ngOnInit(): void {
     this.contactOptions = [
@@ -70,7 +74,7 @@ export class ContactListDialog implements OnInit {
   }
 
   public deleteContact(): void {
-    
+    // this.authService.deleteContactToClient(this.sharedService.dialogClient().id, this.selectedContact?.id)
   }
 
   public closeDialog() {
