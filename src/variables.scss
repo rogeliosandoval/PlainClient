@@ -54,6 +54,12 @@ $theme-color-main-light: #37b6ff;
   }
 }
 
+.p-dialog .p-dialog-content {
+  @include media('phone') {
+    padding-top: 1rem;
+  }
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-7px); }
