@@ -346,18 +346,58 @@ export class AuthService {
     }
   }
 
-  async addContactToClient(formData: any, clientId: any): Promise<void> {
+  async addContactToClient(formData: any, clientId: string): Promise<void> {
     const contactId = uuidv4()
-    const contactRef = doc(this.firestore, `businesses/${this.coreUserData()?.businessId}/clients/${clientId}/contacts/${contactId}`)
+    const businessId = this.coreUserData()?.businessId
+    const contactRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}/contacts/${contactId}`)
 
-    await setDoc(contactRef, {
+    const newContact = {
       id: contactId,
       name: formData.contact_name,
       email: formData.contact_email,
       position: formData.contact_position,
       phone: formData.contact_phone,
       createdAt: new Date().toISOString()
-    })
+    }
+
+    // Write to Firestore first
+    await setDoc(contactRef, newContact)
+
+    // --- Update Local Cache ---
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Find the target client inside cached data
+        const clientIndex = parsed.clients.findIndex((c: any) => c.id === clientId)
+        if (clientIndex !== -1) {
+          // Ensure contacts array exists
+          if (!Array.isArray(parsed.clients[clientIndex].contacts)) {
+            parsed.clients[clientIndex].contacts = []
+          }
+
+          // Add new contact to the top of the contacts list
+          parsed.clients[clientIndex].contacts = [newContact, ...parsed.clients[clientIndex].contacts]
+        }
+
+        // Save the updated cache back to localStorage
+        localStorage.setItem(cacheKey, JSON.stringify(parsed))
+
+        // Update signal/store so UI reacts immediately
+        this.coreBusinessData.set(parsed)
+
+        console.log('✅ Contact successfully added and cache updated')
+      } catch (e) {
+        console.warn('[addContactToClient] Failed to update cache manually, refetching instead ❌', e)
+        await this.fetchCoreBusinessData()
+      }
+    } else {
+      // Fallback if cache doesn't exist
+      await this.fetchCoreBusinessData()
+    }
   }
 
   // async deleteContactToClient(clientId: any, contactId: any): Promise<void> {
