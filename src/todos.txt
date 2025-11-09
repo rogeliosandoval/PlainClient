@@ -17,3 +17,5 @@ TODOS:
 - add join business feature for members who register for a business
 
 - implement google auth sign in
+
+- add "add client" to mobile
