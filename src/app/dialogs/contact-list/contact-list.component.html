@@ -5,7 +5,15 @@
       <div class="contact-card-info">
         <div class="contact-card__name">{{ contact.name }}</div>
         <div class="contact-card__position">{{ contact.position }}</div>
-        <div class="contact-card__email">{{ contact.email }}</div>
+        @if (contact.email.length >= 37) {
+          <a class="email" href="mailto:{{contact.email}}" pTooltip="{{contact.email}}" tooltipPosition="top" autoHide="false" showDelay="500">
+            <div class="contact-card__email">{{ contact.email | truncate: 37 }}</div>
+          </a>
+        } @else {
+          <a class="email" href="mailto:{{contact.email}}">
+            <div class="contact-card__email">{{ contact.email }}</div>
+          </a>
+        }
         <div class="contact-card__phone">{{ contact.phone }}</div>
       </div>
       <div class="menu">

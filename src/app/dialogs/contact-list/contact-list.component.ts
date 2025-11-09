@@ -9,6 +9,8 @@ import { MenuModule } from 'primeng/menu'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ConfirmationService } from 'primeng/api'
 import { Contact } from '../../interfaces/user.interface'
+import { TruncatePipe } from '../../pipes/truncate.pipe'
+import { TooltipModule } from 'primeng/tooltip'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -18,7 +20,9 @@ import { Contact } from '../../interfaces/user.interface'
     ButtonModule,
     ProgressSpinnerModule,
     MenuModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    TruncatePipe,
+    TooltipModule
   ],
   providers: [ConfirmationService],
   templateUrl: './contact-list.component.html',

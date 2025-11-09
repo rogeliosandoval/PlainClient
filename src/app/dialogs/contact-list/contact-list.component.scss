@@ -54,3 +54,13 @@ p-progressSpinner {
     padding: 0;
   }
 }
+
+.email {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    cursor: pointer;
+    color: variables.$theme-color-main;
+  }
+}
