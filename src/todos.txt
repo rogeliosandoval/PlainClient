@@ -19,3 +19,5 @@ TODOS:
 - implement google auth sign in
 
 - add "add client" to mobile
+
+- double check best practices for optimization on images and code
