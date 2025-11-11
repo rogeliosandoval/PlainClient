@@ -11,6 +11,7 @@ import { ConfirmationService } from 'primeng/api'
 import { Contact } from '../../interfaces/user.interface'
 import { TruncatePipe } from '../../pipes/truncate.pipe'
 import { TooltipModule } from 'primeng/tooltip'
+import { UnformatPhonePipe } from '../../pipes/unformat-phone.pipe'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -22,7 +23,8 @@ import { TooltipModule } from 'primeng/tooltip'
     MenuModule,
     ConfirmDialogModule,
     TruncatePipe,
-    TooltipModule
+    TooltipModule,
+    UnformatPhonePipe
   ],
   providers: [ConfirmationService],
   templateUrl: './contact-list.component.html',

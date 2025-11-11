@@ -14,7 +14,9 @@
             <div class="contact-card__email">{{ contact.email }}</div>
           </a>
         }
-        <div class="contact-card__phone">{{ contact.phone }}</div>
+        <a class="phone" href="tel:+1{{contact.phone | unformatPhone}}">
+          <div class="contact-card__phone">{{ contact.phone }}</div>
+        </a>
       </div>
       <div class="menu">
         <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedContact = contact"></i>
