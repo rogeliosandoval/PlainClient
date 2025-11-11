@@ -5,7 +5,7 @@
     }
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="client_name">Client Name*</label>
-      <input id="client_name" type="text" pInputText variant="filled" placeholder="Name" formControlName="client_name" autocomplete="name"/>
+      <input id="client_name" type="text" pInputText variant="filled" placeholder="Name" formControlName="client_name" autocomplete="name" maxlength="44"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">
@@ -18,7 +18,7 @@
       @if (clientForm.get('client_email')?.invalid && clientForm.get('client_email')?.touched) {
         <div class="input-error">Please enter a valid email</div>
       }
-      <input id="client_email" type="email" pInputText variant="filled" placeholder="Email" formControlName="client_email" autocomplete="email"/>
+      <input id="client_email" type="email" pInputText variant="filled" placeholder="Email" formControlName="client_email" autocomplete="email" maxlength="44"/>
     </div>
     
     <div class="input-group" [class.disabled]="dialogLoading()">
@@ -28,7 +28,7 @@
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="client_location">Client Location</label>
-      <input id="client_location" type="text" pInputText variant="filled" placeholder="Location" formControlName="client_location" autocomplete="off"/>
+      <input id="client_location" type="text" pInputText variant="filled" placeholder="Location" formControlName="client_location" autocomplete="off" maxlength="44"/>
     </div>
 
     @if (showUploadAvatarButton()) {

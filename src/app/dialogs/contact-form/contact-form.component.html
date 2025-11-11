@@ -2,7 +2,7 @@
   <form [formGroup]="contactForm" class="contact-form" (ngSubmit)="type === 'edit' ? submitDialog('edit') : submitDialog('add')">
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="contact_name">Contact Name*</label>
-      <input id="contact_name" type="text" pInputText variant="filled" placeholder="Name" formControlName="contact_name" autocomplete="name"/>
+      <input id="contact_name" type="text" pInputText variant="filled" placeholder="Name" formControlName="contact_name" autocomplete="name" maxlength="40"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">
@@ -10,12 +10,12 @@
       @if (contactForm.get('contact_email')?.invalid && contactForm.get('contact_email')?.touched) {
         <div class="input-error">Please enter a valid email</div>
       }
-      <input id="contact_email" type="email" pInputText variant="filled" placeholder="Email" formControlName="contact_email" autocomplete="email"/>
+      <input id="contact_email" type="email" pInputText variant="filled" placeholder="Email" formControlName="contact_email" autocomplete="email" maxlength="44"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">
       <label for="contact_position">Contact Position</label>
-      <input id="contact_position" type="text" pInputText variant="filled" placeholder="Position" formControlName="contact_position" autocomplete="off"/>
+      <input id="contact_position" type="text" pInputText variant="filled" placeholder="Position" formControlName="contact_position" autocomplete="off" maxlength="40"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">

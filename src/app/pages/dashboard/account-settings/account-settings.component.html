@@ -19,18 +19,18 @@
         }
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="name">Your Name:</label>
-          <input id="name" type="text" pInputText variant="filled" placeholder="Name" formControlName="name" autocomplete="name"/>
+          <input id="name" type="text" pInputText variant="filled" placeholder="Name" formControlName="name" autocomplete="name" maxlength="44"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="email">Email:</label>
           @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
             <div class="input-error">Please enter a valid email</div>
           }
-          <input id="email" type="text" pInputText variant="filled" placeholder="Email" formControlName="email" autocomplete="email"/>
+          <input id="email" type="text" pInputText variant="filled" placeholder="Email" formControlName="email" autocomplete="email" maxlength="44"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="position">Position:</label>
-          <input id="position" type="text" pInputText variant="filled" placeholder="Position" formControlName="position" autocomplete="off"/>
+          <input id="position" type="text" pInputText variant="filled" placeholder="Position" formControlName="position" autocomplete="off" maxlength="44"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="phone">Phone:</label>
@@ -38,7 +38,7 @@
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="location">Location:</label>
-          <input id="location" type="text" pInputText variant="filled" placeholder="Location" formControlName="location" autocomplete="off"/>
+          <input id="location" type="text" pInputText variant="filled" placeholder="Location" formControlName="location" autocomplete="off" maxlength="44"/>
         </div>
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="message">Message:</label>
@@ -67,7 +67,7 @@
         }
         <div class="input-container" [class.disabled]="sharedService.loading()">
           <label for="name">Business Name:</label>
-          <input id="name" type="text" pInputText variant="filled" placeholder="Business Name" formControlName="name" autocomplete="name"/>
+          <input id="name" type="text" pInputText variant="filled" placeholder="Business Name" formControlName="name" autocomplete="name" maxlength="44"/>
         </div>
         <div class="button-container">
           <p-button label="Save Changes" type="submit" [disabled]="!businessForm.dirty || savingChanges()"></p-button>
