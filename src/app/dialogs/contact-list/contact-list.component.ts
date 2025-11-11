@@ -12,6 +12,7 @@ import { Contact } from '../../interfaces/user.interface'
 import { TruncatePipe } from '../../pipes/truncate.pipe'
 import { TooltipModule } from 'primeng/tooltip'
 import { UnformatPhonePipe } from '../../pipes/unformat-phone.pipe'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -24,7 +25,8 @@ import { UnformatPhonePipe } from '../../pipes/unformat-phone.pipe'
     ConfirmDialogModule,
     TruncatePipe,
     TooltipModule,
-    UnformatPhonePipe
+    UnformatPhonePipe,
+    // MessageService
   ],
   providers: [ConfirmationService],
   templateUrl: './contact-list.component.html',
@@ -35,6 +37,7 @@ export class ContactListDialog implements OnInit {
   @Input() showContactListDialog = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
+  public messageService = inject(MessageService)
   public confirmationService = inject(ConfirmationService)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
@@ -79,8 +82,30 @@ export class ContactListDialog implements OnInit {
     ]
   }
 
-  public deleteContact(): void {
-    // this.authService.deleteContactToClient(this.sharedService.dialogClient().id, this.selectedContact?.id)
+  public async deleteContact(): Promise<void> {
+    this.deletingContact.set(true)
+    try {
+      await this.authService.deleteContactToClient(this.sharedService.dialogClient().id, this.selectedContact?.id as string)
+  
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Contact has been deleted.',
+        key: 'br',
+        life: 4000
+      })
+      this.deletingContact.set(false)
+      this.showContactListDialog = false
+    } catch {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error deleting contact. Try again.',
+        key: 'br',
+        life: 4000,
+      })
+      this.deletingContact.set(false)
+    }
   }
 
   public closeDialog() {

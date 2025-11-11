@@ -126,7 +126,7 @@ export class Clients implements OnInit {
         summary: 'Success',
         detail: `Client (${this.sharedService.dialogClient().name}) has been deleted.`,
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
       this.dialogLoading.set(false)
       this.showConfirmDialog.set(false)
@@ -138,7 +138,7 @@ export class Clients implements OnInit {
         summary: 'Error',
         detail: 'There was an error deleting a client.',
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
     }
   }
@@ -155,7 +155,7 @@ export class Clients implements OnInit {
           summary: 'Success',
           detail: 'Contact has been added to the client!',
           key: 'br',
-          life: 6000
+          life: 4000
         })
         
         this.contactFormDialog.resetForm()
@@ -169,7 +169,7 @@ export class Clients implements OnInit {
           summary: 'Error',
           detail: 'There was an error adding a contact. Try again.',
           key: 'br',
-          life: 6000,
+          life: 4000,
         })
       }
     }

@@ -400,9 +400,44 @@ export class AuthService {
     }
   }
 
-  // async deleteContactToClient(clientId: any, contactId: any): Promise<void> {
-  //   const contactRef = doc(this.firestore, `businesses/${this.coreUserData()?.businessId}/clients/${clientId}/contacts/${contactId}`)
+  async deleteContactToClient(clientId: string, contactId: string): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    const contactRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}/contacts/${contactId}`)
 
-  //   await deleteDoc(contactRef)
-  // }
+    // Delete from Firestore
+    await deleteDoc(contactRef)
+
+    // Update local cache
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Find client
+        const clientIndex = parsed.clients.findIndex((c: any) => c.id === clientId)
+        if (clientIndex !== -1 && Array.isArray(parsed.clients[clientIndex].contacts)) {
+          // Filter out deleted contact
+          parsed.clients[clientIndex].contacts = parsed.clients[clientIndex].contacts.filter(
+            (contact: any) => contact.id !== contactId
+          )
+        }
+
+        // Save updated cache
+        localStorage.setItem(cacheKey, JSON.stringify(parsed))
+
+        // Update store/signal
+        this.coreBusinessData.set(parsed)
+
+        console.log('✅ Contact successfully deleted and cache updated')
+      } catch (e) {
+        console.warn('[deleteContactToClient] Failed to update cache manually, refetching instead ❌', e)
+        await this.fetchCoreBusinessData()
+      }
+    } else {
+      // fallback if cache is missing
+      await this.fetchCoreBusinessData()
+    }
+  }
 }

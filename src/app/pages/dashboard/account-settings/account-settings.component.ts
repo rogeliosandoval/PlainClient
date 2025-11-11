@@ -98,7 +98,7 @@ export class AccountSettings implements OnInit {
         summary: 'Success',
         detail: 'Avatar has been saved!',
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
 
       this.sharedService.showAvatarUploadDialog.set(false)
@@ -118,7 +118,7 @@ export class AccountSettings implements OnInit {
         summary: 'Success',
         detail: 'Avatar has been deleted!',
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
 
       this.sharedService.showAvatarUploadDialog.set(false)
@@ -163,7 +163,7 @@ export class AccountSettings implements OnInit {
         summary: 'Success',
         detail: 'Logo has been saved!',
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
       
       this.sharedService.showAvatarUploadDialog.set(false)      
@@ -205,7 +205,7 @@ export class AccountSettings implements OnInit {
         summary: 'Success',
         detail: 'Logo has been removed.',
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
       
       this.sharedService.showAvatarUploadDialog.set(false)      
@@ -263,7 +263,7 @@ export class AccountSettings implements OnInit {
                 summary: 'Success',
                 detail: 'Profile has been updated!',
                 key: 'br',
-                life: 6000,
+                life: 4000,
               })
             })
             .then(() => {
@@ -280,7 +280,7 @@ export class AccountSettings implements OnInit {
             summary: 'Error',
             detail: 'There was an error updating your profile. Try again',
             key: 'br',
-            life: 6000,
+            life: 4000,
           })
         }
       })
@@ -312,7 +312,7 @@ export class AccountSettings implements OnInit {
                 summary: 'Success',
                 detail: 'Business profile has been updated!',
                 key: 'br',
-                life: 6000,
+                life: 4000,
               })
             })
             .then(() => {
@@ -329,7 +329,7 @@ export class AccountSettings implements OnInit {
             summary: 'Error',
             detail: 'There was an error updating your profile. Try again.',
             key: 'br',
-            life: 6000,
+            life: 4000,
           })
         }
       })

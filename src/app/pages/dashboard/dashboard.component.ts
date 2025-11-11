@@ -199,7 +199,7 @@ export class Dashboard implements OnInit {
         summary: 'Success',
         detail: 'Client has been added!',
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
   
       this.addClientDialog.resetForm()
@@ -216,7 +216,7 @@ export class Dashboard implements OnInit {
           summary: 'Error',
           detail: 'There was an error adding a client. Try again.',
           key: 'br',
-          life: 6000,
+          life: 4000,
         })
       }, 2000)
     }
@@ -298,7 +298,7 @@ export class Dashboard implements OnInit {
         summary: 'Success',
         detail: 'Client has been updated!',
         key: 'br',
-        life: 6000,
+        life: 4000,
       })
   
       this.addClientDialog.resetForm()
@@ -313,7 +313,7 @@ export class Dashboard implements OnInit {
           summary: 'Error',
           detail: 'There was an error updating the client. Try again.',
           key: 'br',
-          life: 6000,
+          life: 4000,
         })
       }, 2000)
     }
@@ -363,7 +363,7 @@ export class Dashboard implements OnInit {
               summary: 'Success',
               detail: 'Business name has been added!',
               key: 'br',
-              life: 6000,
+              life: 4000,
             })
           })
         }
