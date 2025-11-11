@@ -440,4 +440,60 @@ export class AuthService {
       await this.fetchCoreBusinessData()
     }
   }
+
+  async editContactForClient(clientId: string, contactId: string, formData: any): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    const contactRef = doc(this.firestore, `businesses/${businessId}/clients/${clientId}/contacts/${contactId}`)
+
+    const updatedContact = {
+      id: contactId,
+      name: formData.contact_name,
+      email: formData.contact_email,
+      position: formData.contact_position,
+      phone: formData.contact_phone,
+      updatedAt: new Date().toISOString()
+    }
+
+    // Update Firestore document
+    await setDoc(contactRef, updatedContact, { merge: true })
+
+    // Update Local Cache
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Find client in cache
+        const clientIndex = parsed.clients.findIndex((c: any) => c.id === clientId)
+        if (clientIndex !== -1) {
+          const contacts = parsed.clients[clientIndex].contacts || []
+          const contactIndex = contacts.findIndex((c: any) => c.id === contactId)
+
+          if (contactIndex !== -1) {
+            // Merge updated fields into existing contact
+            parsed.clients[clientIndex].contacts[contactIndex] = {
+              ...parsed.clients[clientIndex].contacts[contactIndex],
+              ...updatedContact
+            }
+          }
+        }
+
+        // Save updated cache
+        localStorage.setItem(cacheKey, JSON.stringify(parsed))
+
+        // Update reactive signal/store
+        this.coreBusinessData.set(parsed)
+
+        console.log('✅ Contact successfully edited and cache updated')
+      } catch (e) {
+        console.warn('[editContactForClient] Failed to update cache manually, refetching instead ❌', e)
+        await this.fetchCoreBusinessData()
+      }
+    } else {
+      // Fallback if cache doesn't exist
+      await this.fetchCoreBusinessData()
+    }
+  }
 }

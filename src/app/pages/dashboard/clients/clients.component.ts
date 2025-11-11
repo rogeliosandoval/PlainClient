@@ -146,32 +146,30 @@ export class Clients implements OnInit {
   public async triggerContactForm(data: ClientFormData) {
     this.dialogLoading.set(true)
 
-    if (data.type === 'add') {
-      try {
-        await this.authService.addContactToClient(data.formData, this.sharedService.dialogClient().id)
-  
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Contact has been added to the client!',
-          key: 'br',
-          life: 4000
-        })
-        
-        this.contactFormDialog.resetForm()
-        this.dialogLoading.set(false)
-        this.showContactFormDialog.set(false)
-      } catch (err) {
-        this.dialogLoading.set(false)
-        console.log(err)
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error adding a contact. Try again.',
-          key: 'br',
-          life: 4000,
-        })
-      }
+    try {
+      await this.authService.addContactToClient(data.formData, this.sharedService.dialogClient().id)
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Contact has been added to the client!',
+        key: 'br',
+        life: 4000
+      })
+      
+      this.contactFormDialog.resetForm()
+      this.dialogLoading.set(false)
+      this.showContactFormDialog.set(false)
+    } catch (err) {
+      this.dialogLoading.set(false)
+      console.log(err)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error adding a contact. Try again.',
+        key: 'br',
+        life: 4000,
+      })
     }
   }
 }

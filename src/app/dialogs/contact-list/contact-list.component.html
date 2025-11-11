@@ -1,7 +1,7 @@
 <p-dialog header="Contacts" [modal]="true" (onHide)="closeDialog()" [(visible)]="showContactListDialog" [style]="{ width: '25rem', maxHeight: '34rem', height: 'auto' }">
   <span class="p-text-secondary">Contacts for <strong>{{ sharedService.dialogClient()?.name }}</strong></span>
-  @for (contact of sharedService.dialogClient()?.contacts; track contact.id) {
-    <div class="contact-card" [class.disabled]="deletingContact()" [style.background-color]="sharedService.darkMode() ? 'rgb(30, 30, 30)' : 'rgb(245, 245, 237)'">
+  @for (contact of sortedContacts; track contact.id) {
+    <div class="contact-card" [class.disabled]="dialogLoading" [style.background-color]="sharedService.darkMode() ? 'rgb(30, 30, 30)' : 'rgb(245, 245, 237)'">
       <div class="contact-card-info">
         <div class="contact-card__name">{{ contact.name }}</div>
         <div class="contact-card__position">{{ contact.position }}</div>
@@ -23,9 +23,10 @@
         <p-menu #menu [model]="contactOptions" [popup]="true" [appendTo]="'body'"/>
       </div>
     </div>
-    @if (deletingContact()) {
+    @if (dialogLoading) {
       <p-progressSpinner ariaLabel="loading" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
     }
   }
 </p-dialog>
+<tcd-contact-form #contactFormDialog [showContactFormDialog]="showContactFormDialog()" (onSubmit)="triggerContactForm($event)" (onClose)="onDialogClose($event)" [dialogLoading]="dialogLoading" [type]="'edit'" [selectedContact]="selectedContact"/>
 <p-confirmDialog />

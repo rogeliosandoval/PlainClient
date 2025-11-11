@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject, input, signal } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, inject, input, signal } from '@angular/core'
 import { DialogModule } from 'primeng/dialog'
 import { ButtonModule } from 'primeng/button'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
@@ -13,6 +13,8 @@ import { TruncatePipe } from '../../pipes/truncate.pipe'
 import { TooltipModule } from 'primeng/tooltip'
 import { UnformatPhonePipe } from '../../pipes/unformat-phone.pipe'
 import { MessageService } from 'primeng/api'
+import { ContactFormDialog } from '../../dialogs/contact-form/contact-form.component'
+import { ClientFormData } from '../../interfaces/other.interface'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -26,7 +28,7 @@ import { MessageService } from 'primeng/api'
     TruncatePipe,
     TooltipModule,
     UnformatPhonePipe,
-    // MessageService
+    ContactFormDialog
   ],
   providers: [ConfirmationService],
   templateUrl: './contact-list.component.html',
@@ -34,17 +36,18 @@ import { MessageService } from 'primeng/api'
 })
 
 export class ContactListDialog implements OnInit {
-  @Input() showContactListDialog = false
+  @ViewChild('contactFormDialog') contactFormDialog!: ContactFormDialog
+  @Input() showContactListDialog: boolean = false
+  @Input() dialogLoading: boolean = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
   public messageService = inject(MessageService)
   public confirmationService = inject(ConfirmationService)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
-  public dialogLoading = input<boolean>()
   public contactOptions: MenuItem[] | undefined
-  public deletingContact = signal<boolean>(false)
   public selectedContact: Contact | null = null
+  public showContactFormDialog = signal<boolean>(false)
 
   ngOnInit(): void {
     this.contactOptions = [
@@ -52,7 +55,7 @@ export class ContactListDialog implements OnInit {
         label: 'Edit Contact',
         icon: 'pi pi-pencil',
         command: () => {
-
+          this.showContactFormDialog.set(true)
         }
       },
       {
@@ -72,9 +75,6 @@ export class ContactListDialog implements OnInit {
             rejectButtonStyleClass: 'p-button-text',
             accept: () => {
               this.deleteContact()
-            },
-            reject: () => {
-              // this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
             }
           })
         }
@@ -82,11 +82,59 @@ export class ContactListDialog implements OnInit {
     ]
   }
 
+  get sortedContacts() {
+    const contacts = this.sharedService.dialogClient()?.contacts || []
+    return [...contacts].sort((a, b) => a.name.localeCompare(b.name))
+  }
+
+  public onDialogClose(newState: boolean) {
+    this.showContactFormDialog.set(newState)
+    this.contactFormDialog.resetForm()
+  }
+
+  public async triggerContactForm(data: ClientFormData) {
+    this.dialogLoading = true
+
+    try {
+      await this.authService.editContactForClient(this.sharedService.dialogClient().id, this.selectedContact?.id as string, data.formData)
+
+      await this.authService.fetchClientDataById(this.sharedService.dialogClient().id)
+      this.sharedService.dialogClient.set(this.authService.dialogClient())
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Contact has been updated!',
+        key: 'br',
+        life: 4000
+      })
+      
+      this.contactFormDialog.resetForm()
+      this.dialogLoading = false
+      this.showContactFormDialog.set(false)
+    } catch (err) {
+      this.dialogLoading = false
+      console.log(err)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error updating the contact. Try again.',
+        key: 'br',
+        life: 4000,
+      })
+    }
+  }
+
   public async deleteContact(): Promise<void> {
-    this.deletingContact.set(true)
+    this.dialogLoading = true
+
     try {
       await this.authService.deleteContactToClient(this.sharedService.dialogClient().id, this.selectedContact?.id as string)
   
+      await this.authService.fetchClientDataById(this.sharedService.dialogClient().id)
+      
+      this.sharedService.dialogClient.set(this.authService.dialogClient())
+
       this.messageService.add({
         severity: 'success',
         summary: 'Success',
@@ -94,8 +142,7 @@ export class ContactListDialog implements OnInit {
         key: 'br',
         life: 4000
       })
-      this.deletingContact.set(false)
-      this.showContactListDialog = false
+      this.dialogLoading = false
     } catch {
       this.messageService.add({
         severity: 'error',
@@ -104,7 +151,7 @@ export class ContactListDialog implements OnInit {
         key: 'br',
         life: 4000,
       })
-      this.deletingContact.set(false)
+      this.dialogLoading = false
     }
   }
 
