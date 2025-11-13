@@ -60,7 +60,10 @@ export class ContactListDialog implements OnInit {
       },
       {
         label: 'Send Email',
-        icon: 'pi pi-envelope'
+        icon: 'pi pi-envelope',
+        command: () => {
+          window.location.href = `mailto:${this.selectedContact?.email}`
+        }
       },
       {
         label: 'Delete Contact',
