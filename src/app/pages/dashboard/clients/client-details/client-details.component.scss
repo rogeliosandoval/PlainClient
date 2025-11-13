@@ -19,6 +19,7 @@ p-progressSpinner {
   padding: 30px;
   border-radius: 10px;
   animation: routeAnimation 0.2s linear;
+  margin-top: 1rem;
 }
 
 .pi-pencil {
@@ -96,8 +97,18 @@ p-progressSpinner {
   }
 }
 
+.link-tag {
+  color: inherit;
+  text-decoration: none !important;
+
+  &:hover {
+    cursor: pointer;
+    color: variables.$theme-color-main;
+  }
+}
+
 .phone {
-  margin-top: auto;
+  margin-top: 1rem;
   margin-bottom: 12px;
 }
 

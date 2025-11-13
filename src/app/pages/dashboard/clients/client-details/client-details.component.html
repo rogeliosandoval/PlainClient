@@ -1,19 +1,32 @@
 <div class="route-container" [style.position]="loadingClient() ? 'relative' : ''">
   @if (loadingClient()) {
-    <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+    <p-progressSpinner ariaLabel="loading" strokeWidth="3" [class.disabled]="sharedService.loading()"/>
   } @else {
+    <p-button label="Go back" (onClick)="goBack()"></p-button>
     <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
       <div class="main">
-        @if (sharedService.dialogClient().avatarUrl) {
+        @if (sharedService.dialogClient()?.avatarUrl) {
           <img [ngSrc]="sharedService.dialogClient().avatarUrl" alt="avatar" width="200" height="200" draggable="false" priority>
         } @else {
-          <img ngSrc="assets/avatars/default-business-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
+          <img ngSrc="/assets/images/avatars/default-business-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
         }
         <div class="main-info">
           <div class="name">{{ sharedService.dialogClient().name }}</div>
           <div class="connected" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ sharedService.dialogClient().connectedBy ? 'Connected by: ' + sharedService.dialogClient().connectedBy : 'Connected By: N/A' }}</div>
-          <div class="phone"><i class="pi pi-phone"></i> {{ sharedService.dialogClient().phone ? sharedService.dialogClient().phone : 'N/A' }}</div>
-          <div class="email"><i class="pi pi-envelope"></i> {{ sharedService.dialogClient().email ? sharedService.dialogClient().email : 'N/A' }}</div>
+          @if (sharedService.dialogClient().phone) {
+            <a class="link-tag" href="tel:+1{{sharedService.dialogClient().phone | unformatPhone}}" aria-label="call the client">
+              <div class="phone"><i class="pi pi-phone"></i> {{ sharedService.dialogClient().phone }}</div>
+            </a>
+          } @else {
+            <div class="phone"><i class="pi pi-phone"></i> N/A</div>
+          }
+          @if (sharedService.dialogClient().email) {
+            <a class="link-tag" href="mailto:{{sharedService.dialogClient().email}}" aria-label="email client">
+              <div class="email"><i class="pi pi-envelope"></i> {{ sharedService.dialogClient().email }}</div>
+            </a>
+          } @else {
+            <div class="email"><i class="pi pi-envelope"></i> N/A</div>
+          }
           <div class="location"><i class="pi pi-map-marker"></i> {{ sharedService.dialogClient().location ? sharedService.dialogClient().location : 'N/A' }}</div>
         </div>
       </div>

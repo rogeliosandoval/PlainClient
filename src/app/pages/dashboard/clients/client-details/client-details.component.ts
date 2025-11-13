@@ -1,16 +1,20 @@
 import { Component, OnInit, inject, signal } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService } from '../../../../services/auth.service'
 import { SharedService } from '../../../../services/shared.service'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { NgOptimizedImage } from '@angular/common'
+import { ButtonModule } from 'primeng/button'
+import { UnformatPhonePipe } from '../../../../pipes/unformat-phone.pipe'
 
 @Component({
   selector: 'tc-client-details',
   standalone: true,
   imports: [
     ProgressSpinnerModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    ButtonModule,
+    UnformatPhonePipe
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss'
@@ -20,6 +24,7 @@ export class ClientDetails implements OnInit {
   private activatedRoute = inject(ActivatedRoute)
   public authService = inject(AuthService)
   public sharedService = inject(SharedService)
+  public router = inject(Router)
   public loadingClient = signal<boolean>(true)
 
   ngOnInit() {
@@ -46,6 +51,10 @@ export class ClientDetails implements OnInit {
         this.loadingClient.set(false)
       }
     })
+  }
+
+  public goBack(): void {
+    this.router.navigate(['/dashboard/clients'])
   }
 
   public editClient(): void {
