@@ -87,7 +87,10 @@ export class Clients implements OnInit {
       },
       {
         label: 'Send Email',
-        icon: 'pi pi-envelope'
+        icon: 'pi pi-envelope',
+        command: () => {
+          window.location.href = `mailto:${this.sharedService.dialogClient().email}`
+        }
       },
       {
         label: 'Delete',
