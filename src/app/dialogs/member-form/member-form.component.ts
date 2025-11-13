@@ -44,10 +44,10 @@ export class MemberFormDialog {
   }
 
   public submitDialog(type: string): void {
-    // const data = {
-    //   formData: this.memberForm.value,
-    //   type
-    // }
-    // this.onSubmit.emit(data)
+    const data = {
+      formData: this.memberForm.value,
+      type
+    }
+    this.onSubmit.emit(data)
   }
 }

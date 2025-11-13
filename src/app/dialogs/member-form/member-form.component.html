@@ -1,17 +1,17 @@
 <p-dialog header="{{ type === 'edit' ? 'Edit Member' : 'Add Member' }}" [modal]="true" (onHide)="closeDialog()" [(visible)]="showMemberFormDialog" [style]="{ width: '26rem' }">
   <form [formGroup]="memberForm" class="member-form" (ngSubmit)="type === 'edit' ? submitDialog('edit') : submitDialog('add')">
     <div class="input-group" [class.disabled]="dialogLoading()">
-      <label for="member_name">Member Name*</label>
+      <label for="member_name">Name*</label>
       <input id="member_name" type="text" pInputText variant="filled" placeholder="Name" formControlName="member_name" autocomplete="name"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">
-      <label for="member_position">Member Position</label>
+      <label for="member_position">Position</label>
       <input id="member_position" type="text" pInputText variant="filled" placeholder="Position" formControlName="member_position" autocomplete="off"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">
-      <label for="member_email">Member Email</label>
+      <label for="member_email">Email</label>
       @if (memberForm.get('member_email')?.invalid && memberForm.get('member_email')?.touched) {
         <div class="input-error">Please enter a valid email</div>
       }
@@ -19,7 +19,7 @@
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading()">
-      <label for="member_phone">Member Phone</label>
+      <label for="member_phone">Phone</label>
       <input id="member_phone" type="tel" pInputText variant="filled" placeholder="Phone" formControlName="member_phone" phoneNumber autocomplete="tel" maxlength="14"/>
     </div>
 

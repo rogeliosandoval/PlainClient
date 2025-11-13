@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal, ViewChild } from '@angular/core'
 import { AuthService } from '../../../services/auth.service'
 import { ButtonModule } from 'primeng/button'
 import { MemberFormDialog } from '../../../dialogs/member-form/member-form.component'
+import { TeamMemberData, TeamMemberFormData } from '../../../interfaces/other.interface'
 
 @Component({
   selector: 'tc-team-members',
@@ -23,8 +24,12 @@ export class TeamMembers implements OnInit {
 
   }
 
+  public onSubmit(data: TeamMemberFormData): void {
+    console.log(data)
+    this.showMemberFormDialog.set(false)
+  }
+
   public onDialogClose(newState: boolean) {
     this.showMemberFormDialog.set(newState)
   }
-
 }
