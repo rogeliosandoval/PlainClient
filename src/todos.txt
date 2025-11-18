@@ -19,3 +19,5 @@ TODOS:
 - add "add client" to mobile
 
 - double check best practices for optimization on images and code
+
+- implement team member logic
