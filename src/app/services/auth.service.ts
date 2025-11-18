@@ -504,13 +504,45 @@ export class AuthService {
 
     const newMember = {
       id: memberId,
-      name: formData.name,
-      position: formData.position,
-      email: formData.email,
-      phone: formData.phone,
+      name: formData.member_name,
+      position: formData.member_position,
+      email: formData.member_email,
+      phone: formData.member_phone,
       createdAt: new Date().toISOString()
     }
 
+    // Write to Firestore
     await setDoc(memberRef, newMember)
+
+    // Attempt to update local cache
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Ensure team array exists
+        if (!Array.isArray(parsed.team)) {
+          parsed.team = []
+        }
+
+        // Add new member to top of local cache list
+        parsed.team = [newMember, ...parsed.team]
+
+        // Save back to localStorage
+        localStorage.setItem(cacheKey, JSON.stringify(parsed))
+
+        // Update reactive signal (UI updates instantly)
+        this.coreBusinessData.set(parsed)
+
+        console.log('✅ Team member added and cache updated successfully')
+      } catch (e) {
+        console.warn('[addTeamMember] Cache update failed ❌ Falling back to refetch', e)
+        await this.fetchCoreBusinessData()
+      }
+    } else {
+      await this.fetchCoreBusinessData()
+    }
   }
 }
