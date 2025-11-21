@@ -21,3 +21,5 @@ TODOS:
 - double check best practices for optimization on images and code
 
 - implement team member logic
+
+- begin implementing profits page/maybe grab code from budgetboy project
