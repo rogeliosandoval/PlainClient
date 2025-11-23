@@ -23,3 +23,5 @@ TODOS:
 - implement team member logic
 
 - begin implementing profits page/maybe grab code from budgetboy project
+
+- implement add note logic to clients
