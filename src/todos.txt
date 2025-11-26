@@ -25,3 +25,5 @@ TODOS:
 - begin implementing profits page/maybe grab code from budgetboy project
 
 - implement add note logic to clients
+
+- begin implementing Todo list logic
