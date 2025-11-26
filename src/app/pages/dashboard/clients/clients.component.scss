@@ -14,9 +14,15 @@ p-progressSpinner {
   text-align: center;
 
   img {
-    max-width: 330px;
-    opacity: 0.5;
+    height: 291px;
+    width: auto;
+    opacity: 0.6;
     margin-bottom: 2rem;
+
+    @include variables.media('phone') {
+      height: auto;
+      width: 60%;
+    }
   }
 
   span {
