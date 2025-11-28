@@ -7,9 +7,10 @@
   flex-direction: column;
   height: 100%;
   text-align: center;
+  padding-bottom: 4rem;
 
   img {
-    height: 291px;
+    height: 200px;
     width: auto;
     opacity: 0.6;
     margin-bottom: 2rem;
@@ -27,4 +28,9 @@
     margin-bottom: 1rem;
     line-height: 1.7rem;
   }
+}
+
+.tab-menu {
+  margin: auto;
+  width: fit-content;
 }
