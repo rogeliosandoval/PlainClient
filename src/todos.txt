@@ -27,3 +27,5 @@ TODOS:
 - implement add note logic to clients
 
 - begin implementing Todo list logic
+
+- implement LLM/Some form of AI
