@@ -29,3 +29,5 @@ TODOS:
 - begin implementing Todo list logic
 
 - implement LLM/Some form of AI
+
+- implement email confirm on sign up
