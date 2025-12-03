@@ -1,0 +1,29 @@
+<p-dialog [header]="logicType === 'edit' ? 'Edit ' + profitType : 'Add ' + profitType" [modal]="true" (onHide)="closeDialog()" (onShow)="editCheck()" [(visible)]="showProfitFormDialog" [style]="{ width: '26rem' }">
+  <form [formGroup]="profitForm" class="profit-form" (ngSubmit)="logicType === 'edit' ? submitDialog('edit') : submitDialog('add')">
+
+    <div class="profit-type-buttons">
+      <p-button label="Income" severity="success" [class.disabled]="profitType === 'Income'" (onClick)="profitType = 'Income'"></p-button>
+      <p-button label="Expense" severity="danger" [class.disabled]="profitType === 'Expense'" (onClick)="profitType = 'Expense'"></p-button>
+    </div>
+
+    <div class="input-group" [class.disabled]="dialogLoading">
+      <label for="name">Name*</label>
+      <input id="name" type="text" pInputText variant="filled" placeholder="Name" formControlName="name" autocomplete="name" maxlength="40"/>
+    </div>
+
+    <div class="input-group" [class.disabled]="dialogLoading">
+      <label for="amount">Amount*</label>
+      <input id="amount" type="number" pInputText variant="filled" placeholder="Amount" formControlName="amount" autocomplete="off" maxlength="20"/>
+    </div>
+
+    <div class="input-group" [class.disabled]="dialogLoading">
+      <label for="note">Note (optional)</label>
+      <input id="note" type="text" pInputText variant="filled" placeholder="Add a note" formControlName="note" autocomplete="off" maxlength="100"/>
+    </div>
+
+    <p-button [label]="logicType === 'edit' ? 'Edit ' + profitType : 'Add ' + profitType" type="submit" [disabled]="dialogLoading || profitForm.invalid || !profitForm.dirty"></p-button>
+    @if (dialogLoading) {
+      <p-progressSpinner ariaLabel="loading" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
+    }
+  </form>
+</p-dialog>
