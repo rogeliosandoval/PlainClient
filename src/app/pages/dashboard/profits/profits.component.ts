@@ -21,7 +21,7 @@ export class Profits implements OnInit {
   public items: MenuItem[] | undefined
   public activeItem: any
   public showBusinessProfits = signal<boolean>(true)
-  public showPersonalProfits = signal<boolean>(false)
+  // public showPersonalProfits = signal<boolean>(false)
 
   ngOnInit(): void {
     this.items = [
@@ -29,14 +29,14 @@ export class Profits implements OnInit {
         label: 'Business',
         icon: 'pi pi-briefcase',
         command: () => {
-          
+          this.showBusinessProfits.set(true)
         }
       },
       {
         label: 'Personal',
         icon: 'pi pi-user',
         command: () => {
-
+          this.showBusinessProfits.set(false)
         }
       }
     ]

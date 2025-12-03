@@ -5,9 +5,10 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100%;
   text-align: center;
   padding-bottom: 4rem;
+  height: calc(100% - 3.6rem);
+  animation: routeAnimation 0.2s linear;
 
   img {
     height: 200px;
@@ -33,4 +34,5 @@
 .tab-menu {
   margin: auto;
   width: fit-content;
+  height: 3.6rem;
 }
