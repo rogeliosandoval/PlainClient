@@ -5,6 +5,11 @@ export interface ClientFormData {
   type: string
 }
 
+export interface StandardFormData {
+  formData: any
+  type: string
+}
+
 export interface TeamMemberFormData {
   formData: TeamMemberData,
   type: string

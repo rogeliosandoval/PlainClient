@@ -14,7 +14,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { UnformatPhonePipe } from '../../pipes/unformat-phone.pipe'
 import { MessageService } from 'primeng/api'
 import { ContactFormDialog } from '../../dialogs/contact-form/contact-form.component'
-import { ClientFormData } from '../../interfaces/other.interface'
+import { StandardFormData } from '../../interfaces/other.interface'
 
 @Component({
   selector: 'tcd-contact-list',
@@ -95,7 +95,7 @@ export class ContactListDialog implements OnInit {
     this.contactFormDialog.resetForm()
   }
 
-  public async triggerContactForm(data: ClientFormData) {
+  public async triggerContactForm(data: StandardFormData) {
     this.dialogLoading = true
 
     try {
