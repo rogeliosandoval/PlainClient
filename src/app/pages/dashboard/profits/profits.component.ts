@@ -5,6 +5,8 @@ import { MessageService } from 'primeng/api'
 import { TabMenuModule } from 'primeng/tabmenu'
 import { MenuItem } from 'primeng/api'
 import { ProfitFormDialog } from '../../../dialogs/profit-form/profit-form.component'
+import { StandardFormData } from '../../../interfaces/other.interface'
+import { SharedService } from '../../../services/shared.service'
 
 @Component({
   selector: 'tc-profits',
@@ -20,6 +22,7 @@ import { ProfitFormDialog } from '../../../dialogs/profit-form/profit-form.compo
 export class Profits implements OnInit {
   @ViewChild('profitFormDialog') profitFormDialog!: ProfitFormDialog
   @Input() dialogLoading: boolean = false
+  public sharedService = inject(SharedService)
   public authService = inject(AuthService)
   public messageService = inject(MessageService)
   public items: MenuItem[] | undefined
@@ -51,5 +54,38 @@ export class Profits implements OnInit {
   public onDialogClose(newState: boolean) {
     this.showProfitFormDialog.set(newState)
     this.profitFormDialog.resetForm()
+  }
+
+  async triggerProfitForm(data: StandardFormData) {
+    this.dialogLoading = true
+
+    try {
+      this.dialogLoading = true
+
+      await this.authService.addProfit(data.formData)
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Profit added!',
+        key: 'br',
+        life: 4000
+      })
+
+      this.profitFormDialog.resetForm()
+      this.dialogLoading = false
+      this.showProfitFormDialog.set(false)
+
+    } catch (err) {
+      this.dialogLoading = false
+      console.log(err)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error adding the profit. Try again.',
+        key: 'br',
+        life: 4000
+      })
+    }
   }
 }

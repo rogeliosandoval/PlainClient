@@ -1,4 +1,4 @@
-<div class="route-container">
+<div class="route-container" [class.disabled]="sharedService.loading()">
   <div class="tab-menu">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
   </div>
@@ -16,4 +16,4 @@
     </div>
   }
 </div>
-<tcd-profit-form #profitFormDialog [showProfitFormDialog]="showProfitFormDialog()" (onClose)="onDialogClose($event)"></tcd-profit-form>
+<tcd-profit-form #profitFormDialog [showProfitFormDialog]="showProfitFormDialog()" (onClose)="onDialogClose($event)" (onSubmit)="triggerProfitForm($event)" [dialogLoading]="dialogLoading"></tcd-profit-form>

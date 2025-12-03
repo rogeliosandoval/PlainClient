@@ -73,6 +73,7 @@ export class Dashboard implements OnInit {
   ngOnInit(): void {
     this.primengConfig.ripple = true
     this.initializeApp()
+    this.sharedService.loadCachedProfits()
     this.items = [
       {
         label: 'Profile',

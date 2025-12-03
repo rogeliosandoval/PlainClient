@@ -1,9 +1,9 @@
 <p-dialog [header]="logicType === 'edit' ? 'Edit ' + profitType : 'Add ' + profitType" [modal]="true" (onHide)="closeDialog()" (onShow)="editCheck()" [(visible)]="showProfitFormDialog" [style]="{ width: '26rem' }">
   <form [formGroup]="profitForm" class="profit-form" (ngSubmit)="logicType === 'edit' ? submitDialog('edit') : submitDialog('add')">
 
-    <div class="profit-type-buttons">
-      <p-button label="Income" severity="success" [class.disabled]="profitType === 'Income'" (onClick)="profitType = 'Income'"></p-button>
-      <p-button label="Expense" severity="danger" [class.disabled]="profitType === 'Expense'" (onClick)="profitType = 'Expense'"></p-button>
+    <div class="profit-type-buttons" [class.disabled]="dialogLoading">
+      <p-button label="Income" severity="success" [class.active]="profitType === 'Income'" [class.gray]="profitType !== 'Income'" (onClick)="profitType = 'Income'"></p-button>
+      <p-button label="Expense" severity="danger" [class.active]="profitType === 'Expense'" [class.gray]="profitType !== 'Expense'" (onClick)="profitType = 'Expense'"></p-button>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading">
@@ -13,7 +13,7 @@
 
     <div class="input-group" [class.disabled]="dialogLoading">
       <label for="amount">Amount*</label>
-      <input id="amount" type="number" pInputText variant="filled" placeholder="Amount" formControlName="amount" autocomplete="off" maxlength="20"/>
+      <input id="amount" pInputText variant="filled" placeholder="Amount" formControlName="amount" autocomplete="off" numbersOnly maxLength="8"/>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading">

@@ -46,3 +46,17 @@ p-progressSpinner {
   width: 100%;
   margin-bottom: 1rem;
 }
+
+.active {
+  pointer-events: none;
+}
+
+.gray {
+  opacity: 0.5;
+  filter: grayscale(100%);
+
+  &:hover {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+}
