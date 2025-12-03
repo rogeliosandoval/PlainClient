@@ -51,6 +51,10 @@ export class Profits implements OnInit {
     this.activeItem = this.items[0]
   }
 
+  public ness(): void {
+    console.log(this.sharedService.userProfits().length)
+  }
+
   public onDialogClose(newState: boolean) {
     this.showProfitFormDialog.set(newState)
     this.profitFormDialog.resetForm()

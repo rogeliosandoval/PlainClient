@@ -9,11 +9,16 @@
       <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true)"></p-button>
     </div>
   } @else {
-    <div class="no-profits">
-      <img src="/assets/images/wallet.webp" alt="no profits" draggable="false" width="186" height="200" priority>
-      <span>Keep track of your personal expenses!</span>
-      <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true)"></p-button>
-    </div>
+    @if (sharedService.userProfits().length === 0) {
+      <div class="no-profits">
+        <img src="/assets/images/wallet.webp" alt="no profits" draggable="false" width="186" height="200" priority>
+        <span>Keep track of your personal expenses!</span>
+        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true)"></p-button>
+        <button (click)="ness()">TESTING</button>
+      </div>
+    } @else {
+      WE HAVE DATA
+    }
   }
 </div>
 <tcd-profit-form #profitFormDialog [showProfitFormDialog]="showProfitFormDialog()" (onClose)="onDialogClose($event)" (onSubmit)="triggerProfitForm($event)" [dialogLoading]="dialogLoading"></tcd-profit-form>
