@@ -12,6 +12,7 @@ export class SharedService {
   showClientFormDialog = signal<boolean>(false)
   clientFormType = signal<string>('')
   dialogClient = signal<any>(null)
+  userProfits = signal<any[]>([])
 
   constructor(
       @Inject(PLATFORM_ID)
@@ -25,6 +26,24 @@ export class SharedService {
 
       this.applyTheme()
     }
+  }
+
+  loadCachedProfits() {
+    const cached = localStorage.getItem('userProfitsCache')
+    if (cached) {
+      try {
+        this.userProfits.set(JSON.parse(cached))
+      } catch {
+        console.warn('Failed to parse cached profits')
+      }
+    }
+  }
+
+  getSortedProfits() {
+    const profits = this.userProfits() || []
+    return [...profits].sort((a, b) =>
+      a.createdAt.localeCompare(b.createdAt)
+    )
   }
 
   toggleTheme(): void {

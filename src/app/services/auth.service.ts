@@ -5,6 +5,7 @@ import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc } from '
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { UserData, BusinessData, ClientData, Contact } from '../interfaces/user.interface'
+import { SharedService } from './shared.service'
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class AuthService {
   storage = inject(Storage)
   firestore = inject(Firestore)
   firebaseAuth = inject(Auth)
+  sharedService = inject(SharedService)
   user$ = user(this.firebaseAuth)
   currentUserSignal = signal<any>(undefined)
   coreUserData = signal<UserData | null>(null)
@@ -544,5 +546,71 @@ export class AuthService {
     } else {
       await this.fetchCoreBusinessData()
     }
+  }
+
+  async addProfit(formData: any): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    const profitId = uuidv4()
+
+    const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
+
+    const newProfit = {
+      id: profitId,
+      profitType: formData.profitType,
+      name: formData.name,
+      amount: formData.amount,
+      note: formData.note || '',
+      createdAt: new Date().toISOString()
+    }
+
+    // 1. Write to Firestore
+    await setDoc(profitRef, newProfit)
+
+    // ----------------------------
+    // 2. Update Local Cache
+    // ----------------------------
+
+    const cacheKey = 'userProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+        updatedList = [newProfit, ...parsed]
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating profit cache, refetching...', err)
+        await this.fetchUserProfits()
+        return
+      }
+    } else {
+      updatedList = [newProfit]
+      localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+    }
+
+    // ----------------------------
+    // 3. Update signal (UI reactivity)
+    // ----------------------------
+    this.sharedService.userProfits.set(updatedList)
+  }
+
+  // Fetch all profits from Firestore
+  async fetchUserProfits(): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    const ref = collection(this.firestore, `users/${uid}/profits`)
+
+    const snapshot = await getDocs(ref)
+
+    let list: any[] = []
+    snapshot.forEach(doc => {
+      list.push(doc.data())
+    })
+
+    localStorage.setItem('userProfitsCache', JSON.stringify(list))
+    this.sharedService.userProfits.set(list)
+
+    console.log('🔥 Profits reloaded from Firestore')
   }
 }
