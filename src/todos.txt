@@ -31,3 +31,5 @@ TODOS:
 - implement LLM/Some form of AI
 
 - implement email confirm on sign up
+
+- implement timeout session
