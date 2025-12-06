@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
-import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc } from '@angular/fire/firestore'
+import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { UserData, BusinessData, ClientData, Contact } from '../interfaces/user.interface'
@@ -612,5 +612,54 @@ export class AuthService {
     this.sharedService.userProfits.set(list)
 
     console.log('🔥 Profits reloaded from Firestore')
+  }
+
+  async editProfit(profitId: string, formData: any): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
+
+    const updatedProfit = {
+      ...formData,
+      id: profitId,
+      updatedAt: new Date().toISOString()
+    }
+
+    // 1. Update Firestore
+    await updateDoc(profitRef, updatedProfit)
+
+    // ----------------------------
+    // 2. Update Local Cache
+    // ----------------------------
+    const cacheKey = 'userProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Replace the matching profit in the array
+        const updatedList = parsed.map((p: any) =>
+          p.id === profitId ? { ...p, ...updatedProfit } : p
+        )
+
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+
+        // ----------------------------
+        // 3. Update signal (UI reactivity)
+        // ----------------------------
+        this.sharedService.userProfits.set(updatedList)
+
+        return
+      } catch (err) {
+        console.warn('Error updating cache on edit, refetching...', err)
+
+        // Worst case: fallback to full reload
+        await this.fetchUserProfits()
+        return
+      }
+    }
+
+    // If cache doesn't exist, force reload (rare case)
+    await this.fetchUserProfits()
   }
 }

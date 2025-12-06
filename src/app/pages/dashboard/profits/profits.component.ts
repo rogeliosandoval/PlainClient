@@ -23,7 +23,7 @@ import { SharedService } from '../../../services/shared.service'
 })
 export class Profits implements OnInit {
   @ViewChild('profitFormDialog') profitFormDialog!: ProfitFormDialog
-  @Input() dialogLoading: boolean = false
+  @Input() dialogLoading: boolean = true
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
   public messageService = inject(MessageService)
@@ -35,6 +35,7 @@ export class Profits implements OnInit {
   public logicType = signal<string>('')
   public databaseType = signal<string>('')
   public profitOptions: MenuItem[] | undefined
+  public profitItemData: any
   
   ngOnInit(): void {
     this.items = [
@@ -59,7 +60,7 @@ export class Profits implements OnInit {
         label: 'Edit',
         icon: 'pi pi-pencil',
         command: () => {
-          this.ness()
+          this.logicType.set('edit'); this.showProfitFormDialog.set(true)
         }
       },
       {
@@ -82,10 +83,8 @@ export class Profits implements OnInit {
   }
 
   async triggerProfitForm(data: StandardFormData) {
-    this.dialogLoading = true
-
     if (this.logicType() === 'edit') {
-
+      console.log(data)
     } else {
       try {
         this.dialogLoading = true

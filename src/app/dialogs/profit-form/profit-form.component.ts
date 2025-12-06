@@ -28,7 +28,8 @@ export class ProfitFormDialog {
   @Input() logicType: string = ''
   @Input() profitType: string = 'Income'
   @Input() showProfitFormDialog: boolean = false
-  @Input() dialogLoading: boolean = false
+  @Input() dialogLoading: boolean = true
+  @Input() profitItemData: any
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
   public sharedService = inject(SharedService)
@@ -46,7 +47,16 @@ export class ProfitFormDialog {
 
   public editCheck(): void {
     if (this.logicType === 'edit') {
-      // this.contactForm.get('contact_name')?.setValue(this.selectedContact?.name || null)
+      this.dialogLoading = true
+      this.profitForm.get('profitType')?.setValue(this.profitItemData?.profitType || null)
+      this.profitForm.get('name')?.setValue(this.profitItemData?.name || null)
+      this.profitForm.get('amount')?.setValue(this.profitItemData?.amount || null)
+      this.profitForm.get('note')?.setValue(this.profitItemData?.note || null)
+      setTimeout(() => {
+        this.dialogLoading = false
+      }, 500)
+    } else {
+      this.dialogLoading = false
     }
   }
 
