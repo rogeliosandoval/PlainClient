@@ -18,12 +18,18 @@
     } @else {
       <div class="profit-container">
         <div class="profit-items">
-          <div class="profit-item" [class.profit-item-dark]="sharedService.darkMode()">
-            <div class="profit-item__expense">$1,000</div>
-            <div class="profit-item__name">Rent Payment</div>
-            <div class="profit-item__note">This is an optional note for the item. It can only be so long.</div>
-            <i class="pi pi-ellipsis-h" (click)="menu.toggle($event);"></i>
-          </div>
+          @for (item of sharedService.userProfits(); track item.id) {
+            <div class="profit-item" [class.profit-item-dark]="sharedService.darkMode()">
+              @if (!sharedService.darkMode()) {
+                <div class="profit-item__expense" [style.color]="item.profitType === 'Expense' ? 'red' : '#06a506'">${{ item.amount }}</div>
+              } @else {
+                <div class="profit-item__expense" [style.color]="item.profitType === 'Expense' ? '#fc6363' : '#48df57'">${{ item.amount }}</div>
+              }
+              <div class="profit-item__name">{{ item.name }}</div>
+              <div class="profit-item__note">{{ item.note }}</div>
+              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event);"></i>
+            </div>
+          }
           <p-menu #menu [model]="profitOptions" [popup]="true"/>
         </div>
         <div class="profit-summary">

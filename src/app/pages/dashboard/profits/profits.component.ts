@@ -59,7 +59,7 @@ export class Profits implements OnInit {
         label: 'Edit',
         icon: 'pi pi-pencil',
         command: () => {
-
+          this.ness()
         }
       },
       {
@@ -70,6 +70,10 @@ export class Profits implements OnInit {
         }
       }
     ]
+  }
+
+  public ness(): void {
+    console.log(this.sharedService.userProfits())
   }
 
   public onDialogClose(newState: boolean) {
