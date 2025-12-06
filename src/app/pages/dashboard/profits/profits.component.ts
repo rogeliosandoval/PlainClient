@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button'
 import { MessageService } from 'primeng/api'
 import { TabMenuModule } from 'primeng/tabmenu'
 import { MenuItem } from 'primeng/api'
+import { MenuModule } from 'primeng/menu'
 import { ProfitFormDialog } from '../../../dialogs/profit-form/profit-form.component'
 import { StandardFormData } from '../../../interfaces/other.interface'
 import { SharedService } from '../../../services/shared.service'
@@ -14,7 +15,8 @@ import { SharedService } from '../../../services/shared.service'
   imports: [
     ButtonModule,
     TabMenuModule,
-    ProfitFormDialog
+    ProfitFormDialog,
+    MenuModule
   ],
   templateUrl: './profits.component.html',
   styleUrl: './profits.component.scss'
@@ -27,9 +29,12 @@ export class Profits implements OnInit {
   public messageService = inject(MessageService)
   public items: MenuItem[] | undefined
   public activeItem: any
-  public showBusinessProfits = signal<boolean>(true)
+  public showBusinessProfits = signal<boolean>(false)
   // public showPersonalProfits = signal<boolean>(false)
   public showProfitFormDialog = signal<boolean>(false)
+  public logicType = signal<string>('')
+  public databaseType = signal<string>('')
+  public profitOptions: MenuItem[] | undefined
   
   ngOnInit(): void {
     this.items = [
@@ -49,10 +54,22 @@ export class Profits implements OnInit {
       }
     ]
     this.activeItem = this.items[0]
-  }
+    this.profitOptions = [
+      {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => {
 
-  public ness(): void {
-    console.log(this.sharedService.userProfits().length)
+        }
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: () => {
+
+        }
+      }
+    ]
   }
 
   public onDialogClose(newState: boolean) {
@@ -63,33 +80,37 @@ export class Profits implements OnInit {
   async triggerProfitForm(data: StandardFormData) {
     this.dialogLoading = true
 
-    try {
-      this.dialogLoading = true
+    if (this.logicType() === 'edit') {
 
-      await this.authService.addProfit(data.formData)
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Profit added!',
-        key: 'br',
-        life: 4000
-      })
-
-      this.profitFormDialog.resetForm()
-      this.dialogLoading = false
-      this.showProfitFormDialog.set(false)
-
-    } catch (err) {
-      this.dialogLoading = false
-      console.log(err)
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'There was an error adding the profit. Try again.',
-        key: 'br',
-        life: 4000
-      })
+    } else {
+      try {
+        this.dialogLoading = true
+  
+        await this.authService.addProfit(data.formData)
+  
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Profit added!',
+          key: 'br',
+          life: 4000
+        })
+  
+        this.profitFormDialog.resetForm()
+        this.dialogLoading = false
+        this.showProfitFormDialog.set(false)
+  
+      } catch (err) {
+        this.dialogLoading = false
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error adding the profit. Try again.',
+          key: 'br',
+          life: 4000
+        })
+      }
     }
   }
 }

@@ -6,19 +6,33 @@
     <div class="no-profits">
       <img src="/assets/images/money-stacks.webp" alt="no profits" draggable="false" width="230" height="205" priority>
       <span>Keep track of your business expesnes!</span>
-      <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true)"></p-button>
+      <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('business')"></p-button>
     </div>
   } @else {
     @if (sharedService.userProfits().length === 0) {
       <div class="no-profits">
         <img src="/assets/images/wallet.webp" alt="no profits" draggable="false" width="186" height="200" priority>
         <span>Keep track of your personal expenses!</span>
-        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true)"></p-button>
-        <button (click)="ness()">TESTING</button>
+        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('personal')"></p-button>
       </div>
     } @else {
-      WE HAVE DATA
+      <div class="profit-container">
+        <div class="profit-items">
+          <div class="profit-item" [class.profit-item-dark]="sharedService.darkMode()">
+            <div class="profit-item__expense">$1,000</div>
+            <div class="profit-item__name">Rent Payment</div>
+            <div class="profit-item__note">This is an optional note for the item. It can only be so long.</div>
+            <i class="pi pi-ellipsis-h" (click)="menu.toggle($event);"></i>
+          </div>
+          <p-menu #menu [model]="profitOptions" [popup]="true"/>
+        </div>
+        <div class="profit-summary">
+          <div class="profit-summary-clipboard">
+            <div class="profit-summary-clipboard--title">This is the title</div>
+          </div>
+        </div>
+      </div>
     }
   }
 </div>
-<tcd-profit-form #profitFormDialog [showProfitFormDialog]="showProfitFormDialog()" (onClose)="onDialogClose($event)" (onSubmit)="triggerProfitForm($event)" [dialogLoading]="dialogLoading"></tcd-profit-form>
+<tcd-profit-form #profitFormDialog [showProfitFormDialog]="showProfitFormDialog()" (onClose)="onDialogClose($event)" (onSubmit)="triggerProfitForm($event)" [dialogLoading]="dialogLoading" [logicType]="logicType()"></tcd-profit-form>
