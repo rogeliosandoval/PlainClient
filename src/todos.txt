@@ -4,10 +4,6 @@ TODOS:
 
 - check numberOfClients update in the database
 
-- make dark/light mode based on a variable for the user in their firestore opposed to session state
-
-- double check @if(s) to see if you can use @else if
-
 - redesign register page
 
 - redesign home page and add fade in
@@ -26,9 +22,7 @@ TODOS:
 
 - implement add note logic to clients
 
-- begin implementing Todo list logic
-
-- implement LLM/Some form of AI
+- begin implementing task list logic
 
 - implement email confirm on sign up
 
