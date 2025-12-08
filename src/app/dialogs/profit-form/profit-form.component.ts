@@ -52,6 +52,7 @@ export class ProfitFormDialog {
       this.profitForm.get('name')?.setValue(this.profitItemData?.name || null)
       this.profitForm.get('amount')?.setValue(this.profitItemData?.amount || null)
       this.profitForm.get('note')?.setValue(this.profitItemData?.note || null)
+      this.profitType = this.profitItemData.profitType
       setTimeout(() => {
         this.dialogLoading = false
       }, 500)
@@ -93,11 +94,13 @@ export class ProfitFormDialog {
   }
 
   public submitDialog(type: string): void {
+    this.dialogLoading = true
     this.profitForm.get('profitType')?.setValue(this.profitType)
     this.handleControlNumberValue()
     const data = {
       formData: this.profitForm.value,
-      type
+      type,
+      id: this.profitItemData.id
     }
     this.onSubmit.emit(data)
   }

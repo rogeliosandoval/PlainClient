@@ -8,6 +8,7 @@ export interface ClientFormData {
 export interface StandardFormData {
   formData: any
   type: string
+  id?: string
 }
 
 export interface TeamMemberFormData {

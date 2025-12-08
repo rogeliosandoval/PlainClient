@@ -2,8 +2,8 @@
   <form [formGroup]="profitForm" class="profit-form" (ngSubmit)="logicType === 'edit' ? submitDialog('edit') : submitDialog('add')">
 
     <div class="profit-type-buttons" [class.disabled]="dialogLoading">
-      <p-button label="Income" severity="success" [class.active]="profitType === 'Income'" [class.gray]="profitType !== 'Income'" (onClick)="profitType = 'Income'"></p-button>
-      <p-button label="Expense" severity="danger" [class.active]="profitType === 'Expense'" [class.gray]="profitType !== 'Expense'" (onClick)="profitType = 'Expense'"></p-button>
+      <p-button label="Income" severity="success" [class.active]="profitType === 'Income'" [class.gray]="profitType !== 'Income'" (onClick)="profitType = 'Income'; profitForm.markAsDirty()"></p-button>
+      <p-button label="Expense" severity="danger" [class.active]="profitType === 'Expense'" [class.gray]="profitType !== 'Expense'" (onClick)="profitType = 'Expense'; profitForm.markAsDirty()"></p-button>
     </div>
 
     <div class="input-group" [class.disabled]="dialogLoading">

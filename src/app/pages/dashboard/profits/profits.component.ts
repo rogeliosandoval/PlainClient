@@ -84,13 +84,33 @@ export class Profits implements OnInit {
 
   async triggerProfitForm(data: StandardFormData) {
     if (this.logicType() === 'edit') {
-      this.dialogLoading = true
-      setTimeout(() => {
-        console.log(data)
+      try {
+        this.dialogLoading = true
+  
+        await this.authService.editProfit(data.id as string, data.formData)
+  
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Profit item updated!',
+          key: 'br',
+          life: 4000
+        })
+  
         this.profitFormDialog.resetForm()
         this.dialogLoading = false
         this.showProfitFormDialog.set(false)
-      }, 2000)
+      } catch (err) {
+        this.dialogLoading = false
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error updating the profit item. Try again.',
+          key: 'br',
+          life: 4000
+        })
+      }
     } else {
       try {
         this.dialogLoading = true
