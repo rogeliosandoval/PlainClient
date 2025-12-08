@@ -29,6 +29,11 @@
     margin-bottom: 1rem;
     line-height: 1.7rem;
   }
+
+  @media screen and (max-height: 555px) {
+    height: auto;
+    padding-bottom: 0;
+  }
 }
 
 .tab-menu {

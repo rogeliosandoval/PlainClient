@@ -84,7 +84,13 @@ export class Profits implements OnInit {
 
   async triggerProfitForm(data: StandardFormData) {
     if (this.logicType() === 'edit') {
-      console.log(data)
+      this.dialogLoading = true
+      setTimeout(() => {
+        console.log(data)
+        this.profitFormDialog.resetForm()
+        this.dialogLoading = false
+        this.showProfitFormDialog.set(false)
+      }, 2000)
     } else {
       try {
         this.dialogLoading = true
