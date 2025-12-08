@@ -94,7 +94,7 @@ export class Profits implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: 'Profit added!',
+          detail: 'Profit item added!',
           key: 'br',
           life: 4000
         })
@@ -109,7 +109,7 @@ export class Profits implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'There was an error adding the profit. Try again.',
+          detail: 'There was an error adding the profit item. Try again.',
           key: 'br',
           life: 4000
         })
