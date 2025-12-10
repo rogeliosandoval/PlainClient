@@ -100,7 +100,7 @@ export class ProfitFormDialog {
     const data = {
       formData: this.profitForm.value,
       type,
-      id: this.profitItemData.id
+      id: this.profitItemData?.id
     }
     this.onSubmit.emit(data)
   }

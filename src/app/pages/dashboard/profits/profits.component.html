@@ -1,6 +1,7 @@
 <div class="route-container" [class.disabled]="sharedService.loading()">
   <div class="tab-menu">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
+    <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('business'); logicType.set('add')"></p-button>
   </div>
   @if (showBusinessProfits()) {
     <div class="no-profits">
@@ -34,7 +35,7 @@
         </div>
         <div class="profit-summary">
           <div class="profit-summary-clipboard">
-            <div class="profit-summary-clipboard--title">This is the title</div>
+            <div class="profit-summary-clipboard--title">Monthly Report</div>
           </div>
         </div>
       </div>

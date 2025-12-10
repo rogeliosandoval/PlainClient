@@ -91,7 +91,7 @@ export class Profits implements OnInit {
   
         this.messageService.add({
           severity: 'success',
-          summary: 'Success',
+          // summary: 'Success',
           detail: 'Profit item updated!',
           key: 'br',
           life: 4000

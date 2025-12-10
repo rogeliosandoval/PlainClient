@@ -18,7 +18,7 @@
 
     <div class="input-group" [class.disabled]="dialogLoading">
       <label for="note">Note (optional)</label>
-      <input id="note" type="text" pInputText variant="filled" placeholder="Add a note" formControlName="note" autocomplete="off" maxlength="100"/>
+      <input id="note" type="text" pInputText variant="filled" placeholder="Add a note" formControlName="note" autocomplete="off" maxlength="73"/>
     </div>
 
     <p-button [label]="logicType === 'edit' ? 'Save ' + profitType : 'Add ' + profitType" type="submit" [disabled]="dialogLoading || profitForm.invalid || !profitForm.dirty"></p-button>
