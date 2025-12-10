@@ -168,3 +168,8 @@ textarea,
     width: 200px;
   }
 }
+
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}

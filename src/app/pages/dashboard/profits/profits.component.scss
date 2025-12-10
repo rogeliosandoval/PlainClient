@@ -19,6 +19,7 @@
     @include variables.media('phone') {
       height: auto;
       width: 60%;
+      padding-top: 1rem;
     }
   }
 
@@ -43,14 +44,15 @@
   gap: 1rem;
   height: 3.6rem;
 
-  p-button {
-    margin-left: auto;
+  @include variables.media('tablet') {
+    justify-content: center;
+    height: auto;
+    flex-direction: column;
   }
 }
 
 .profit-container {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
   padding: 1rem 0;
   animation: routeAnimation 0.2s linear;
@@ -58,6 +60,12 @@
   @media screen and (max-width: 1376px) {
     flex-direction: column;
     gap: 1rem;
+  }
+
+  @include variables.media('tablet') {
+    // flex-direction: column-reverse;
+    justify-content: center;
+    padding-bottom: 0;
   }
 }
 
@@ -67,15 +75,18 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+
+  @include variables.media('tablet') {
+    justify-content: center;
+  }
 }
 
 .profit-item {
   position: relative;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   gap: 0.1rem;
-  width: 100%;
+  width: 250px;
   height: 125px;
   background-color: white;
   border-radius: 10px;
@@ -97,10 +108,14 @@
       background-color: rgba(223, 223, 223, 0.188);
     }
   }
+
+  @include variables.media('tablet') {
+    width: 100%;
+  }
 }
 
 .profit-item-dark {
-  background-color: rgb(42, 42, 42);
+  background-color: #2a2a2a;
 }
 
 .profit-item__expense {
@@ -117,6 +132,12 @@
   font-size: 1rem;
 }
 
+.profit-summary {
+  @include variables.media('tablet') {
+    width: 100%;
+  }
+}
+
 .profit-summary-clipboard {
   position: relative;
   width: 450px;
@@ -124,6 +145,15 @@
   background-color: white;
   border-radius: 10px;
   box-shadow: 5px 5px 2px rgba(128, 128, 128, 0.519);
+
+  @include variables.media('tablet') {
+    width: 100%;
+  }
+}
+
+.profit-summary-clipboard-dark {
+  background-color: #2a2a2a;
+  box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.323);
 }
 
 .profit-summary-clipboard--title {
