@@ -1,4 +1,4 @@
-<div class="route-container">
+<div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   <div class="first-widgets">
     <div class="total-clients small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
       <i class="pi pi-users" style="background-color: rgb(191, 226, 255);"></i>

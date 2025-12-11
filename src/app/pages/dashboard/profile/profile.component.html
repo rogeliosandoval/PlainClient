@@ -1,4 +1,4 @@
-<div class="route-container">
+<div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   <div class="profile-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
     <div class="main">
       @if (authService.coreUserData()?.avatarUrl) {

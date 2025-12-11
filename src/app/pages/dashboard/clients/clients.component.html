@@ -1,4 +1,4 @@
-<div class="route-container">
+<div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   @if (authService.coreBusinessData()?.clients!.length <= 0) {
     <div class="no-clients" [class.disabled]="sharedService.loading()">
       <img ngSrc="/assets/images/working.svg" alt="business owner working" draggable="false" width="330" height="291" priority>

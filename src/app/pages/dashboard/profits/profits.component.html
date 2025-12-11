@@ -1,4 +1,4 @@
-<div class="route-container" [class.disabled]="sharedService.loading()">
+<div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   <div class="tab-menu">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {

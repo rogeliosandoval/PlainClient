@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { Component, inject } from '@angular/core'
+import { RouterLink } from '@angular/router'
+import { SharedService } from '../../../services/shared.service'
 
 @Component({
   selector: 'tc-inbox',
@@ -12,5 +13,6 @@ import { RouterLink } from "@angular/router";
 })
 
 export class Inbox {
+  public sharedService = inject(SharedService)
   
 }

@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button'
 import { MemberFormDialog } from '../../../dialogs/member-form/member-form.component'
 import { TeamMemberFormData } from '../../../interfaces/other.interface'
 import { MessageService } from 'primeng/api'
+import { SharedService } from '../../../services/shared.service'
 
 @Component({
   selector: 'tc-team-members',
@@ -19,6 +20,7 @@ import { MessageService } from 'primeng/api'
 export class TeamMembers implements OnInit {
   @ViewChild('memberFormDialog') memberFormDialog!: MemberFormDialog
   public authService = inject(AuthService)
+  public sharedService = inject(SharedService)
   public showMemberFormDialog = signal<boolean>(false)
   public dialogLoading = signal<boolean>(false)
   public messageService = inject(MessageService)

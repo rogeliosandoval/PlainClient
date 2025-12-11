@@ -1,7 +1,7 @@
 @if(authService.coreUserData() === null || authService.coreBusinessData() === undefined) {
   Loading...
 } @else {
-  <div class="route-container">
+  <div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
     <div class="title" [class.disabled]="sharedService.loading()">Account Settings</div>
     <div class="form-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
       <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Profile Info</div>

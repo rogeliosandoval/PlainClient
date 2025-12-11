@@ -47,6 +47,7 @@ $theme-color-main-light: #37b6ff;
   padding: 25px;
   overflow: auto;
   animation: routeAnimation 0.2s linear;
+  background-color: rgb(241, 241, 241);
 
   @media screen and (max-width: 1000px) {
     width: 100%;
