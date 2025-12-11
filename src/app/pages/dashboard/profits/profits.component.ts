@@ -45,7 +45,7 @@ export class Profits implements OnInit {
   public profitItemData: any
   public confirmationService = inject(ConfirmationService)
   public filteredUserProfits = signal<any[]>([])
-  public filterLabel = signal<string>('Order')
+  public filterLabel = signal<string>('Oldest/Newest')
   
   ngOnInit(): void {
     this.filteredUserProfits.set(this.sharedService.getSortedProfits())
@@ -68,38 +68,45 @@ export class Profits implements OnInit {
     this.activeItem = this.items[0]
     this.filterOptions = [
       {
-        label: 'Default',
-        icon: 'pi pi-sort-alt',
-        command: () => {
-          this.filterUserProfitItems('')
-        }
-      },
-      {
         label: 'A-Z',
         icon: 'pi pi-sort-alpha-down',
         command: () => {
-          this.filterUserProfitItems('a-z')
+          this.filterUserProfitItems('A-Z')
         }
       },
       {
         label: 'Z-A',
         icon: 'pi pi-sort-alpha-down-alt',
         command: () => {
-          this.filterUserProfitItems('z-a')
+          this.filterUserProfitItems('Z-A')
         }
       },
       {
         label: 'Income/Expense',
         icon: 'pi pi-sort-amount-down',
         command: () => {
-          this.filterUserProfitItems('income')
+          this.filterUserProfitItems('Income/Expense')
         }
       },
       {
         label: 'Expense/Income',
         icon: 'pi pi-sort-amount-down-alt',
         command: () => {
-          this.filterUserProfitItems('expense')
+          this.filterUserProfitItems('Expense/Income')
+        }
+      },
+      {
+        label: 'Newest/Oldest',
+        icon: 'pi pi-clock',
+        command: () => {
+          this.filterUserProfitItems('Newest/Oldest')
+        }
+      },
+      {
+        label: 'Oldest/Newest',
+        icon: 'pi pi-clock',
+        command: () => {
+          this.filterUserProfitItems('Oldest/Newest')
         }
       }
     ]
@@ -141,21 +148,21 @@ export class Profits implements OnInit {
 
     switch(value) {
 
-      case 'a-z':
+      case 'A-Z':
         this.filterLabel.set('A-Z')
         this.filteredUserProfits.set(
           [...profits].sort((a, b) => a.name.localeCompare(b.name))
         )
         break
 
-      case 'z-a':
+      case 'Z-A':
         this.filterLabel.set('Z-A')
         this.filteredUserProfits.set(
           [...profits].sort((a, b) => b.name.localeCompare(a.name))
         )
         break
 
-      case 'income':
+      case 'Income/Expense':
         this.filterLabel.set('Income/Expense')
         this.filteredUserProfits.set(
           [...profits].sort((a, b) => {
@@ -165,7 +172,7 @@ export class Profits implements OnInit {
         )
         break
 
-      case 'expense':
+      case 'Expense/Income':
         this.filterLabel.set('Expense/Income')
         this.filteredUserProfits.set(
           [...profits].sort((a, b) => {
@@ -175,10 +182,18 @@ export class Profits implements OnInit {
         )
         break
 
-      default:
-        // Back to original sorted-by-date order
-        this.filterLabel.set('Default')
-        this.filteredUserProfits.set(profits)
+      case 'Newest/Oldest':
+        this.filterLabel.set('Newest/Oldest')
+        this.filteredUserProfits().sort((a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+        break
+
+      case 'Oldest/Newest':
+        this.filterLabel.set('Oldest/Newest')
+        this.filteredUserProfits().sort((a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        )
         break
     }
   }
@@ -217,6 +232,8 @@ export class Profits implements OnInit {
         this.dialogLoading = true
   
         await this.authService.editProfit(data.id as string, data.formData)
+        this.filteredUserProfits.set(this.sharedService.getSortedProfits())
+        this.filterUserProfitItems(this.filterLabel())
   
         this.messageService.add({
           severity: 'success',
@@ -244,6 +261,8 @@ export class Profits implements OnInit {
         this.dialogLoading = true
   
         await this.authService.addProfit(data.formData)
+        this.filteredUserProfits.set(this.sharedService.getSortedProfits())
+        this.filterUserProfitItems(this.filterLabel())
   
         this.messageService.add({
           severity: 'success',
@@ -275,6 +294,8 @@ export class Profits implements OnInit {
 
     try {
       await this.authService.deleteProfit(profitId)
+      this.filteredUserProfits.set(this.sharedService.getSortedProfits())
+      this.filterUserProfitItems(this.filterLabel())
   
       this.messageService.add({
         severity: 'error',

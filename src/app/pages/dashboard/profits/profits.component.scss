@@ -226,6 +226,10 @@
   font-family: "Outfit", sans-serif;
   border-bottom: 1px solid black;
   padding: 0.1rem 0;
+
+  &:last-child {
+    border: none;
+  }
 }
 
 .item-dark {
