@@ -8,6 +8,8 @@ import { MenuModule } from 'primeng/menu'
 import { ProfitFormDialog } from '../../../dialogs/profit-form/profit-form.component'
 import { StandardFormData } from '../../../interfaces/other.interface'
 import { SharedService } from '../../../services/shared.service'
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
+import { ConfirmationService } from 'primeng/api'
 
 @Component({
   selector: 'tc-profits',
@@ -16,8 +18,10 @@ import { SharedService } from '../../../services/shared.service'
     ButtonModule,
     TabMenuModule,
     ProfitFormDialog,
-    MenuModule
+    MenuModule,
+    ConfirmDialogModule
   ],
+  providers: [ConfirmationService],
   templateUrl: './profits.component.html',
   styleUrl: './profits.component.scss'
 })
@@ -36,6 +40,7 @@ export class Profits implements OnInit {
   public databaseType = signal<string>('')
   public profitOptions: MenuItem[] | undefined
   public profitItemData: any
+  public confirmationService = inject(ConfirmationService)
   
   ngOnInit(): void {
     this.items = [
@@ -67,14 +72,20 @@ export class Profits implements OnInit {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => {
-
+          this.confirmationService.confirm({
+            message: 'Are you sure you want to delete this item?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            acceptIcon: 'none',
+            rejectIcon: 'none',
+            rejectButtonStyleClass: 'p-button-text',
+            accept: () => {
+              this.triggerDeleteProfit(this.profitItemData.id)
+            }
+          })
         }
       }
     ]
-  }
-
-  public ness(): void {
-    console.log(this.sharedService.userProfits())
   }
 
   public onDialogClose(newState: boolean) {
@@ -119,7 +130,7 @@ export class Profits implements OnInit {
   
         this.messageService.add({
           severity: 'success',
-          summary: 'Success',
+          // summary: 'Success',
           detail: 'Profit item added!',
           key: 'br',
           life: 4000
@@ -142,4 +153,30 @@ export class Profits implements OnInit {
       }
     }
   }
+
+  async triggerDeleteProfit(profitId: string) {
+    this.dialogLoading = true
+
+    try {
+      await this.authService.deleteProfit(profitId)
+  
+      this.messageService.add({
+        severity: 'success',
+        // summary: 'Deleted',
+        detail: 'Profit removed',
+        key: 'br',
+        life: 4000
+      })
+  
+    } catch (err) {
+      console.log(err)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error deleting the profit. Try again.',
+        key: 'br',
+        life: 4000
+      })
+    }
+  }  
 }

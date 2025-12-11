@@ -662,4 +662,48 @@ export class AuthService {
     // If cache doesn't exist, force reload (rare case)
     await this.fetchUserProfits()
   }
+
+  async deleteProfit(profitId: string): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    if (!uid) throw new Error('No user ID found')
+  
+    const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
+  
+    // --------------------------
+    // 1. Delete from Firestore
+    // --------------------------
+    await deleteDoc(profitRef)
+  
+    // --------------------------
+    // 2. Update Local Cache
+    // --------------------------
+    const cacheKey = 'userProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+  
+    let updatedList = []
+  
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+  
+        // Remove the deleted profit
+        updatedList = parsed.filter((p: any) => p.id !== profitId)
+  
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating profit cache after delete, refetching...', err)
+        await this.fetchUserProfits()
+        return
+      }
+    } else {
+      // No cache? Just refetch
+      await this.fetchUserProfits()
+      return
+    }
+  
+    // --------------------------
+    // 3. Update Signal
+    // --------------------------
+    this.sharedService.userProfits.set(updatedList)
+  }  
 }
