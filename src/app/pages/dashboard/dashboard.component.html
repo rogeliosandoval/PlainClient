@@ -40,7 +40,7 @@
           <i class="pi pi-bars hamburger-icon" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#023c8b'" (click)="sidebarVisible.set(true)"></i>
         }
       </div>
-      <p-menu #menu [model]="items" [popup]="true"/>
+      <p-menu #menu [model]="items" popup="true" appendTo="body"/>
     </div>
 
     @if (sharedService.loading()) {

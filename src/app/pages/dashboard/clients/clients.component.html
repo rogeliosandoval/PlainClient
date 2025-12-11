@@ -16,7 +16,7 @@
             <img class="client-logo" [ngSrc]="client.avatarUrl || '/assets/images/avatars/default-business-avatar.png'" alt="client logo" draggable="false" width="160" height="160" priority>
             <div class="menu">
               <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); this.sharedService.dialogClient.set(client)"></i>
-              <p-menu #menu [model]="clientOptions" [popup]="true"/>
+              <p-menu #menu [model]="clientOptions" popup="true" appendTo="body"/>
             </div>
           </div>
           <div class="client-name">{{ client?.name }}</div>

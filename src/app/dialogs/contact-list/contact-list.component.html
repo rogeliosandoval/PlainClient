@@ -20,7 +20,7 @@
       </div>
       <div class="menu">
         <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedContact = contact"></i>
-        <p-menu #menu [model]="contactOptions" [popup]="true" [appendTo]="'body'"/>
+        <p-menu #menu [model]="contactOptions" popup="true" appendTo="body"/>
       </div>
     </div>
     @if (dialogLoading) {

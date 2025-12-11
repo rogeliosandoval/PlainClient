@@ -33,7 +33,7 @@
               <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); profitItemData = item"></i>
             </div>
           }
-          <p-menu #menu [model]="profitOptions" [popup]="true"/>
+          <p-menu #menu [model]="profitOptions" popup="true" appendTo="body"/>
         </div>
         <div class="profit-summary">
           <div class="profit-summary-clipboard" [class.profit-summary-clipboard-dark]="sharedService.darkMode()">
