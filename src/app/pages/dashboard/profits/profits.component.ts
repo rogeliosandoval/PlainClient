@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, signal, ViewChild } from '@angular/core'
+import { Component, computed, inject, Input, OnInit, signal, ViewChild } from '@angular/core'
 import { AuthService } from '../../../services/auth.service'
 import { ButtonModule } from 'primeng/button'
 import { MessageService } from 'primeng/api'
@@ -10,6 +10,7 @@ import { StandardFormData } from '../../../interfaces/other.interface'
 import { SharedService } from '../../../services/shared.service'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ConfirmationService } from 'primeng/api'
+import { CurrencyPipe } from '@angular/common'
 
 @Component({
   selector: 'tc-profits',
@@ -19,7 +20,8 @@ import { ConfirmationService } from 'primeng/api'
     TabMenuModule,
     ProfitFormDialog,
     MenuModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    CurrencyPipe
   ],
   providers: [ConfirmationService],
   templateUrl: './profits.component.html',
@@ -92,6 +94,38 @@ export class Profits implements OnInit {
     this.showProfitFormDialog.set(newState)
     this.profitFormDialog.resetForm()
   }
+
+  public getTotal(): void {
+    console.log(this.sharedService.userProfits())
+  }
+
+  public parseAmount(amountStr: string): number {
+    const normalized = amountStr.replace(/,/g, '')
+    const num = parseFloat(normalized)
+    return isNaN(num) ? 0 : num
+  }
+  
+  public totalProfit = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits.reduce((acc, p) => {
+      const amt = this.parseAmount(p.amount)
+      return p.profitType === 'Income' ? acc + amt : acc - amt
+    }, 0)
+  })
+
+  public totalIncome = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits
+      .filter(p => p.profitType === 'Income')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
+  })
+
+  public totalExpenses = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits
+      .filter(p => p.profitType === 'Expense')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
+  })  
 
   async triggerProfitForm(data: StandardFormData) {
     if (this.logicType() === 'edit') {

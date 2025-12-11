@@ -37,23 +37,51 @@
   }
 }
 
-.tab-menu {
+.tab-menu-desktop {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
   gap: 1rem;
   height: 3.6rem;
 
-  @include variables.media('tablet') {
-    justify-content: center;
+  @media screen and (max-width: 1302px) {
+    display: none;
+  }
+}
+
+.tab-menu-mobile {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  height: 3.6rem;
+
+  @media screen and (max-width: 1302px) {
+    display: flex;
+  }
+
+  @include variables.media('phone') {
     height: auto;
     flex-direction: column;
+
+    p-button .p-button {
+      width: 100%;
+    }
+  }
+}
+
+.add-button-container {
+  margin-left: auto;
+
+  @media screen and (max-width: 1302px) {
+    margin: 0;
   }
 }
 
 .profit-container {
   display: flex;
+  justify-content: space-between;
   align-items: flex-start;
+  gap: 0.5rem;
   padding: 1rem 0;
   animation: routeAnimation 0.2s linear;
 
@@ -139,9 +167,11 @@
 }
 
 .profit-summary-clipboard {
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 450px;
-  height: 600px;
+  height: 680px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 5px 5px 2px rgba(128, 128, 128, 0.519);
@@ -166,4 +196,64 @@
   text-align: center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+
+.profit-summary-clipboard--items {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.5rem;
+  gap: 0.2rem;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 1.1rem;
+  font-family: "Outfit", sans-serif;
+  border-bottom: 1px solid black;
+  padding: 0.1rem 0;
+}
+
+.item-dark {
+  border-bottom: 1px solid white;
+}
+
+.item-amount {
+  font-weight: 700;
+}
+
+.profit-summary-clipboard--results {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: variables.$theme-color-main;
+  min-height: 5rem;
+  margin-top: auto;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  font-family: "Outfit", sans-serif;
+}
+
+.profit-summary-clipboard--results__income,
+.profit-summary-clipboard--results__expense,
+.profit-summary-clipboard--results__total {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 1.1rem;
+
+  span {
+    color: white;
+  }
+}
+
+.profit-summary-clipboard--results__income {
+  color: lime;
+}
+
+.profit-summary-clipboard--results__expense {
+  color: rgb(255, 149, 149);
 }
