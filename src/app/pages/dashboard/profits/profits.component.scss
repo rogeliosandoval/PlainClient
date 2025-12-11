@@ -202,7 +202,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   gap: 0.2rem;
 }
 
@@ -234,6 +234,12 @@
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   font-family: "Outfit", sans-serif;
+  padding: 0.5rem;
+  gap: 0.2rem;
+
+  @include variables.media('phone') {
+    flex-direction: column;
+  }
 }
 
 .profit-summary-clipboard--results__income,
@@ -247,6 +253,12 @@
 
   span {
     color: white;
+  }
+
+  @include variables.media('phone') {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
   }
 }
 
