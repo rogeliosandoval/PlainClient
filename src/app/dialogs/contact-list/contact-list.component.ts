@@ -70,7 +70,7 @@ export class ContactListDialog implements OnInit {
         icon: 'pi pi-trash',
         command: () => {
           this.confirmationService.confirm({
-            message: 'Are you sure that you want to delete this contact?',
+            message: 'Are you sure you want to delete this contact?',
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             acceptIcon: 'none',
