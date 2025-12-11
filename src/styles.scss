@@ -176,3 +176,33 @@ textarea,
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
+
+// Toasts
+.p-toast .p-toast-message.p-toast-message-success {
+  background: rgb(228, 248, 235);
+}
+
+.p-toast .p-toast-message.p-toast-message-error {
+  background: rgb(255, 218, 216);
+}
+
+.p-toast .p-toast-message .p-toast-message-content {
+  padding: 0.9rem;
+  font-size: 1rem;
+  letter-spacing: 0.2px;
+  font-family: "Outfit", sans-serif;
+}
+
+.standard-dark {
+  .p-toast .p-toast-message.p-toast-message-success {
+    background: rgba(0, 136, 34, 0.483);
+  }
+
+  .p-toast .p-toast-message.p-toast-message-error {
+    background: rgb(168 0 0 / 68%);
+  }
+
+  .p-toast .p-toast-message .p-toast-message-content {
+    color: white;
+  }
+}

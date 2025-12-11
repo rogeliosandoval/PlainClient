@@ -178,6 +178,7 @@
       <router-outlet/>
     </div>
     <p-toast position="bottom-right" key="br" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"/>
+    <p-toast position="bottom-center" key="bc" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"/>
     <tcd-startup-form #addBusinessDialog [showStartupFormDialog]="showStartupFormDialog()" [dialogLoading]="dialogLoading()" (onSubmit)="startupFormTrigger($event)" (onClose)="onDialogClose($event)"/>
     <tcd-client-form #addClientDialog [showClientFormDialog]="sharedService.showClientFormDialog()" [dialogLoading]="dialogLoading()" [type]="sharedService.clientFormType()" (onSubmit)="clientFormTrigger($event)" (onClose)="onDialogClose($event)"/>
   }
