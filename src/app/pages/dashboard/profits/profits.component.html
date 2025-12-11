@@ -2,9 +2,10 @@
   <div class="tab-menu-desktop">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {
-      <p-button label="Filter" icon="pi pi-filter" iconPos="right"/>
-      <p-button label="Print" icon="pi pi-print" iconPos="right"/>
-      <p-button label="Download CSV" icon="pi pi-download" iconPos="right"/>
+      <p-button [label]="filterLabel()" icon="pi pi-filter" iconPos="right" (click)="filterMenu.toggle($event)"/>
+      <p-menu #filterMenu [model]="filterOptions" popup="true" appendTo="body"/>
+      <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
+      <p-button label="Download CSV" icon="pi pi-download" iconPos="right" disabled/>
       <div class="add-button-container">
         <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('business'); logicType.set('add')"></p-button>
       </div>
@@ -13,7 +14,7 @@
   <div class="tab-menu-mobile">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {
-      <p-button label="Options" icon="pi pi-ellipsis-v" iconPos="right" (onClick)="getTotal()"/>
+      <p-button label="Options" icon="pi pi-ellipsis-v" iconPos="right"/>
     }
   </div>
   @if (showBusinessProfits()) {
@@ -32,7 +33,7 @@
     } @else {
       <div class="profit-container">
         <div class="profit-items">
-          @for (item of sharedService.userProfits(); track item.id) {
+          @for (item of filteredUserProfits(); track item.id) {
             <div class="profit-item" [class.profit-item-dark]="sharedService.darkMode()">
               @if (!sharedService.darkMode()) {
                 <div class="profit-item__expense" [style.color]="item.profitType === 'Expense' ? 'red' : '#06a506'">${{ item.amount }}</div>
@@ -50,7 +51,7 @@
           <div class="profit-summary-clipboard" [class.profit-summary-clipboard-dark]="sharedService.darkMode()">
             <div class="profit-summary-clipboard--title">Monthly Report</div>
             <div class="profit-summary-clipboard--items">
-              @for (item of sharedService.userProfits(); track item.id) {
+              @for (item of filteredUserProfits(); track item.id) {
                 <div class="item" [class.item-dark]="sharedService.darkMode()">
                   <div class="item-title">{{ item.name }}</div>
                   @if (!sharedService.darkMode()) {

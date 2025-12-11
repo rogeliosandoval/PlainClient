@@ -35,16 +35,20 @@ export class Profits implements OnInit {
   public messageService = inject(MessageService)
   public items: MenuItem[] | undefined
   public activeItem: any
-  public showBusinessProfits = signal<boolean>(false)
+  public showBusinessProfits = signal<boolean>(true)
   // public showPersonalProfits = signal<boolean>(false)
   public showProfitFormDialog = signal<boolean>(false)
   public logicType = signal<string>('')
   public databaseType = signal<string>('')
   public profitOptions: MenuItem[] | undefined
+  public filterOptions: MenuItem[] | undefined
   public profitItemData: any
   public confirmationService = inject(ConfirmationService)
+  public filteredUserProfits = signal<any[]>([])
+  public filterLabel = signal<string>('Order')
   
   ngOnInit(): void {
+    this.filteredUserProfits.set(this.sharedService.getSortedProfits())
     this.items = [
       { 
         label: 'Business',
@@ -62,6 +66,43 @@ export class Profits implements OnInit {
       }
     ]
     this.activeItem = this.items[0]
+    this.filterOptions = [
+      {
+        label: 'Default',
+        icon: 'pi pi-sort-alt',
+        command: () => {
+          this.filterUserProfitItems('')
+        }
+      },
+      {
+        label: 'A-Z',
+        icon: 'pi pi-sort-alpha-down',
+        command: () => {
+          this.filterUserProfitItems('a-z')
+        }
+      },
+      {
+        label: 'Z-A',
+        icon: 'pi pi-sort-alpha-down-alt',
+        command: () => {
+          this.filterUserProfitItems('z-a')
+        }
+      },
+      {
+        label: 'Income/Expense',
+        icon: 'pi pi-sort-amount-down',
+        command: () => {
+          this.filterUserProfitItems('income')
+        }
+      },
+      {
+        label: 'Expense/Income',
+        icon: 'pi pi-sort-amount-down-alt',
+        command: () => {
+          this.filterUserProfitItems('expense')
+        }
+      }
+    ]
     this.profitOptions = [
       {
         label: 'Edit',
@@ -95,8 +136,51 @@ export class Profits implements OnInit {
     this.profitFormDialog.resetForm()
   }
 
-  public getTotal(): void {
-    console.log(this.sharedService.userProfits())
+  public filterUserProfitItems(value: string): void {
+    const profits = this.sharedService.getSortedProfits()
+
+    switch(value) {
+
+      case 'a-z':
+        this.filterLabel.set('A-Z')
+        this.filteredUserProfits.set(
+          [...profits].sort((a, b) => a.name.localeCompare(b.name))
+        )
+        break
+
+      case 'z-a':
+        this.filterLabel.set('Z-A')
+        this.filteredUserProfits.set(
+          [...profits].sort((a, b) => b.name.localeCompare(a.name))
+        )
+        break
+
+      case 'income':
+        this.filterLabel.set('Income/Expense')
+        this.filteredUserProfits.set(
+          [...profits].sort((a, b) => {
+            if (a.profitType === b.profitType) return 0
+            return a.profitType === 'Income' ? -1 : 1
+          })
+        )
+        break
+
+      case 'expense':
+        this.filterLabel.set('Expense/Income')
+        this.filteredUserProfits.set(
+          [...profits].sort((a, b) => {
+            if (a.profitType === b.profitType) return 0
+            return a.profitType === 'Expense' ? -1 : 1
+          })
+        )
+        break
+
+      default:
+        // Back to original sorted-by-date order
+        this.filterLabel.set('Default')
+        this.filteredUserProfits.set(profits)
+        break
+    }
   }
 
   public parseAmount(amountStr: string): number {
@@ -136,10 +220,9 @@ export class Profits implements OnInit {
   
         this.messageService.add({
           severity: 'success',
-          // summary: 'Success',
           detail: 'Profit item updated!',
-          key: 'br',
-          life: 4000
+          key: 'bc',
+          life: 2000
         })
   
         this.profitFormDialog.resetForm()
@@ -152,7 +235,7 @@ export class Profits implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error updating the profit item. Try again.',
-          key: 'br',
+          key: 'bc',
           life: 4000
         })
       }
@@ -164,10 +247,9 @@ export class Profits implements OnInit {
   
         this.messageService.add({
           severity: 'success',
-          // summary: 'Success',
           detail: 'Profit item added!',
-          key: 'br',
-          life: 4000
+          key: 'bc',
+          life: 2000
         })
   
         this.profitFormDialog.resetForm()
@@ -181,7 +263,7 @@ export class Profits implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error adding the profit item. Try again.',
-          key: 'br',
+          key: 'bc',
           life: 4000
         })
       }
@@ -195,10 +277,9 @@ export class Profits implements OnInit {
       await this.authService.deleteProfit(profitId)
   
       this.messageService.add({
-        severity: 'success',
-        // summary: 'Deleted',
-        detail: 'Profit removed',
-        key: 'br',
+        severity: 'error',
+        detail: 'Profit removed.',
+        key: 'bc',
         life: 4000
       })
   
@@ -208,7 +289,7 @@ export class Profits implements OnInit {
         severity: 'error',
         summary: 'Error',
         detail: 'There was an error deleting the profit. Try again.',
-        key: 'br',
+        key: 'bc',
         life: 4000
       })
     }
