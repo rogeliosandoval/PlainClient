@@ -3,13 +3,13 @@
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {
       <p-button [label]="filterLabel()" icon="pi pi-filter" iconPos="right" (click)="filterMenu.toggle($event)"/>
-      <p-menu #filterMenu [model]="filterOptions" popup="true" appendTo="body"/>
       <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
       <p-button label="Download CSV" icon="pi pi-download" iconPos="right" disabled/>
       <div class="add-button-container">
         <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('business'); logicType.set('add')"></p-button>
       </div>
     }
+    <p-menu #filterMenu [model]="filterOptions" popup="true" appendTo="body"/>
   </div>
   <div class="tab-menu-mobile">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
@@ -65,15 +65,19 @@
             <div class="profit-summary-clipboard--results">
               <div class="profit-summary-clipboard--results__income">
                 <span>Income</span>
-                <strong>{{ totalIncome() | currency:'USD' }}</strong>
+                <strong [style.color]="!sharedService.darkMode() ? '#06a506' : '#48df57'">{{ totalIncome() | currency:'USD' }}</strong>
               </div>
               <div class="profit-summary-clipboard--results__expense">
                 <span>Obligation</span>
-                <strong>{{ totalExpenses() | currency:'USD'}}</strong>
+                <strong [style.color]="!sharedService.darkMode() ? 'red' : '#fc6363'">{{ totalExpenses() | currency:'USD'}}</strong>
               </div>
               <div class="profit-summary-clipboard--results__total">
                 <span>Profit</span>
-                <strong [style.color]="totalProfit() < 0 ? 'rgb(255, 149, 149)' : 'lime'">{{ totalProfit() | currency:'USD'}}</strong>
+                @if (sharedService.darkMode()) {
+                  <strong [style.color]="totalProfit() < 0 ? '#fc6363' : '#48df57'">{{ totalProfit() | currency:'USD'}}</strong>
+                } @else {
+                  <strong [style.color]="totalProfit() < 0 ? 'red' : '#06a506'">{{ totalProfit() | currency:'USD'}}</strong>
+                }
               </div>
             </div>
           </div>
