@@ -39,7 +39,7 @@ export class Profits implements OnInit {
   // public showPersonalProfits = signal<boolean>(false)
   public showProfitFormDialog = signal<boolean>(false)
   public logicType = signal<string>('')
-  public databaseType = signal<string>('')
+  public databaseType = signal<string>('business')
   public profitOptions: MenuItem[] | undefined
   public filterOptions: MenuItem[] | undefined
   public profitItemData: any
@@ -54,6 +54,7 @@ export class Profits implements OnInit {
         label: 'Business',
         icon: 'pi pi-briefcase',
         command: () => {
+          this.databaseType.set('business')
           this.showBusinessProfits.set(true)
         }
       },
@@ -61,6 +62,7 @@ export class Profits implements OnInit {
         label: 'Personal',
         icon: 'pi pi-user',
         command: () => {
+          this.databaseType.set('personal')
           this.showBusinessProfits.set(false)
         }
       }
@@ -227,6 +229,7 @@ export class Profits implements OnInit {
   })  
 
   async triggerProfitForm(data: StandardFormData) {
+
     if (this.logicType() === 'edit') {
       try {
         this.dialogLoading = true
@@ -260,7 +263,7 @@ export class Profits implements OnInit {
       try {
         this.dialogLoading = true
   
-        await this.authService.addProfit(data.formData)
+        await this.authService.addProfit(data.formData, this.databaseType())
         this.filteredUserProfits.set(this.sharedService.getSortedProfits())
         this.filterUserProfitItems(this.filterLabel())
   

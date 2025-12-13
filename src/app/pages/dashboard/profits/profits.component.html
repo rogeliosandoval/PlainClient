@@ -6,7 +6,7 @@
       <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
       <p-button label="Download CSV" icon="pi pi-download" iconPos="right" disabled/>
       <div class="add-button-container">
-        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('business'); logicType.set('add')"></p-button>
+        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); logicType.set('add')"></p-button>
       </div>
     }
     <p-menu #filterMenu [model]="filterOptions" popup="true" appendTo="body"/>
@@ -21,14 +21,14 @@
     <div class="no-profits">
       <img src="/assets/images/money-stacks.webp" alt="no profits" draggable="false" width="230" height="205" priority>
       <span>Keep track of your business expesnes!</span>
-      <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('business'); logicType.set('add')"></p-button>
+      <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); logicType.set('add')"></p-button>
     </div>
   } @else {
     @if (sharedService.userProfits().length === 0) {
       <div class="no-profits">
         <img src="/assets/images/wallet.webp" alt="no profits" draggable="false" width="186" height="200" priority>
         <span>Keep track of your personal expenses!</span>
-        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); databaseType.set('personal'); logicType.set('add')"></p-button>
+        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); logicType.set('add')"></p-button>
       </div>
     } @else {
       <div class="profit-container">

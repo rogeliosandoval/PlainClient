@@ -548,7 +548,7 @@ export class AuthService {
     }
   }
 
-  async addProfit(formData: any): Promise<void> {
+  async addProfit(formData: any, databaseType: string): Promise<void> {
     const uid = this.coreUserData()?.uid
     const profitId = uuidv4()
 
