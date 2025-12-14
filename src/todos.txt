@@ -27,3 +27,7 @@ TODOS:
 - implement email confirm on sign up
 
 - implement timeout session
+
+- add padding to login/signup form when you make vertical space less
+
+- implement inbox logic
