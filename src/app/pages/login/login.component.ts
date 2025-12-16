@@ -56,9 +56,11 @@ export class Login implements OnInit {
     const formData = this.loginForm.value
     this.sharedService.loading.set(true)
 
-    setTimeout(() => {
+    setTimeout(async () => {
       if (formData.checked?.includes('yes')) {
         this.authService.clearBusinessDataCache.set(true)
+        await this.authService.fetchProfits('business')
+        await this.authService.fetchProfits('personal')
         this.authService.loginWithLocalPersistence(formData.email!, formData.password!).subscribe({
           next: () => {
             this.sharedService.loading.set(false)
@@ -77,6 +79,8 @@ export class Login implements OnInit {
         })
       } else {
         this.authService.clearBusinessDataCache.set(true)
+        await this.authService.fetchProfits('business')
+        await this.authService.fetchProfits('personal')
         this.authService.loginWithSessionPersistence(formData.email!, formData.password!).subscribe({
           next: () => {
             this.sharedService.loading.set(false)

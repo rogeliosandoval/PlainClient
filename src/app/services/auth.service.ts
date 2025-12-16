@@ -548,11 +548,14 @@ export class AuthService {
     }
   }
 
-  async addProfit(formData: any, databaseType: string): Promise<void> {
+  async addProfit(formData: any, databaseType: 'personal' | 'business'): Promise<void> {
     const uid = this.coreUserData()?.uid
-    const profitId = uuidv4()
+    if (!uid) return
 
-    const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
+    const profitId = uuidv4()
+    const context = this.resolveProfitContext(databaseType, uid)
+
+    const profitRef = doc(this.firestore, `${context.collectionPath}/${profitId}`)
 
     const newProfit = {
       id: profitId,
@@ -563,60 +566,94 @@ export class AuthService {
       createdAt: new Date().toISOString()
     }
 
-    // 1. Write to Firestore
+    // 1️⃣ Firestore write
     await setDoc(profitRef, newProfit)
 
-    // ----------------------------
-    // 2. Update Local Cache
-    // ----------------------------
+    // 2️⃣ Cache update
+    let updatedList: any[] = []
 
-    const cacheKey = 'userProfitsCache'
-    const cached = localStorage.getItem(cacheKey)
-
-    let updatedList = []
+    const cached = localStorage.getItem(context.cacheKey)
 
     if (cached) {
       try {
-        const parsed = JSON.parse(cached)
-        updatedList = [newProfit, ...parsed]
-        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
-      } catch (err) {
-        console.warn('Error updating profit cache, refetching...', err)
-        await this.fetchUserProfits()
+        updatedList = [newProfit, ...JSON.parse(cached)]
+      } catch {
+        await this.fetchProfits(databaseType)
         return
       }
     } else {
       updatedList = [newProfit]
-      localStorage.setItem(cacheKey, JSON.stringify(updatedList))
     }
 
-    // ----------------------------
-    // 3. Update signal (UI reactivity)
-    // ----------------------------
-    this.sharedService.userProfits.set(updatedList)
+    localStorage.setItem(context.cacheKey, JSON.stringify(updatedList))
+
+    // 3️⃣ Signal update
+    context.signal.set(updatedList)
   }
 
-  // Fetch all profits from Firestore
-  async fetchUserProfits(): Promise<void> {
+  private resolveProfitContext(databaseType: 'personal' | 'business', uid: string) {
+    return {
+      collectionPath:
+        databaseType === 'personal'
+          ? `users/${uid}/profits`
+          : `businesses/${uid}/profits`,
+
+      cacheKey:
+        databaseType === 'personal'
+          ? 'userProfitsCache'
+          : 'businessProfitsCache',
+
+      signal:
+        databaseType === 'personal'
+          ? this.sharedService.userProfits
+          : this.sharedService.businessProfits
+    }
+  }
+
+  async fetchProfits(databaseType: 'personal' | 'business'): Promise<void> {
     const uid = this.coreUserData()?.uid
-    const ref = collection(this.firestore, `users/${uid}/profits`)
+    if (!uid) return
+
+    const context = this.resolveProfitContext(databaseType, uid)
+    const ref = collection(this.firestore, context.collectionPath)
 
     const snapshot = await getDocs(ref)
 
-    let list: any[] = []
-    snapshot.forEach(doc => {
-      list.push(doc.data())
-    })
+    const list: any[] = []
+    snapshot.forEach(doc => list.push(doc.data()))
 
-    localStorage.setItem('userProfitsCache', JSON.stringify(list))
-    this.sharedService.userProfits.set(list)
+    localStorage.setItem(context.cacheKey, JSON.stringify(list))
+    context.signal.set(list)
 
-    console.log('🔥 Profits reloaded from Firestore')
+    console.log(`🔥 ${databaseType} profits reloaded from Firestore`)
   }
 
-  async editProfit(profitId: string, formData: any): Promise<void> {
+  loadProfits(databaseType: 'personal' | 'business'): void {
+    const context = this.resolveProfitContext(databaseType, this.coreUserData()?.uid as string)
+
+    const cached = localStorage.getItem(context.cacheKey)
+
+    if (cached) {
+      try {
+        context.signal.set(JSON.parse(cached))
+        console.log(`📦 Loaded ${databaseType} profits from cache`)
+        return
+      } catch {
+        console.warn('Cache parse failed, refetching...')
+      }
+    }
+
+    // No cache → fetch from Firestore
+    this.fetchProfits(databaseType)
+  }
+
+  async editProfit(profitId: string, formData: any, databaseType: 'personal' | 'business'):Promise<void> {
     const uid = this.coreUserData()?.uid
-    const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
+    if (!uid) return
+
+    const context = this.resolveProfitContext(databaseType, uid)
+
+    const profitRef = doc(this.firestore, `${context.collectionPath}/${profitId}`)
 
     const updatedProfit = {
       ...formData,
@@ -624,86 +661,69 @@ export class AuthService {
       updatedAt: new Date().toISOString()
     }
 
-    // 1. Update Firestore
+    // 1️⃣ Update Firestore
     await updateDoc(profitRef, updatedProfit)
 
-    // ----------------------------
-    // 2. Update Local Cache
-    // ----------------------------
-    const cacheKey = 'userProfitsCache'
-    const cached = localStorage.getItem(cacheKey)
+    // 2️⃣ Update cache
+    const cached = localStorage.getItem(context.cacheKey)
 
     if (cached) {
       try {
         const parsed = JSON.parse(cached)
 
-        // Replace the matching profit in the array
         const updatedList = parsed.map((p: any) =>
           p.id === profitId ? { ...p, ...updatedProfit } : p
         )
 
-        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+        localStorage.setItem(context.cacheKey, JSON.stringify(updatedList))
 
-        // ----------------------------
-        // 3. Update signal (UI reactivity)
-        // ----------------------------
-        this.sharedService.userProfits.set(updatedList)
-
+        // 3️⃣ Update signal
+        context.signal.set(updatedList)
         return
       } catch (err) {
         console.warn('Error updating cache on edit, refetching...', err)
-
-        // Worst case: fallback to full reload
-        await this.fetchUserProfits()
+        await this.fetchProfits(databaseType)
         return
       }
     }
 
-    // If cache doesn't exist, force reload (rare case)
-    await this.fetchUserProfits()
+    // Fallback if no cache exists
+    await this.fetchProfits(databaseType)
   }
 
-  async deleteProfit(profitId: string): Promise<void> {
+  async deleteProfit(profitId: string, databaseType: 'personal' | 'business'): Promise<void> {
     const uid = this.coreUserData()?.uid
-    if (!uid) throw new Error('No user ID found')
-  
-    const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
-  
-    // --------------------------
-    // 1. Delete from Firestore
-    // --------------------------
+    if (!uid) return
+
+    const context = this.resolveProfitContext(databaseType, uid)
+
+    const profitRef = doc(this.firestore, `${context.collectionPath}/${profitId}`)
+
+    // 1️⃣ Delete from Firestore
     await deleteDoc(profitRef)
-  
-    // --------------------------
-    // 2. Update Local Cache
-    // --------------------------
-    const cacheKey = 'userProfitsCache'
-    const cached = localStorage.getItem(cacheKey)
-  
-    let updatedList = []
-  
+
+    // 2️⃣ Update cache
+    const cached = localStorage.getItem(context.cacheKey)
+
     if (cached) {
       try {
         const parsed = JSON.parse(cached)
-  
-        // Remove the deleted profit
-        updatedList = parsed.filter((p: any) => p.id !== profitId)
-  
-        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+
+        const updatedList = parsed.filter((p: any) => p.id !== profitId)
+
+        localStorage.setItem(context.cacheKey, JSON.stringify(updatedList))
+
+        // 3️⃣ Update signal
+        context.signal.set(updatedList)
+        return
       } catch (err) {
-        console.warn('Error updating profit cache after delete, refetching...', err)
-        await this.fetchUserProfits()
+        console.warn('Error updating cache after delete, refetching...', err)
+        await this.fetchProfits(databaseType)
         return
       }
-    } else {
-      // No cache? Just refetch
-      await this.fetchUserProfits()
-      return
     }
-  
-    // --------------------------
-    // 3. Update Signal
-    // --------------------------
-    this.sharedService.userProfits.set(updatedList)
-  }  
+
+    // Fallback
+    await this.fetchProfits(databaseType)
+  }
 }
