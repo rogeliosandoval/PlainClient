@@ -24,6 +24,7 @@ import { NumbersOnlyDirective } from '../../directives/numbers-only.directive'
 })
 
 export class ProfitFormDialog {
+  @Input() databaseType: string = ''
   @Input() logicType: string = ''
   @Input() profitType: string = 'Income'
   @Input() showProfitFormDialog: boolean = false

@@ -39,7 +39,7 @@ export class Profits implements OnInit {
   // public showPersonalProfits = signal<boolean>(false)
   public showProfitFormDialog = signal<boolean>(false)
   public logicType = signal<string>('')
-  public databaseType = signal<any>('business')
+  public databaseType = signal<string>('business')
   public profitOptions: MenuItem[] | undefined
   public filterOptions: MenuItem[] | undefined
   public profitItemData: any
@@ -47,8 +47,8 @@ export class Profits implements OnInit {
   public filteredUserProfits = signal<any[]>([])
   public filterLabel = signal<string>('Oldest/Newest')
   
-  async ngOnInit(): Promise<void> {
-    this.filteredUserProfits.set(this.sharedService.getSortedProfits('personal'))
+  ngOnInit(): void {
+    this.filteredUserProfits.set(this.sharedService.getSortedProfits())
     this.items = [
       { 
         label: 'Business',
@@ -146,7 +146,7 @@ export class Profits implements OnInit {
   }
 
   public filterUserProfitItems(value: string): void {
-    const profits = this.sharedService.getSortedProfits(this.databaseType())
+    const profits = this.sharedService.getSortedProfits()
 
     switch(value) {
 
@@ -234,8 +234,8 @@ export class Profits implements OnInit {
       try {
         this.dialogLoading = true
   
-        await this.authService.editProfit(data.id as string, data.formData, this.databaseType())
-        this.filteredUserProfits.set(this.sharedService.getSortedProfits(this.databaseType()))
+        await this.authService.editProfit(data.id as string, data.formData)
+        this.filteredUserProfits.set(this.sharedService.getSortedProfits())
         this.filterUserProfitItems(this.filterLabel())
   
         this.messageService.add({
@@ -264,7 +264,7 @@ export class Profits implements OnInit {
         this.dialogLoading = true
   
         await this.authService.addProfit(data.formData, this.databaseType())
-        this.filteredUserProfits.set(this.sharedService.getSortedProfits(this.databaseType()))
+        this.filteredUserProfits.set(this.sharedService.getSortedProfits())
         this.filterUserProfitItems(this.filterLabel())
   
         this.messageService.add({
@@ -296,8 +296,8 @@ export class Profits implements OnInit {
     this.dialogLoading = true
 
     try {
-      await this.authService.deleteProfit(profitId, this.databaseType())
-      this.filteredUserProfits.set(this.sharedService.getSortedProfits(this.databaseType()))
+      await this.authService.deleteProfit(profitId)
+      this.filteredUserProfits.set(this.sharedService.getSortedProfits())
       this.filterUserProfitItems(this.filterLabel())
   
       this.messageService.add({
