@@ -1,5 +1,9 @@
 @use '../../../../variables.scss' as variables;
 
+.route-container {
+  animation: fadeInAndSlideInBottom 0.2s linear;
+}
+
 .title {
   font-size: 2rem;
   font-family: "Outfit", sans-serif;

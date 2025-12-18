@@ -1,5 +1,9 @@
 @use '../../../../variables.scss' as variables;
 
+.route-container {
+  animation: fadeInAndSlideInBottom 0.2s linear;
+}
+
 .inbox-empty {
   display: flex;
   justify-content: center;
