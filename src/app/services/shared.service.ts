@@ -14,6 +14,7 @@ export class SharedService {
   dialogClient = signal<any>(null)
   userProfits = signal<any[]>([])
   businessProfits = signal<any[]>([])
+  fromLogin = signal<boolean>(false)
 
   constructor(
       @Inject(PLATFORM_ID)

@@ -58,6 +58,7 @@ export class Login implements OnInit {
 
     setTimeout(() => {
       if (formData.checked?.includes('yes')) {
+        this.sharedService.fromLogin.set(true)
         this.authService.clearBusinessDataCache.set(true)
         this.authService.loginWithLocalPersistence(formData.email!, formData.password!).subscribe({
           next: () => {
@@ -76,6 +77,7 @@ export class Login implements OnInit {
           }
         })
       } else {
+        this.sharedService.fromLogin.set(true)
         this.authService.clearBusinessDataCache.set(true)
         this.authService.loginWithSessionPersistence(formData.email!, formData.password!).subscribe({
           next: () => {

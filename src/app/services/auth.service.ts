@@ -614,6 +614,24 @@ export class AuthService {
     console.log('🔥 Profits reloaded from Firestore')
   }
 
+  loadUserProfits(): void {
+    const cached = localStorage.getItem('userProfitsCache')
+  
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+        this.sharedService.userProfits.set(parsed)
+        console.log('📦 Loaded user profits from cache')
+        return
+      } catch {
+        console.warn('Cache corrupted, refetching from Firestore')
+      }
+    }
+  
+    // No cache (or bad cache) → fetch from Firestore
+    this.fetchUserProfits()
+  }  
+
   async editProfit(profitId: string, formData: any): Promise<void> {
     const uid = this.coreUserData()?.uid
     const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
