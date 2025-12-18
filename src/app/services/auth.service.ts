@@ -548,7 +548,8 @@ export class AuthService {
     }
   }
 
-  async addProfit(formData: any): Promise<void> {
+  // Personal Profit Logic
+  async addPersonalProfit(formData: any): Promise<void> {
     const uid = this.coreUserData()?.uid
     const profitId = uuidv4()
 
@@ -582,7 +583,7 @@ export class AuthService {
         localStorage.setItem(cacheKey, JSON.stringify(updatedList))
       } catch (err) {
         console.warn('Error updating profit cache, refetching...', err)
-        await this.fetchUserProfits()
+        await this.fetchPersonalProfits()
         return
       }
     } else {
@@ -597,7 +598,7 @@ export class AuthService {
   }
 
   // Fetch all profits from Firestore
-  async fetchUserProfits(): Promise<void> {
+  async fetchPersonalProfits(): Promise<void> {
     const uid = this.coreUserData()?.uid
     const ref = collection(this.firestore, `users/${uid}/profits`)
 
@@ -614,7 +615,7 @@ export class AuthService {
     console.log('🔥 Profits reloaded from Firestore')
   }
 
-  loadUserProfits(): void {
+  loadPersonalProfits(): void {
     const cached = localStorage.getItem('userProfitsCache')
   
     if (cached) {
@@ -629,7 +630,7 @@ export class AuthService {
     }
   
     // No cache (or bad cache) → fetch from Firestore
-    this.fetchUserProfits()
+    this.fetchPersonalProfits()
   }  
 
   async editProfit(profitId: string, formData: any): Promise<void> {
@@ -672,16 +673,16 @@ export class AuthService {
         console.warn('Error updating cache on edit, refetching...', err)
 
         // Worst case: fallback to full reload
-        await this.fetchUserProfits()
+        await this.fetchPersonalProfits()
         return
       }
     }
 
     // If cache doesn't exist, force reload (rare case)
-    await this.fetchUserProfits()
+    await this.fetchPersonalProfits()
   }
 
-  async deleteProfit(profitId: string): Promise<void> {
+  async deletePersonalProfit(profitId: string): Promise<void> {
     const uid = this.coreUserData()?.uid
     if (!uid) throw new Error('No user ID found')
   
@@ -710,12 +711,12 @@ export class AuthService {
         localStorage.setItem(cacheKey, JSON.stringify(updatedList))
       } catch (err) {
         console.warn('Error updating profit cache after delete, refetching...', err)
-        await this.fetchUserProfits()
+        await this.fetchPersonalProfits()
         return
       }
     } else {
       // No cache? Just refetch
-      await this.fetchUserProfits()
+      await this.fetchPersonalProfits()
       return
     }
   
@@ -725,6 +726,7 @@ export class AuthService {
     this.sharedService.userProfits.set(updatedList)
   }
 
+  // Business Profit Logic
   async addBusinessProfit(formData: any): Promise<void> {
     const businessId = this.coreUserData()?.businessId
     if (!businessId) return
@@ -790,4 +792,123 @@ export class AuthService {
     localStorage.setItem('businessProfitsCache', JSON.stringify(list))
     this.sharedService.businessProfits.set(list)
   }
+
+  loadBusinessProfits(): void {
+    const cached = localStorage.getItem('businessProfitsCache')
+  
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+        this.sharedService.businessProfits.set(parsed)
+        console.log('📦 Loaded business profits from cache')
+        return
+      } catch {
+        console.warn('Business profit cache corrupted, refetching...')
+      }
+    }
+  
+    // No cache or bad cache → fallback to Firestore
+    this.fetchBusinessProfits()
+  }
+
+  async editBusinessProfit(profitId: string, formData: any): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+  
+    const profitRef = doc(
+      this.firestore,
+      `businesses/${businessId}/profits/${profitId}`
+    )
+  
+    const updatedProfit = {
+      ...formData,
+      id: profitId,
+      updatedAt: new Date().toISOString()
+    }
+  
+    // 1️⃣ Update Firestore
+    await updateDoc(profitRef, updatedProfit)
+  
+    // ----------------------------
+    // 2️⃣ Update Local Cache
+    // ----------------------------
+    const cacheKey = 'businessProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+  
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+  
+        // Replace the matching profit in the array
+        const updatedList = parsed.map((p: any) =>
+          p.id === profitId ? { ...p, ...updatedProfit } : p
+        )
+  
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+  
+        // ----------------------------
+        // 3️⃣ Update signal (UI reactivity)
+        // ----------------------------
+        this.sharedService.businessProfits.set(updatedList)
+  
+        return
+      } catch (err) {
+        console.warn('Error updating business profit cache on edit, refetching...', err)
+  
+        // Worst case: fallback to full reload
+        await this.fetchBusinessProfits()
+        return
+      }
+    }
+  
+    // If cache doesn't exist, force reload (rare case)
+    await this.fetchBusinessProfits()
+  }
+
+  async deleteBusinessProfit(profitId: string): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) throw new Error('No business ID found')
+  
+    const profitRef = doc(
+      this.firestore,
+      `businesses/${businessId}/profits/${profitId}`
+    )
+  
+    // --------------------------
+    // 1️⃣ Delete from Firestore
+    // --------------------------
+    await deleteDoc(profitRef)
+  
+    // --------------------------
+    // 2️⃣ Update Local Cache
+    // --------------------------
+    const cacheKey = 'businessProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+  
+    let updatedList: any[] = []
+  
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+  
+        // Remove the deleted profit
+        updatedList = parsed.filter((p: any) => p.id !== profitId)
+  
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating business profit cache after delete, refetching...', err)
+        await this.fetchBusinessProfits()
+        return
+      }
+    } else {
+      // No cache? Just refetch
+      await this.fetchBusinessProfits()
+      return
+    }
+  
+    // --------------------------
+    // 3️⃣ Update Signal
+    // --------------------------
+    this.sharedService.businessProfits.set(updatedList)
+  }  
 }

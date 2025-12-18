@@ -43,11 +43,15 @@ export class Profits implements OnInit {
   public filterOptions: MenuItem[] | undefined
   public profitItemData: any
   public confirmationService = inject(ConfirmationService)
-  public filteredUserProfits = signal<any[]>([])
-  public filterLabel = signal<string>('Oldest/Newest')
+  public filteredPersonalProfits = signal<any[]>([])
+  public filteredBusinessProfits = signal<any[]>([])
+  public filterPersonalLabel = signal<string>('Oldest/Newest')
+  public filterBusinessLabel = signal<string>('Oldest/Newest')
+
   
   ngOnInit(): void {
-    this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
+    this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
+    this.filteredBusinessProfits.set(this.sharedService.getSortedBusinessProfits())
     this.items = [
       { 
         label: 'Business',
@@ -72,42 +76,66 @@ export class Profits implements OnInit {
         label: 'A-Z',
         icon: 'pi pi-sort-alpha-down',
         command: () => {
-          this.filterUserProfitItems('A-Z')
+          if (this.databaseType() === 'business') {
+            this.filterBusinessProfitItems('A-Z')
+          } else {
+            this.filterPersonalProfitItems('A-Z')
+          }
         }
       },
       {
         label: 'Z-A',
         icon: 'pi pi-sort-alpha-down-alt',
         command: () => {
-          this.filterUserProfitItems('Z-A')
+          if (this.databaseType() === 'business') {
+            this.filterBusinessProfitItems('Z-A')
+          } else {
+            this.filterPersonalProfitItems('Z-A')
+          }
         }
       },
       {
         label: 'Income/Expense',
         icon: 'pi pi-sort-amount-down',
         command: () => {
-          this.filterUserProfitItems('Income/Expense')
+          if (this.databaseType() === 'business') {
+            this.filterBusinessProfitItems('Income/Expense')
+          } else {
+            this.filterPersonalProfitItems('Income/Expense')
+          }
         }
       },
       {
         label: 'Expense/Income',
         icon: 'pi pi-sort-amount-down-alt',
         command: () => {
-          this.filterUserProfitItems('Expense/Income')
+          if (this.databaseType() === 'business') {
+            this.filterBusinessProfitItems('Expense/Income')
+          } else {
+            this.filterPersonalProfitItems('Expense/Income')
+          }
         }
       },
       {
         label: 'Newest/Oldest',
         icon: 'pi pi-clock',
         command: () => {
-          this.filterUserProfitItems('Newest/Oldest')
+          if (this.databaseType() === 'business') {
+            this.filterBusinessProfitItems('Newest/Oldest')
+          } else {
+            this.filterPersonalProfitItems('Newest/Oldest')
+          }
         }
       },
       {
         label: 'Oldest/Newest',
         icon: 'pi pi-clock',
         command: () => {
-          this.filterUserProfitItems('Oldest/Newest')
+          if (this.databaseType() === 'business') {
+            this.filterBusinessProfitItems('Oldest/Newest')
+          } else {
+            this.filterPersonalProfitItems('Oldest/Newest')
+          }
         }
       }
     ]
@@ -144,28 +172,28 @@ export class Profits implements OnInit {
     this.profitFormDialog.resetForm()
   }
 
-  public filterUserProfitItems(value: string): void {
+  public filterPersonalProfitItems(value: string): void {
     const profits = this.sharedService.getSortedPersonalProfits()
 
     switch(value) {
 
       case 'A-Z':
-        this.filterLabel.set('A-Z')
-        this.filteredUserProfits.set(
+        this.filterPersonalLabel.set('A-Z')
+        this.filteredPersonalProfits.set(
           [...profits].sort((a, b) => a.name.localeCompare(b.name))
         )
         break
 
       case 'Z-A':
-        this.filterLabel.set('Z-A')
-        this.filteredUserProfits.set(
+        this.filterPersonalLabel.set('Z-A')
+        this.filteredPersonalProfits.set(
           [...profits].sort((a, b) => b.name.localeCompare(a.name))
         )
         break
 
       case 'Income/Expense':
-        this.filterLabel.set('Income/Expense')
-        this.filteredUserProfits.set(
+        this.filterPersonalLabel.set('Income/Expense')
+        this.filteredPersonalProfits.set(
           [...profits].sort((a, b) => {
             if (a.profitType === b.profitType) return 0
             return a.profitType === 'Income' ? -1 : 1
@@ -174,8 +202,8 @@ export class Profits implements OnInit {
         break
 
       case 'Expense/Income':
-        this.filterLabel.set('Expense/Income')
-        this.filteredUserProfits.set(
+        this.filterPersonalLabel.set('Expense/Income')
+        this.filteredPersonalProfits.set(
           [...profits].sort((a, b) => {
             if (a.profitType === b.profitType) return 0
             return a.profitType === 'Expense' ? -1 : 1
@@ -184,15 +212,70 @@ export class Profits implements OnInit {
         break
 
       case 'Newest/Oldest':
-        this.filterLabel.set('Newest/Oldest')
-        this.filteredUserProfits().sort((a, b) =>
+        this.filterPersonalLabel.set('Newest/Oldest')
+        this.filteredPersonalProfits().sort((a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         )
         break
 
       case 'Oldest/Newest':
-        this.filterLabel.set('Oldest/Newest')
-        this.filteredUserProfits().sort((a, b) =>
+        this.filterPersonalLabel.set('Oldest/Newest')
+        this.filteredPersonalProfits().sort((a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        )
+        break
+    }
+  }
+
+  public filterBusinessProfitItems(value: string): void {
+    const profits = this.sharedService.getSortedBusinessProfits()
+
+    switch(value) {
+
+      case 'A-Z':
+        this.filterBusinessLabel.set('A-Z')
+        this.filteredBusinessProfits.set(
+          [...profits].sort((a, b) => a.name.localeCompare(b.name))
+        )
+        break
+
+      case 'Z-A':
+        this.filterBusinessLabel.set('Z-A')
+        this.filteredBusinessProfits.set(
+          [...profits].sort((a, b) => b.name.localeCompare(a.name))
+        )
+        break
+
+      case 'Income/Expense':
+        this.filterBusinessLabel.set('Income/Expense')
+        this.filteredBusinessProfits.set(
+          [...profits].sort((a, b) => {
+            if (a.profitType === b.profitType) return 0
+            return a.profitType === 'Income' ? -1 : 1
+          })
+        )
+        break
+
+      case 'Expense/Income':
+        this.filterBusinessLabel.set('Expense/Income')
+        this.filteredBusinessProfits.set(
+          [...profits].sort((a, b) => {
+            if (a.profitType === b.profitType) return 0
+            return a.profitType === 'Expense' ? -1 : 1
+          })
+        )
+        break
+
+      case 'Newest/Oldest':
+        this.filterBusinessLabel.set('Newest/Oldest')
+        this.filteredBusinessProfits().sort((a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+        break
+
+      case 'Oldest/Newest':
+        this.filterBusinessLabel.set('Oldest/Newest')
+        this.filteredBusinessProfits().sort((a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
         )
         break
@@ -205,7 +288,8 @@ export class Profits implements OnInit {
     return isNaN(num) ? 0 : num
   }
   
-  public totalProfit = computed(() => {
+  // Personal Calc
+  public totalPersonalProfit = computed(() => {
     const profits = this.sharedService.userProfits()
     return profits.reduce((acc, p) => {
       const amt = this.parseAmount(p.amount)
@@ -213,80 +297,165 @@ export class Profits implements OnInit {
     }, 0)
   })
 
-  public totalIncome = computed(() => {
+  public totalPersonalIncome = computed(() => {
     const profits = this.sharedService.userProfits()
     return profits
       .filter(p => p.profitType === 'Income')
       .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
   })
 
-  public totalExpenses = computed(() => {
+  public totalPersonalExpenses = computed(() => {
     const profits = this.sharedService.userProfits()
     return profits
       .filter(p => p.profitType === 'Expense')
       .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
-  })  
+  })
+
+  // Business Calc
+  public totalBusinessProfit = computed(() => {
+    const profits = this.sharedService.businessProfits()
+    return profits.reduce((acc, p) => {
+      const amt = this.parseAmount(p.amount)
+      return p.profitType === 'Income' ? acc + amt : acc - amt
+    }, 0)
+  })
+
+  public totalBusinessIncome = computed(() => {
+    const profits = this.sharedService.businessProfits()
+    return profits
+      .filter(p => p.profitType === 'Income')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
+  })
+
+  public totalBusinessExpenses = computed(() => {
+    const profits = this.sharedService.businessProfits()
+    return profits
+      .filter(p => p.profitType === 'Expense')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
+  })
 
   async triggerProfitForm(data: StandardFormData) {
-
-    if (this.logicType() === 'edit') {
-      try {
-        this.dialogLoading = true
-  
-        await this.authService.editProfit(data.id as string, data.formData)
-        this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
-        this.filterUserProfitItems(this.filterLabel())
-  
-        this.messageService.add({
-          severity: 'success',
-          detail: 'Profit item updated!',
-          key: 'bc',
-          life: 2000
-        })
-  
-        this.profitFormDialog.resetForm()
-        this.dialogLoading = false
-        this.showProfitFormDialog.set(false)
-      } catch (err) {
-        this.dialogLoading = false
-        console.log(err)
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error updating the profit item. Try again.',
-          key: 'bc',
-          life: 4000
-        })
+    if (this.databaseType() === 'business') {
+      if (this.logicType() === 'edit') {
+        try {
+          this.dialogLoading = true
+    
+          await this.authService.editBusinessProfit(data.id as string, data.formData)
+          this.filteredBusinessProfits.set(this.sharedService.getSortedBusinessProfits())
+          this.filterBusinessProfitItems(this.filterBusinessLabel())
+    
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Profit item updated!',
+            key: 'bc',
+            life: 2000
+          })
+    
+          this.profitFormDialog.resetForm()
+          this.dialogLoading = false
+          this.showProfitFormDialog.set(false)
+        } catch (err) {
+          this.dialogLoading = false
+          console.log(err)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error updating the profit item. Try again.',
+            key: 'bc',
+            life: 4000
+          })
+        }
+      } else {
+        try {
+          this.dialogLoading = true
+    
+          await this.authService.addBusinessProfit(data.formData)
+          this.filteredBusinessProfits.set(this.sharedService.getSortedBusinessProfits())
+          this.filterBusinessProfitItems(this.filterBusinessLabel())
+    
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Profit item added!',
+            key: 'bc',
+            life: 2000
+          })
+    
+          this.profitFormDialog.resetForm()
+          this.dialogLoading = false
+          this.showProfitFormDialog.set(false)
+    
+        } catch (err) {
+          this.dialogLoading = false
+          console.log(err)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error adding the profit item. Try again.',
+            key: 'bc',
+            life: 4000
+          })
+        }
       }
     } else {
-      try {
-        this.dialogLoading = true
-  
-        await this.authService.addProfit(data.formData)
-        this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
-        this.filterUserProfitItems(this.filterLabel())
-  
-        this.messageService.add({
-          severity: 'success',
-          detail: 'Profit item added!',
-          key: 'bc',
-          life: 2000
-        })
-  
-        this.profitFormDialog.resetForm()
-        this.dialogLoading = false
-        this.showProfitFormDialog.set(false)
-  
-      } catch (err) {
-        this.dialogLoading = false
-        console.log(err)
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'There was an error adding the profit item. Try again.',
-          key: 'bc',
-          life: 4000
-        })
+      if (this.logicType() === 'edit') {
+        try {
+          this.dialogLoading = true
+    
+          await this.authService.editProfit(data.id as string, data.formData)
+          this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
+          this.filterPersonalProfitItems(this.filterPersonalLabel())
+    
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Profit item updated!',
+            key: 'bc',
+            life: 2000
+          })
+    
+          this.profitFormDialog.resetForm()
+          this.dialogLoading = false
+          this.showProfitFormDialog.set(false)
+        } catch (err) {
+          this.dialogLoading = false
+          console.log(err)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error updating the profit item. Try again.',
+            key: 'bc',
+            life: 4000
+          })
+        }
+      } else {
+        try {
+          this.dialogLoading = true
+    
+          await this.authService.addPersonalProfit(data.formData)
+          this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
+          this.filterPersonalProfitItems(this.filterPersonalLabel())
+    
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Profit item added!',
+            key: 'bc',
+            life: 2000
+          })
+    
+          this.profitFormDialog.resetForm()
+          this.dialogLoading = false
+          this.showProfitFormDialog.set(false)
+    
+        } catch (err) {
+          this.dialogLoading = false
+          console.log(err)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error adding the profit item. Try again.',
+            key: 'bc',
+            life: 4000
+          })
+        }
       }
     }
   }
@@ -294,27 +463,52 @@ export class Profits implements OnInit {
   async triggerDeleteProfit(profitId: string) {
     this.dialogLoading = true
 
-    try {
-      await this.authService.deleteProfit(profitId)
-      this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
-      this.filterUserProfitItems(this.filterLabel())
-  
-      this.messageService.add({
-        severity: 'error',
-        detail: 'Profit removed.',
-        key: 'bc',
-        life: 4000
-      })
-  
-    } catch (err) {
-      console.log(err)
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'There was an error deleting the profit. Try again.',
-        key: 'bc',
-        life: 4000
-      })
+    if (this.databaseType() === 'business') {
+      try {
+        await this.authService.deleteBusinessProfit(profitId)
+        this.filteredBusinessProfits.set(this.sharedService.getSortedBusinessProfits())
+        this.filterBusinessProfitItems(this.filterBusinessLabel())
+    
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Profit removed.',
+          key: 'bc',
+          life: 4000
+        })
+    
+      } catch (err) {
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error deleting the profit. Try again.',
+          key: 'bc',
+          life: 4000
+        })
+      }
+    } else {
+      try {
+        await this.authService.deletePersonalProfit(profitId)
+        this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
+        this.filterPersonalProfitItems(this.filterPersonalLabel())
+    
+        this.messageService.add({
+          severity: 'error',
+          detail: 'Profit removed.',
+          key: 'bc',
+          life: 4000
+        })
+    
+      } catch (err) {
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error deleting the profit. Try again.',
+          key: 'bc',
+          life: 4000
+        })
+      }
     }
   }  
 }
