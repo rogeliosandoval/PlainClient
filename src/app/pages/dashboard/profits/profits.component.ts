@@ -36,7 +36,6 @@ export class Profits implements OnInit {
   public items: MenuItem[] | undefined
   public activeItem: any
   public showBusinessProfits = signal<boolean>(true)
-  // public showPersonalProfits = signal<boolean>(false)
   public showProfitFormDialog = signal<boolean>(false)
   public logicType = signal<string>('')
   public databaseType = signal<string>('business')
@@ -48,7 +47,7 @@ export class Profits implements OnInit {
   public filterLabel = signal<string>('Oldest/Newest')
   
   ngOnInit(): void {
-    this.filteredUserProfits.set(this.sharedService.getSortedProfits())
+    this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
     this.items = [
       { 
         label: 'Business',
@@ -146,7 +145,7 @@ export class Profits implements OnInit {
   }
 
   public filterUserProfitItems(value: string): void {
-    const profits = this.sharedService.getSortedProfits()
+    const profits = this.sharedService.getSortedPersonalProfits()
 
     switch(value) {
 
@@ -235,7 +234,7 @@ export class Profits implements OnInit {
         this.dialogLoading = true
   
         await this.authService.editProfit(data.id as string, data.formData)
-        this.filteredUserProfits.set(this.sharedService.getSortedProfits())
+        this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
         this.filterUserProfitItems(this.filterLabel())
   
         this.messageService.add({
@@ -263,8 +262,8 @@ export class Profits implements OnInit {
       try {
         this.dialogLoading = true
   
-        await this.authService.addProfit(data.formData, this.databaseType())
-        this.filteredUserProfits.set(this.sharedService.getSortedProfits())
+        await this.authService.addProfit(data.formData)
+        this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
         this.filterUserProfitItems(this.filterLabel())
   
         this.messageService.add({
@@ -297,7 +296,7 @@ export class Profits implements OnInit {
 
     try {
       await this.authService.deleteProfit(profitId)
-      this.filteredUserProfits.set(this.sharedService.getSortedProfits())
+      this.filteredUserProfits.set(this.sharedService.getSortedPersonalProfits())
       this.filterUserProfitItems(this.filterLabel())
   
       this.messageService.add({

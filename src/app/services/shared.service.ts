@@ -13,6 +13,7 @@ export class SharedService {
   clientFormType = signal<string>('')
   dialogClient = signal<any>(null)
   userProfits = signal<any[]>([])
+  businessProfits = signal<any[]>([])
 
   constructor(
       @Inject(PLATFORM_ID)
@@ -29,18 +30,36 @@ export class SharedService {
   }
 
   loadCachedProfits() {
-    const cached = localStorage.getItem('userProfitsCache')
-    if (cached) {
+    // Personal
+    const userCached = localStorage.getItem('userProfitsCache')
+    if (userCached) {
       try {
-        this.userProfits.set(JSON.parse(cached))
+        this.userProfits.set(JSON.parse(userCached))
       } catch {
-        console.warn('Failed to parse cached profits')
+        console.warn('Failed to parse cached user profits')
+      }
+    }
+
+    // Business
+    const businessCached = localStorage.getItem('businessProfitsCache')
+    if (businessCached) {
+      try {
+        this.businessProfits.set(JSON.parse(businessCached))
+      } catch {
+        console.warn('Failed to parse cached business profits')
       }
     }
   }
 
-  getSortedProfits() {
+  getSortedPersonalProfits() {
     const profits = this.userProfits() || []
+    return [...profits].sort((a, b) =>
+      a.createdAt.localeCompare(b.createdAt)
+    )
+  }
+
+  getSortedBusinessProfits() {
+    const profits = this.businessProfits() || []
     return [...profits].sort((a, b) =>
       a.createdAt.localeCompare(b.createdAt)
     )

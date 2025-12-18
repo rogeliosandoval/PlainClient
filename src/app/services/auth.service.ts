@@ -548,7 +548,7 @@ export class AuthService {
     }
   }
 
-  async addProfit(formData: any, databaseType: string): Promise<void> {
+  async addProfit(formData: any): Promise<void> {
     const uid = this.coreUserData()?.uid
     const profitId = uuidv4()
 
@@ -705,5 +705,71 @@ export class AuthService {
     // 3. Update Signal
     // --------------------------
     this.sharedService.userProfits.set(updatedList)
-  }  
+  }
+
+  async addBusinessProfit(formData: any): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const profitId = uuidv4()
+
+    const profitRef = doc(
+      this.firestore,
+      `businesses/${businessId}/profits/${profitId}`
+    )
+
+    const newProfit = {
+      id: profitId,
+      profitType: formData.profitType,
+      name: formData.name,
+      amount: formData.amount,
+      note: formData.note || '',
+      createdAt: new Date().toISOString()
+    }
+
+    // 1️⃣ Write to Firestore
+    await setDoc(profitRef, newProfit)
+
+    // ----------------------------
+    // 2️⃣ Update Local Cache
+    // ----------------------------
+    const cacheKey = 'businessProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList: any[] = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+        updatedList = [newProfit, ...parsed]
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating business profit cache, refetching...', err)
+        await this.fetchBusinessProfits()
+        return
+      }
+    } else {
+      updatedList = [newProfit]
+      localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+    }
+
+    // ----------------------------
+    // 3️⃣ Update signal (UI reactivity)
+    // ----------------------------
+    this.sharedService.businessProfits.set(updatedList)
+  }
+
+  async fetchBusinessProfits(): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const ref = collection(this.firestore, `businesses/${businessId}/profits`)
+    const snapshot = await getDocs(ref)
+
+    const list: any[] = []
+    snapshot.forEach(doc => list.push(doc.data()))
+
+    localStorage.setItem('businessProfitsCache', JSON.stringify(list))
+    this.sharedService.businessProfits.set(list)
+  }
 }
