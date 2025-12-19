@@ -1,0 +1,40 @@
+@use '../../../variables.scss' as variables;
+
+p-progressSpinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.task-form {
+  position: relative;
+}
+
+.input-group {
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
+
+  label {
+    font-size: 1rem;
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+  }
+
+  input,
+  textarea,
+  p-dropdown {
+    margin: 7px auto 15px;
+    width: 100%;
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+  }
+}
+
+.input-error {
+  font-size: 0.9rem;
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  color: rgb(255, 113, 113);
+}
