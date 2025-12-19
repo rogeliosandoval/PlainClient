@@ -27,6 +27,7 @@ import { CurrencyPipe } from '@angular/common'
   templateUrl: './profits.component.html',
   styleUrl: './profits.component.scss'
 })
+
 export class Profits implements OnInit {
   @ViewChild('profitFormDialog') profitFormDialog!: ProfitFormDialog
   @Input() dialogLoading: boolean = true
@@ -470,7 +471,7 @@ export class Profits implements OnInit {
         this.filterBusinessProfitItems(this.filterBusinessLabel())
     
         this.messageService.add({
-          severity: 'error',
+          severity: 'success',
           detail: 'Profit removed.',
           key: 'bc',
           life: 4000
@@ -493,7 +494,7 @@ export class Profits implements OnInit {
         this.filterPersonalProfitItems(this.filterPersonalLabel())
     
         this.messageService.add({
-          severity: 'error',
+          severity: 'success',
           detail: 'Profit removed.',
           key: 'bc',
           life: 4000

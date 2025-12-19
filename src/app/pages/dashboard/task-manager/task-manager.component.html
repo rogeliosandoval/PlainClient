@@ -1,1 +1,8 @@
-<p>task-manager works!</p>
+<div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
+  <div class="no-tasks">
+    <img src="/assets/images/task.webp" alt="no profits" draggable="false" width="230" height="205" priority>
+    <span>Keep track of your business tasks!</span>
+    <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true)"></p-button>
+  </div>
+</div>
+<tcd-task-form #taskFormDialog [showTaskFormDialog]="showTaskFormDialog()" [dialogLoading]="dialogLoading()" (onClose)="onDialogClose($event)"></tcd-task-form>
