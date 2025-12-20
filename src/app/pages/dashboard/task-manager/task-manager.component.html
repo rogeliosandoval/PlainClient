@@ -5,4 +5,4 @@
     <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true)"></p-button>
   </div>
 </div>
-<tcd-task-form #taskFormDialog [showTaskFormDialog]="showTaskFormDialog()" [dialogLoading]="dialogLoading()" (onClose)="onDialogClose($event)"></tcd-task-form>
+<tcd-task-form #taskFormDialog [showTaskFormDialog]="showTaskFormDialog()" [dialogLoading]="dialogLoading()" (onClose)="onDialogClose($event)" (onSubmit)="triggerTaskForm($event)"></tcd-task-form>

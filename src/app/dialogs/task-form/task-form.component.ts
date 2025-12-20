@@ -4,6 +4,7 @@ import { DialogModule } from 'primeng/dialog'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { ButtonModule } from 'primeng/button'
 import { InputTextModule } from 'primeng/inputtext'
+import { InputTextareaModule } from 'primeng/inputtextarea'
 
 @Component({
   selector: 'tcd-task-form',
@@ -14,7 +15,8 @@ import { InputTextModule } from 'primeng/inputtext'
     ReactiveFormsModule,
     ProgressSpinnerModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    InputTextareaModule
   ],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'
@@ -27,12 +29,9 @@ export class TaskFormDialog {
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
   public taskForm = new FormGroup({
-    name: new FormControl('', Validators.required)
+    name: new FormControl(''),
+    task: new FormControl('', Validators.required)
   })
-
-  public resetForm(): void {
-    // this.contactForm.reset()
-  }
 
   public editCheck(): void {
     // if (this.type === 'edit') {
@@ -44,15 +43,16 @@ export class TaskFormDialog {
   }
 
   public closeDialog() {
+    this.taskForm.reset()
     this.showTaskFormDialog = false
     this.onClose.emit(false)
   }
 
   public submitDialog(type: string): void {
-    // const data = {
-    //   formData: this.contactForm.value,
-    //   type
-    // }
-    // this.onSubmit.emit(data)
+    const data = {
+      formData: this.taskForm.value,
+      type
+    }
+    this.onSubmit.emit(data)
   }
 }

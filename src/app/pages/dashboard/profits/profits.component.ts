@@ -402,7 +402,7 @@ export class Profits implements OnInit {
         try {
           this.dialogLoading = true
     
-          await this.authService.editProfit(data.id as string, data.formData)
+          await this.authService.editPersonalProfit(data.id as string, data.formData)
           this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
           this.filterPersonalProfitItems(this.filterPersonalLabel())
     

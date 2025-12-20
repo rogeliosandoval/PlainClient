@@ -2,9 +2,9 @@ import { Component, inject, OnInit, signal, ViewChild } from '@angular/core'
 import { AuthService } from '../../../services/auth.service'
 import { ButtonModule } from 'primeng/button'
 import { MemberFormDialog } from '../../../dialogs/member-form/member-form.component'
-import { TeamMemberFormData } from '../../../interfaces/other.interface'
 import { MessageService } from 'primeng/api'
 import { SharedService } from '../../../services/shared.service'
+import { StandardFormData } from '../../../interfaces/other.interface'
 
 @Component({
   selector: 'tc-team-members',
@@ -29,7 +29,7 @@ export class TeamMembers implements OnInit {
 
   }
 
-  public async onSubmit(data: TeamMemberFormData): Promise<void> {
+  public async onSubmit(data: StandardFormData): Promise<void> {
     this.dialogLoading.set(true)
 
     try {

@@ -633,7 +633,7 @@ export class AuthService {
     this.fetchPersonalProfits()
   }  
 
-  async editProfit(profitId: string, formData: any): Promise<void> {
+  async editPersonalProfit(profitId: string, formData: any): Promise<void> {
     const uid = this.coreUserData()?.uid
     const profitRef = doc(this.firestore, `users/${uid}/profits/${profitId}`)
 
@@ -910,5 +910,22 @@ export class AuthService {
     // 3️⃣ Update Signal
     // --------------------------
     this.sharedService.businessProfits.set(updatedList)
-  }  
+  }
+  //
+
+  async addTask(formData: any): Promise<void> {
+    const taskId = uuidv4()
+    const businessId = this.coreUserData()?.businessId
+    const taskRef = doc(this.firestore, `businesses/${businessId}/tasks/${taskId}`)
+
+    const task = {
+      id: taskId,
+      name: formData.name,
+      task: formData.task,
+      createdAt: new Date().toISOString()
+    }
+
+    // Write to Firestore
+    await setDoc(taskRef, task)
+  }
 }
