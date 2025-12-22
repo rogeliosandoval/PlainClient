@@ -1,28 +1,37 @@
 <div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   <div class="tab-menu-desktop">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
-    <button (click)="test()">TESTING</button>
+    <p-button label="Add Task" (onClick)="showTaskFormDialog.set(true); this.type.set('add')"/>
   </div>
   @if (showBusinessTasks()) {
     @if (sharedService.businessTasks().length > 0) {
       <div class="tasks-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
         <div class="tasks-title">{{ authService.coreBusinessData()?.name }} Task List</div>
-        <div class="tasks">
+        <form class="taskForm" [formGroup]="taskForm" (ngSubmit)="quickAddTask()">
+          <p-inputGroup [class.disabled]="addingTask()">
+            <input type="text" pInputText placeholder="Quick add a task..." formControlName="task"/>
+            <button type="submit" pButton icon="pi pi-plus"></button>
+          </p-inputGroup>
+        </form>
+        <div class="tasks" [class.disabled]="addingTask()">
           @for (task of sharedService.businessTasks(); track task.id) {
             <div class="task" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : 'whitesmoke'">
               <div class="task__title" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ task.name }}</div>
               <div class="task__desc">{{ task.task }}</div>
-              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event);"></i>
+              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedTask = task"></i>
             </div>
           }
           <p-menu #menu [model]="taskOptions" popup="true" appendTo="body"/>
         </div>
+        @if (addingTask()) {
+          <p-progressSpinner ariaLabel="loading" strokeWidth="3" fill="transparent"/>
+        }
       </div>
     } @else {
       <div class="no-tasks">
         <img src="/assets/images/business-task.webp" alt="no profits" draggable="false" width="200" height="200" priority>
         <div>Keep track of your business tasks!</div>
-        <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true)"></p-button>
+        <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true); this.type.set('add')"></p-button>
       </div>
     }
   } @else {
@@ -33,4 +42,4 @@
     </div>
   }
 </div>
-<tcd-task-form #taskFormDialog [showTaskFormDialog]="showTaskFormDialog()" [dialogLoading]="dialogLoading()" (onClose)="onDialogClose($event)" (onSubmit)="triggerTaskForm($event)"></tcd-task-form>
+<tcd-task-form #taskFormDialog [showTaskFormDialog]="showTaskFormDialog()" [dialogLoading]="dialogLoading()" (onClose)="onDialogClose($event)" (onSubmit)="triggerTaskForm($event)" [selectedTask]="selectedTask" [type]="type()"></tcd-task-form>

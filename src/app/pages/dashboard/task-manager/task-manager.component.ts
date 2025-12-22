@@ -8,6 +8,11 @@ import { StandardFormData } from '../../../interfaces/other.interface'
 import { TabMenuModule } from 'primeng/tabmenu'
 import { MenuItem } from 'primeng/api'
 import { MenuModule } from 'primeng/menu'
+import { InputGroupModule } from 'primeng/inputgroup'
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon'
+import { InputTextModule } from 'primeng/inputtext'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 
 @Component({
   selector: 'tc-task-manager',
@@ -16,7 +21,12 @@ import { MenuModule } from 'primeng/menu'
     ButtonModule,
     TaskFormDialog,
     TabMenuModule,
-    MenuModule
+    MenuModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    InputTextModule,
+    ProgressSpinnerModule,
+    ReactiveFormsModule
   ],
   templateUrl: './task-manager.component.html',
   styleUrl: './task-manager.component.scss'
@@ -34,6 +44,13 @@ export class TaskManager implements OnInit {
   public showBusinessTasks = signal<boolean>(true)
   public databaseType = signal<string>('business')
   public taskOptions: MenuItem[] | undefined
+  public selectedTask: any
+  public type = signal<string>('add')
+  public addingTask = signal<boolean>(false)
+  public taskForm = new FormGroup({
+    name: new FormControl(''),
+    task: new FormControl('', Validators.required)
+  })
 
   ngOnInit(): void {
     this.items = [
@@ -67,7 +84,8 @@ export class TaskManager implements OnInit {
         label: 'Edit',
         icon: 'pi pi-pencil',
         command: () => {
-
+          this.type.set('edit')
+          this.showTaskFormDialog.set(true)
         }
       },
       {
@@ -80,12 +98,18 @@ export class TaskManager implements OnInit {
     ]
   }
 
-  public onDialogClose(newState: boolean) {
-    this.showTaskFormDialog.set(newState)
+  public quickAddTask(): void {
+    this.addingTask.set(true)
+    this.type.set('add')
+    const data = {
+      formData: this.taskForm.value,
+      type: this.type()
+    }
+    this.triggerTaskForm(data)
   }
 
-  public test(): void {
-    console.log(this.sharedService.businessTasks())
+  public onDialogClose(newState: boolean) {
+    this.showTaskFormDialog.set(newState)
   }
 
   public async triggerTaskForm(data: StandardFormData): Promise<void> {
@@ -100,6 +124,8 @@ export class TaskManager implements OnInit {
           await this.authService.addBusinessTask(data.formData)
           this.showTaskFormDialog.set(false)
           this.dialogLoading.set(false)
+          this.addingTask.set(false)
+          this.taskForm.reset()
           this.messageService.add({
             severity: 'success',
             detail: 'Task added!',
@@ -108,6 +134,7 @@ export class TaskManager implements OnInit {
           })
         } catch (err) {
           this.dialogLoading.set(false)
+          this.addingTask.set(false)
           console.log(err)
           this.messageService.add({
             severity: 'error',

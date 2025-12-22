@@ -23,6 +23,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
 })
 
 export class TaskFormDialog {
+  @Input() selectedTask: any
   @Input() type: string = ''
   @Input() showTaskFormDialog: boolean = false
   @Input() dialogLoading: boolean = false
@@ -34,12 +35,14 @@ export class TaskFormDialog {
   })
 
   public editCheck(): void {
-    // if (this.type === 'edit') {
-    //   this.contactForm.get('contact_name')?.setValue(this.selectedContact?.name || null)
-    //   this.contactForm.get('contact_email')?.setValue(this.selectedContact?.email || null)
-    //   this.contactForm.get('contact_position')?.setValue(this.selectedContact?.position || null)
-    //   this.contactForm.get('contact_phone')?.setValue(this.selectedContact?.phone || null)
-    // }
+    if (this.type === 'edit') {
+      this.dialogLoading = true
+      this.taskForm.get('name')?.setValue(this.selectedTask?.name || null)
+      this.taskForm.get('task')?.setValue(this.selectedTask?.task || null)
+      setTimeout(() => {
+        this.dialogLoading = false
+      }, 500)
+    }
   }
 
   public closeDialog() {

@@ -4,7 +4,7 @@
       <input id="name" type="text" pInputText variant="filled" placeholder="Name (optional)" formControlName="name" autocomplete="off" maxlength="40"/>
     </div>
     <div class="input-group" [class.disabled]="dialogLoading">
-      <textarea id="task" rows="3" cols="30" pInputTextarea variant="filled" formControlName="task"  placeholder="What is your task?" style="resize: none;" autocomplete="off"></textarea>
+      <textarea id="task" rows="3" cols="30" pInputTextarea variant="filled" formControlName="task"  placeholder="What is your task?" style="resize: none;" autocomplete="off" maxlength="100"></textarea>
     </div>
     <p-button label="{{ type === 'edit' ? 'Update Task' : 'Add Task' }}" type="submit" [disabled]="dialogLoading || taskForm.invalid || !taskForm.dirty"></p-button>
     @if (dialogLoading) {
