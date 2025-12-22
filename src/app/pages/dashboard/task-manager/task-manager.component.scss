@@ -1,5 +1,17 @@
 @use '../../../../variables.scss' as variables;
 
+.tab-menu-desktop {
+  display: flex;
+  // justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  height: 3.6rem;
+
+  @media screen and (max-width: 1399px) {
+    display: none;
+  }
+}
+
 .no-tasks {
   display: flex;
   justify-content: center;
@@ -8,9 +20,10 @@
   text-align: center;
   height: calc(100% - 3.6rem);
   animation: fadeInAndSlideInBottom 0.2s linear;
+  padding-bottom: 4rem;
 
   img {
-    height: 200px;
+    height: 320px;
     width: auto;
     opacity: 0.6;
     margin-bottom: 2rem;
@@ -22,16 +35,83 @@
     }
   }
 
-  span {
+  div {
     font-size: 1.1rem;
     font-family: "Outfit", sans-serif;
     font-weight: 500;
     margin-bottom: 1rem;
     line-height: 1.7rem;
+    max-width: 300px;
   }
 
   @media screen and (max-height: 555px) {
     height: auto;
     padding-bottom: 0;
   }
+}
+
+.tasks-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 800px;
+  margin:  2rem auto;
+  padding: 1.5rem 1.5rem 0;
+  border-radius: 10px;
+  background-color: white;
+  animation: fadeInAndSlideInBottom 0.2s linear;
+}
+
+.tasks-title {
+  font-size: 2rem;
+  font-family: "Outfit", sans-serif;
+  text-align: center;
+  font-weight: 700;
+}
+
+.tasks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+
+.task {
+  position: relative;
+  display: block;
+  background-color: whitesmoke;
+  font-family: "Outfit", sans-serif;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 10px;
+
+  .pi {
+    position: absolute;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    color: gray;
+    font-size: 1.3rem;
+    top: 5px;
+    right: 10px;
+    padding: 10px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(223, 223, 223, 0.188);
+    }
+  }
+}
+
+.task__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.task__desc {
+  font-size: 1.1rem;
 }

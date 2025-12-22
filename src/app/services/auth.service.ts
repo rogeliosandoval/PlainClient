@@ -913,19 +913,86 @@ export class AuthService {
   }
   //
 
-  async addTask(formData: any): Promise<void> {
-    const taskId = uuidv4()
+  async addBusinessTask(formData: any): Promise<void> {
     const businessId = this.coreUserData()?.businessId
-    const taskRef = doc(this.firestore, `businesses/${businessId}/tasks/${taskId}`)
+    if (!businessId) return
 
-    const task = {
+    const taskId = uuidv4()
+
+    const taskRef = doc(
+      this.firestore,
+      `businesses/${businessId}/tasks/${taskId}`
+    )
+
+    const newTask = {
       id: taskId,
       name: formData.name,
       task: formData.task,
+      completed: false,
       createdAt: new Date().toISOString()
     }
 
-    // Write to Firestore
-    await setDoc(taskRef, task)
+    // 1️⃣ Write to Firestore
+    await setDoc(taskRef, newTask)
+
+    // ----------------------------
+    // 2️⃣ Update Local Cache
+    // ----------------------------
+    const cacheKey = 'businessTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList: any[] = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+        updatedList = [newTask, ...parsed]
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating business task cache, refetching...', err)
+        await this.fetchBusinessTasks()
+        return
+      }
+    } else {
+      updatedList = [newTask]
+      localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+    }
+
+    // ----------------------------
+    // 3️⃣ Update Signal (UI reactivity)
+    // ----------------------------
+    this.sharedService.businessTasks.set(updatedList)
+  }
+
+  async fetchBusinessTasks(): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const ref = collection(this.firestore, `businesses/${businessId}/tasks`)
+    const snapshot = await getDocs(ref)
+
+    const list: any[] = []
+    snapshot.forEach(doc => list.push(doc.data()))
+
+    localStorage.setItem('businessTasksCache', JSON.stringify(list))
+    this.sharedService.businessTasks.set(list)
+
+    console.log('🔥 Business tasks reloaded from Firestore')
+  }
+
+  loadBusinessTasks(): void {
+    const cached = localStorage.getItem('businessTasksCache')
+
+    if (cached) {
+      try {
+        this.sharedService.businessTasks.set(JSON.parse(cached))
+        console.log('📦 Loaded business tasks from cache')
+        return
+      } catch {
+        console.warn('Business task cache corrupted, refetching...')
+      }
+    }
+
+    this.fetchBusinessTasks()
   }
 }

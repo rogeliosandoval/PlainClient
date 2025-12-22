@@ -14,6 +14,7 @@ export class SharedService {
   dialogClient = signal<any>(null)
   userProfits = signal<any[]>([])
   businessProfits = signal<any[]>([])
+  businessTasks = signal<any[]>([])
   fromLogin = signal<boolean>(false)
 
   constructor(
@@ -28,6 +29,24 @@ export class SharedService {
 
       this.applyTheme()
     }
+  }
+
+  loadCachedBusinessTasks(): void {
+    const cached = localStorage.getItem('businessTasksCache')
+    if (cached) {
+      try {
+        this.businessTasks.set(JSON.parse(cached))
+      } catch {
+        console.warn('Failed to parse cached business tasks')
+      }
+    }
+  }
+
+  getSortedBusinessTasks() {
+    const tasks = this.businessTasks() || []
+    return [...tasks].sort((a, b) =>
+      a.createdAt.localeCompare(b.createdAt)
+    )
   }
 
   loadCachedProfits() {
