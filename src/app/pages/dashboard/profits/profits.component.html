@@ -89,7 +89,7 @@
     @if (sharedService.userProfits().length === 0) {
       <div class="no-profits">
         <img src="/assets/images/wallet.webp" alt="no profits" draggable="false" width="186" height="200" priority>
-        <div>Keep track of your personal expenses! <span [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">(these are only visible to YOU)</span></div>
+        <div>Keep track of your personal expenses! <span style="font-size: 1rem;" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">(these are only visible to YOU)</span></div>
         <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); logicType.set('add')"></p-button>
       </div>
     } @else {
