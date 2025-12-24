@@ -13,6 +13,8 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon'
 import { InputTextModule } from 'primeng/inputtext'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
+import { ConfirmationService } from 'primeng/api'
 
 @Component({
   selector: 'tc-task-manager',
@@ -26,14 +28,17 @@ import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angula
     InputGroupAddonModule,
     InputTextModule,
     ProgressSpinnerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ConfirmDialogModule
   ],
+  providers: [ConfirmationService],
   templateUrl: './task-manager.component.html',
   styleUrl: './task-manager.component.scss'
 })
 
 export class TaskManager implements OnInit {
   @ViewChild('taskFormDialog') taskFormDialog!: TaskFormDialog
+  public confirmationService = inject(ConfirmationService)
   public messageService = inject(MessageService)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
@@ -92,7 +97,17 @@ export class TaskManager implements OnInit {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => {
-
+          this.confirmationService.confirm({
+            message: 'Are you sure you want to delete this task?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            acceptIcon: 'none',
+            rejectIcon: 'none',
+            rejectButtonStyleClass: 'p-button-text',
+            accept: () => {
+              this.triggerDeleteTask()
+            }
+          })
         }
       }
     ]
@@ -118,7 +133,28 @@ export class TaskManager implements OnInit {
     if (this.databaseType() === 'business') {
       // Business Logic
       if (data.type === 'edit') {
-        console.log('test')
+        try {
+          await this.authService.editBusinessTask(this.selectedTask.id, data.formData)
+          this.showTaskFormDialog.set(false)
+          this.dialogLoading.set(false)
+          this.taskForm.reset()
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Task updated!',
+            key: 'br',
+            life: 2000
+          })
+        } catch (err) {
+          this.dialogLoading.set(false)
+          console.log(err)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error updating the task. Try again.',
+            key: 'bc',
+            life: 4000
+          })
+        }
       } else {
         try {
           await this.authService.addBusinessTask(data.formData)
@@ -147,6 +183,35 @@ export class TaskManager implements OnInit {
       }
     } else {
       // Personal Logic
+    }
+  }
+
+  public async triggerDeleteTask(): Promise<void> {
+    this.dialogLoading.set(true)
+
+    if (this.databaseType() === 'business') {
+      try {
+        await this.authService.deleteBusinessTask(this.selectedTask.id)
+        this.dialogLoading.set(false)
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Task deleted!',
+          key: 'br',
+          life: 2000
+        })
+      } catch (err) {
+        this.dialogLoading.set(false)
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error deleting the task. Try again.',
+          key: 'br',
+          life: 4000
+        })
+      }
+    } else {
+
     }
   }
 }

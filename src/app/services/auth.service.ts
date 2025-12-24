@@ -995,4 +995,101 @@ export class AuthService {
 
     this.fetchBusinessTasks()
   }
+
+  async editBusinessTask(taskId: string, formData: any): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const taskRef = doc(
+      this.firestore,
+      `businesses/${businessId}/tasks/${taskId}`
+    )
+
+    const updatedTask = {
+      ...formData,
+      id: taskId,
+      updatedAt: new Date().toISOString()
+    }
+
+    // 1️⃣ Update Firestore
+    await updateDoc(taskRef, updatedTask)
+
+    // ----------------------------
+    // 2️⃣ Update Local Cache
+    // ----------------------------
+    const cacheKey = 'businessTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        const updatedList = parsed.map((t: any) =>
+          t.id === taskId ? { ...t, ...updatedTask } : t
+        )
+
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+
+        // ----------------------------
+        // 3️⃣ Update Signal
+        // ----------------------------
+        this.sharedService.businessTasks.set(updatedList)
+        return
+      } catch (err) {
+        console.warn('Error updating business task cache on edit, refetching...', err)
+        await this.fetchBusinessTasks()
+        return
+      }
+    }
+
+    // No cache → force reload
+    await this.fetchBusinessTasks()
+  }
+
+  async deleteBusinessTask(taskId: string): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) throw new Error('No business ID found')
+
+    const taskRef = doc(
+      this.firestore,
+      `businesses/${businessId}/tasks/${taskId}`
+    )
+
+    // --------------------------
+    // 1️⃣ Delete from Firestore
+    // --------------------------
+    await deleteDoc(taskRef)
+
+    // --------------------------
+    // 2️⃣ Update Local Cache
+    // --------------------------
+    const cacheKey = 'businessTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList: any[] = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Remove the deleted task
+        updatedList = parsed.filter((t: any) => t.id !== taskId)
+
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating business task cache after delete, refetching...', err)
+        await this.fetchBusinessTasks()
+        return
+      }
+    } else {
+      // No cache? Just refetch
+      await this.fetchBusinessTasks()
+      return
+    }
+
+    // --------------------------
+    // 3️⃣ Update Signal
+    // --------------------------
+    this.sharedService.businessTasks.set(updatedList)
+  }
 }

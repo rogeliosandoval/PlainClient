@@ -1,7 +1,9 @@
 <div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   <div class="tab-menu-desktop">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
-    <p-button label="Add Task" (onClick)="showTaskFormDialog.set(true); this.type.set('add')"/>
+    @if (sharedService.businessTasks().length > 0) {
+      <p-button label="Add Task" (onClick)="showTaskFormDialog.set(true); this.type.set('add')"/>
+    }
   </div>
   @if (showBusinessTasks()) {
     @if (sharedService.businessTasks().length > 0) {
@@ -43,3 +45,4 @@
   }
 </div>
 <tcd-task-form #taskFormDialog [showTaskFormDialog]="showTaskFormDialog()" [dialogLoading]="dialogLoading()" (onClose)="onDialogClose($event)" (onSubmit)="triggerTaskForm($event)" [selectedTask]="selectedTask" [type]="type()"></tcd-task-form>
+<p-confirmDialog/>
