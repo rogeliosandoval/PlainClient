@@ -15,6 +15,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ConfirmationService } from 'primeng/api'
+import { DateAgoPipe } from '../../../pipes/date-ago.pipe'
 
 @Component({
   selector: 'tc-task-manager',
@@ -29,7 +30,8 @@ import { ConfirmationService } from 'primeng/api'
     InputTextModule,
     ProgressSpinnerModule,
     ReactiveFormsModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DateAgoPipe
   ],
   providers: [ConfirmationService],
   templateUrl: './task-manager.component.html',

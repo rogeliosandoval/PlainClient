@@ -132,7 +132,11 @@
 .task__title {
   font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 0.4rem;
+}
+
+.task__date {
+  font-size: 0.9rem;
+  opacity: 0.6;
 }
 
 .task__desc {

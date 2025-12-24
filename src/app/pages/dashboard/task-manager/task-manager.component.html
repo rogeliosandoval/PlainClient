@@ -18,6 +18,7 @@
         <div class="tasks" [class.disabled]="addingTask()">
           @for (task of sharedService.businessTasks(); track task.id) {
             <div class="task" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : 'whitesmoke'">
+              <div class="task__date">{{ task.createdAt | dateAgo }}</div>
               <div class="task__title" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ task.name }}</div>
               <div class="task__desc">{{ task.task }}</div>
               <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedTask = task"></i>
