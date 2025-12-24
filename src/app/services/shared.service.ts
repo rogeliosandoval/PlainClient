@@ -15,6 +15,7 @@ export class SharedService {
   userProfits = signal<any[]>([])
   businessProfits = signal<any[]>([])
   businessTasks = signal<any[]>([])
+  personalTasks = signal<any[]>([])
   fromLogin = signal<boolean>(false)
 
   constructor(

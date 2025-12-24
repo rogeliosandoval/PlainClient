@@ -1092,4 +1092,53 @@ export class AuthService {
     // --------------------------
     this.sharedService.businessTasks.set(updatedList)
   }
+
+  async toggleBusinessTaskCompleted(taskId: string): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const cacheKey = 'businessTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+    if (!cached) {
+      await this.fetchBusinessTasks()
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(cached)
+
+      const targetTask = parsed.find((t: any) => t.id === taskId)
+      if (!targetTask) return
+
+      const newCompletedValue = !targetTask.completed
+      const updatedAt = new Date().toISOString()
+
+      const taskRef = doc(
+        this.firestore,
+        `businesses/${businessId}/tasks/${taskId}`
+      )
+
+      // 1️⃣ Update Firestore
+      await updateDoc(taskRef, {
+        completed: newCompletedValue,
+        updatedAt
+      })
+
+      // 2️⃣ Update Local Cache (IMPORTANT PART)
+      const updatedList = parsed.map((t: any) =>
+        t.id === taskId
+          ? { ...t, completed: newCompletedValue, updatedAt }
+          : t
+      )
+
+      localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+
+      // 3️⃣ Update Signal
+      this.sharedService.businessTasks.set(updatedList)
+
+    } catch (err) {
+      console.warn('Error toggling task completion, refetching...', err)
+      await this.fetchBusinessTasks()
+    }
+  }
 }

@@ -51,6 +51,7 @@ export class TaskManager implements OnInit {
   public showBusinessTasks = signal<boolean>(true)
   public databaseType = signal<string>('business')
   public taskOptions: MenuItem[] | undefined
+  public taskOptionsCompleted: MenuItem[] | undefined
   public selectedTask: any
   public type = signal<string>('add')
   public addingTask = signal<boolean>(false)
@@ -83,8 +84,16 @@ export class TaskManager implements OnInit {
       {
         label: 'Mark Complete',
         icon: 'pi pi-check-circle',
-        command: () => {
-
+        command: async () => {
+          this.addingTask.set(true)
+          await this.authService.toggleBusinessTaskCompleted(this.selectedTask.id)
+          this.addingTask.set(false)
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Task completed!',
+            key: 'br',
+            life: 2000
+          })
         }
       },
       {
@@ -93,6 +102,40 @@ export class TaskManager implements OnInit {
         command: () => {
           this.type.set('edit')
           this.showTaskFormDialog.set(true)
+        }
+      },
+      {
+        label: 'Delete',
+        icon: 'pi pi-trash',
+        command: () => {
+          this.confirmationService.confirm({
+            message: 'Are you sure you want to delete this task?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            acceptIcon: 'none',
+            rejectIcon: 'none',
+            rejectButtonStyleClass: 'p-button-text',
+            accept: () => {
+              this.triggerDeleteTask()
+            }
+          })
+        }
+      }
+    ]
+    this.taskOptionsCompleted =[
+      {
+        label: 'Mark Incomplete',
+        icon: 'pi pi-circle',
+        command: async () => {
+          this.addingTask.set(true)
+          await this.authService.toggleBusinessTaskCompleted(this.selectedTask.id)
+          this.addingTask.set(false)
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Task marked incomplete.',
+            key: 'br',
+            life: 2000
+          })
         }
       },
       {
@@ -189,12 +232,12 @@ export class TaskManager implements OnInit {
   }
 
   public async triggerDeleteTask(): Promise<void> {
-    this.dialogLoading.set(true)
+    this.addingTask.set(true)
 
     if (this.databaseType() === 'business') {
       try {
         await this.authService.deleteBusinessTask(this.selectedTask.id)
-        this.dialogLoading.set(false)
+        this.addingTask.set(false)
         this.messageService.add({
           severity: 'success',
           detail: 'Task deleted!',
@@ -202,7 +245,7 @@ export class TaskManager implements OnInit {
           life: 2000
         })
       } catch (err) {
-        this.dialogLoading.set(false)
+        this.addingTask.set(false)
         console.log(err)
         this.messageService.add({
           severity: 'error',

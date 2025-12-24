@@ -112,7 +112,7 @@
   padding: 1rem;
   border-radius: 10px;
 
-  .pi {
+  .pi-ellipsis-h {
     position: absolute;
     font-size: 1.2rem;
     border-radius: 50%;
@@ -139,6 +139,27 @@
   opacity: 0.6;
 }
 
+.task__date--completed {
+  font-size: 1rem;
+}
+
 .task__desc {
+  margin-top: 0.1rem;
   font-size: 1.1rem;
+}
+
+.completed {
+  opacity: 0.3;
+}
+
+.completed-sticker {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1.2rem;
+  margin-bottom: 0.1rem;
+
+  .pi {
+    font-size: 1.2rem;
+  }
 }

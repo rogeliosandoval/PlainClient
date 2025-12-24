@@ -1,7 +1,7 @@
 <div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   <div class="tab-menu-desktop">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
-    @if (sharedService.businessTasks().length > 0) {
+    @if (sharedService.businessTasks().length > 0 && databaseType() === 'business' || sharedService.personalTasks().length > 0 && databaseType() === 'personal') {
       <p-button label="Add Task" (onClick)="showTaskFormDialog.set(true); this.type.set('add')"/>
     }
   </div>
@@ -18,14 +18,27 @@
         <div class="tasks" [class.disabled]="addingTask()">
           @for (task of sharedService.businessTasks(); track task.id) {
             <div class="task" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : 'whitesmoke'">
-              <div class="task__date">{{ task.createdAt | dateAgo }}</div>
-              <div class="task__title" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ task.name }}</div>
-              <div class="task__desc">{{ task.task }}</div>
-              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedTask = task"></i>
+              @if (task.completed) {
+                <div class="completed-sticker" [style.color]="sharedService.darkMode() ? '#48df57' : '#06a506'">
+                  <i class="pi pi-check-circle"></i>
+                  <strong>Completed</strong>
+                  <div class="task__date--completed">{{ task.updatedAt | dateAgo }}</div>
+                </div>
+              } @else {
+                <div class="task__date">{{ task.createdAt | dateAgo }}</div>
+              }
+              <div class="task__title" [class.completed]="task.completed" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ task.name }}</div>
+              <div class="task__desc" [class.completed]="task.completed">{{ task.task }}</div>
+              @if (task.completed) {
+                <i class="pi pi-ellipsis-h" (click)="menuCompleted.toggle($event); selectedTask = task"></i>
+              } @else {
+                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedTask = task"></i>
+              }
             </div>
           }
-          <p-menu #menu [model]="taskOptions" popup="true" appendTo="body"/>
         </div>
+        <p-menu #menu [model]="taskOptions" popup="true" appendTo="body"/>
+        <p-menu #menuCompleted [model]="taskOptionsCompleted" popup="true" appendTo="body"/>
         @if (addingTask()) {
           <p-progressSpinner ariaLabel="loading" strokeWidth="3" fill="transparent"/>
         }
