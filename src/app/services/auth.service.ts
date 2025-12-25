@@ -1224,4 +1224,150 @@ export class AuthService {
 
     this.fetchPersonalTasks()
   }
+
+  async editPersonalTask(taskId: string, formData: any): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    if (!uid) return
+
+    const taskRef = doc(
+      this.firestore,
+      `users/${uid}/tasks/${taskId}`
+    )
+
+    const updatedTask = {
+      ...formData,
+      id: taskId,
+      updatedAt: new Date().toISOString()
+    }
+
+    // 1️⃣ Update Firestore
+    await updateDoc(taskRef, updatedTask)
+
+    // ----------------------------
+    // 2️⃣ Update Local Cache
+    // ----------------------------
+    const cacheKey = 'personalTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        const updatedList = parsed.map((t: any) =>
+          t.id === taskId ? { ...t, ...updatedTask } : t
+        )
+
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+
+        // ----------------------------
+        // 3️⃣ Update Signal
+        // ----------------------------
+        this.sharedService.personalTasks.set(updatedList)
+        return
+      } catch (err) {
+        console.warn('Error updating personal task cache on edit, refetching...', err)
+        await this.fetchPersonalTasks()
+        return
+      }
+    }
+
+    // No cache → force reload
+    await this.fetchPersonalTasks()
+  }
+
+  async deletePersonalTask(taskId: string): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    if (!uid) throw new Error('No user ID found')
+
+    const taskRef = doc(
+      this.firestore,
+      `users/${uid}/tasks/${taskId}`
+    )
+
+    // --------------------------
+    // 1️⃣ Delete from Firestore
+    // --------------------------
+    await deleteDoc(taskRef)
+
+    // --------------------------
+    // 2️⃣ Update Local Cache
+    // --------------------------
+    const cacheKey = 'personalTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList: any[] = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Remove the deleted task
+        updatedList = parsed.filter((t: any) => t.id !== taskId)
+
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating personal task cache after delete, refetching...', err)
+        await this.fetchPersonalTasks()
+        return
+      }
+    } else {
+      // No cache? Just refetch
+      await this.fetchPersonalTasks()
+      return
+    }
+
+    // --------------------------
+    // 3️⃣ Update Signal
+    // --------------------------
+    this.sharedService.personalTasks.set(updatedList)
+  }
+
+  async togglePersonalTaskCompleted(taskId: string): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    if (!uid) return
+
+    const cacheKey = 'personalTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+    if (!cached) {
+      await this.fetchPersonalTasks()
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(cached)
+
+      const targetTask = parsed.find((t: any) => t.id === taskId)
+      if (!targetTask) return
+
+      const newCompletedValue = !targetTask.completed
+      const updatedAt = new Date().toISOString()
+
+      const taskRef = doc(
+        this.firestore,
+        `users/${uid}/tasks/${taskId}`
+      )
+
+      // 1️⃣ Update Firestore
+      await updateDoc(taskRef, {
+        completed: newCompletedValue,
+        updatedAt
+      })
+
+      // 2️⃣ Update Local Cache
+      const updatedList = parsed.map((t: any) =>
+        t.id === taskId
+          ? { ...t, completed: newCompletedValue, updatedAt }
+          : t
+      )
+
+      localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+
+      // 3️⃣ Update Signal
+      this.sharedService.personalTasks.set(updatedList)
+
+    } catch (err) {
+      console.warn('Error toggling personal task completion, refetching...', err)
+      await this.fetchPersonalTasks()
+    }
+  }
 }

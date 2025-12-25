@@ -86,7 +86,11 @@ export class TaskManager implements OnInit {
         icon: 'pi pi-check-circle',
         command: async () => {
           this.addingTask.set(true)
-          await this.authService.toggleBusinessTaskCompleted(this.selectedTask.id)
+          if (this.databaseType() === 'business') {
+            await this.authService.toggleBusinessTaskCompleted(this.selectedTask.id)
+          } else {
+            await this.authService.togglePersonalTaskCompleted(this.selectedTask.id)
+          }
           this.addingTask.set(false)
           this.messageService.add({
             severity: 'success',
@@ -128,7 +132,11 @@ export class TaskManager implements OnInit {
         icon: 'pi pi-circle',
         command: async () => {
           this.addingTask.set(true)
-          await this.authService.toggleBusinessTaskCompleted(this.selectedTask.id)
+          if (this.databaseType() === 'business') {
+            await this.authService.toggleBusinessTaskCompleted(this.selectedTask.id)
+          } else {
+            await this.authService.togglePersonalTaskCompleted(this.selectedTask.id)
+          }
           this.addingTask.set(false)
           this.messageService.add({
             severity: 'success',
@@ -229,9 +237,26 @@ export class TaskManager implements OnInit {
     } else {
       if (data.type === 'edit') {
         try {
-
+          await this.authService.editPersonalTask(this.selectedTask.id, data.formData)
+          this.showTaskFormDialog.set(false)
+          this.dialogLoading.set(false)
+          this.taskForm.reset()
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Task updated!',
+            key: 'br',
+            life: 2000
+          })
         } catch (err) {
-
+          this.dialogLoading.set(false)
+          console.log(err)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error updating the task. Try again.',
+            key: 'br',
+            life: 4000
+          })
         }
       } else {
         try {
@@ -287,7 +312,26 @@ export class TaskManager implements OnInit {
         })
       }
     } else {
-
+      try {
+        await this.authService.deletePersonalTask(this.selectedTask.id)
+        this.addingTask.set(false)
+        this.messageService.add({
+          severity: 'success',
+          detail: 'Task deleted!',
+          key: 'br',
+          life: 2000
+        })
+      } catch (err) {
+        this.addingTask.set(false)
+        console.log(err)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error deleting the task. Try again.',
+          key: 'br',
+          life: 4000
+        })
+      }
     }
   }
 }
