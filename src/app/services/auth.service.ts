@@ -1141,4 +1141,87 @@ export class AuthService {
       await this.fetchBusinessTasks()
     }
   }
+
+  async addPersonalTask(formData: any): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    if (!uid) return
+
+    const taskId = uuidv4()
+
+    const taskRef = doc(
+      this.firestore,
+      `users/${uid}/tasks/${taskId}`
+    )
+
+    const newTask = {
+      id: taskId,
+      name: formData.name,
+      task: formData.task,
+      completed: false,
+      createdAt: new Date().toISOString()
+    }
+
+    // 1️⃣ Write to Firestore
+    await setDoc(taskRef, newTask)
+
+    // ----------------------------
+    // 2️⃣ Update Local Cache
+    // ----------------------------
+    const cacheKey = 'personalTasksCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList: any[] = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+        updatedList = [newTask, ...parsed]
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating personal task cache, refetching...', err)
+        await this.fetchPersonalTasks()
+        return
+      }
+    } else {
+      updatedList = [newTask]
+      localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+    }
+
+    // ----------------------------
+    // 3️⃣ Update Signal (UI reactivity)
+    // ----------------------------
+    this.sharedService.personalTasks.set(updatedList)
+  }
+
+  async fetchPersonalTasks(): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    if (!uid) return
+
+    const ref = collection(this.firestore, `users/${uid}/tasks`)
+    const snapshot = await getDocs(ref)
+
+    const list: any[] = []
+    snapshot.forEach(doc => list.push(doc.data()))
+
+    localStorage.setItem('personalTasksCache', JSON.stringify(list))
+    this.sharedService.personalTasks.set(list)
+
+    console.log('🔥 Personal tasks reloaded from Firestore')
+  }
+
+  loadPersonalTasks(): void {
+    const cached = localStorage.getItem('personalTasksCache')
+
+    if (cached) {
+      try {
+        this.sharedService.personalTasks.set(JSON.parse(cached))
+        console.log('📦 Loaded personal tasks from cache')
+        return
+      } catch {
+        console.warn('Personal task cache corrupted, refetching...')
+      }
+    }
+
+    this.fetchPersonalTasks()
+  }
 }

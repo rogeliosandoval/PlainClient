@@ -51,11 +51,50 @@
       </div>
     }
   } @else {
-    <div class="no-tasks">
-      <img src="/assets/images/personal-task.webp" alt="no profits" draggable="false" width="200" height="200" priority>
-      <div>Keep track of your personal tasks! <span style="font-size: 1rem;" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">(these are only visible to YOU)</span></div>
-      <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true)"></p-button>
-    </div>
+    @if (sharedService.personalTasks().length > 0) {
+      <div class="tasks-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+        <div class="tasks-title">Your Task List</div>
+        <form class="taskForm" [formGroup]="taskForm" (ngSubmit)="quickAddTask()">
+          <p-inputGroup [class.disabled]="addingTask()">
+            <input type="text" pInputText placeholder="Quick add a task..." formControlName="task"/>
+            <button type="submit" pButton icon="pi pi-plus"></button>
+          </p-inputGroup>
+        </form>
+        <div class="tasks" [class.disabled]="addingTask()">
+          @for (task of sharedService.personalTasks(); track task.id) {
+            <div class="task" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : 'whitesmoke'">
+              @if (task.completed) {
+                <div class="completed-sticker" [style.color]="sharedService.darkMode() ? '#48df57' : '#06a506'">
+                  <i class="pi pi-check-circle"></i>
+                  <strong>Completed</strong>
+                  <div class="task__date--completed">{{ task.updatedAt | dateAgo }}</div>
+                </div>
+              } @else {
+                <div class="task__date">{{ task.createdAt | dateAgo }}</div>
+              }
+              <div class="task__title" [class.completed]="task.completed" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ task.name }}</div>
+              <div class="task__desc" [class.completed]="task.completed">{{ task.task }}</div>
+              @if (task.completed) {
+                <i class="pi pi-ellipsis-h" (click)="menuCompleted.toggle($event); selectedTask = task"></i>
+              } @else {
+                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); selectedTask = task"></i>
+              }
+            </div>
+          }
+        </div>
+        <p-menu #menu [model]="taskOptions" popup="true" appendTo="body"/>
+        <p-menu #menuCompleted [model]="taskOptionsCompleted" popup="true" appendTo="body"/>
+        @if (addingTask()) {
+          <p-progressSpinner ariaLabel="loading" strokeWidth="3" fill="transparent"/>
+        }
+      </div>
+    } @else {
+      <div class="no-tasks">
+        <img src="/assets/images/personal-task.webp" alt="no profits" draggable="false" width="200" height="200" priority>
+        <div>Keep track of your personal tasks! <span style="font-size: 1rem;" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">(these are only visible to YOU)</span></div>
+        <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true)"></p-button>
+      </div>
+    }
   }
 </div>
 <tcd-task-form #taskFormDialog [showTaskFormDialog]="showTaskFormDialog()" [dialogLoading]="dialogLoading()" (onClose)="onDialogClose($event)" (onSubmit)="triggerTaskForm($event)" [selectedTask]="selectedTask" [type]="type()"></tcd-task-form>

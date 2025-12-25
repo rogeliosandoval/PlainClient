@@ -196,7 +196,7 @@ export class TaskManager implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error updating the task. Try again.',
-            key: 'bc',
+            key: 'br',
             life: 4000
           })
         }
@@ -210,7 +210,7 @@ export class TaskManager implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Task added!',
-            key: 'bc',
+            key: 'br',
             life: 2000
           })
         } catch (err) {
@@ -221,13 +221,44 @@ export class TaskManager implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error adding the task. Try again.',
-            key: 'bc',
+            key: 'br',
             life: 4000
           })
         }
       }
     } else {
-      // Personal Logic
+      if (data.type === 'edit') {
+        try {
+
+        } catch (err) {
+
+        }
+      } else {
+        try {
+          await this.authService.addPersonalTask(data.formData)
+          this.showTaskFormDialog.set(false)
+          this.dialogLoading.set(false)
+          this.addingTask.set(false)
+          this.taskForm.reset()
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Task added!',
+            key: 'br',
+            life: 2000
+          })
+        } catch (err) {
+          this.dialogLoading.set(false)
+          this.addingTask.set(false)
+          console.log(err)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error adding the task. Try again.',
+            key: 'br',
+            life: 4000
+          })
+        }
+      }
     }
   }
 

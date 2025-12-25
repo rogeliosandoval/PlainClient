@@ -115,11 +115,13 @@ export class Dashboard implements OnInit {
         await this.authService.fetchPersonalProfits()
         await this.authService.fetchBusinessProfits()
         await this.authService.fetchBusinessTasks()
+        await this.authService.fetchPersonalTasks()
         this.sharedService.fromLogin.set(false)
       } else {
         this.authService.loadPersonalProfits()
         this.authService.loadBusinessProfits()
         this.authService.loadBusinessTasks()
+        this.authService.loadPersonalTasks()
       }
       if (!this.authService.coreUserData()?.businessId) {
         this.showStartupFormDialog.set(true)

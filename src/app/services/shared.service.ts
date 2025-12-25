@@ -50,6 +50,24 @@ export class SharedService {
     )
   }
 
+  loadCachedPersonalTasks(): void {
+    const cached = localStorage.getItem('personalTasksCache')
+    if (cached) {
+      try {
+        this.personalTasks.set(JSON.parse(cached))
+      } catch {
+        console.warn('Failed to parse cached personal tasks')
+      }
+    }
+  }
+
+  getSortedPersonalTasks() {
+    const tasks = this.personalTasks() || []
+    return [...tasks].sort((a, b) =>
+      a.createdAt.localeCompare(b.createdAt)
+    )
+  }
+
   loadCachedProfits() {
     // Personal
     const userCached = localStorage.getItem('userProfitsCache')
