@@ -1,0 +1,24 @@
+@use '../../../../variables.scss' as variables;
+
+.route-container {
+  animation: fadeInAndSlideInBottom 0.2s linear;
+}
+
+.no-notifications {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+
+  .pi {
+    font-size: 2.5rem;
+  }
+
+  span {
+    font-size: 1.3rem;
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+  }
+}

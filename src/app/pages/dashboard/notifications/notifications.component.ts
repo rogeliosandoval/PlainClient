@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core'
+import { SharedService } from '../../../services/shared.service'
 
 @Component({
   selector: 'tc-notifications',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.scss'
 })
-export class Notifications {
 
+export class Notifications {
+  public sharedService = inject(SharedService)
 }
