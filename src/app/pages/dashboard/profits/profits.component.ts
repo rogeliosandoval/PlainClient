@@ -348,7 +348,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item updated!',
-            key: 'bc',
+            key: 'br',
             life: 2000
           })
     
@@ -362,7 +362,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error updating the profit item. Try again.',
-            key: 'bc',
+            key: 'br',
             life: 4000
           })
         }
@@ -377,7 +377,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item added!',
-            key: 'bc',
+            key: 'br',
             life: 2000
           })
     
@@ -392,7 +392,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error adding the profit item. Try again.',
-            key: 'bc',
+            key: 'br',
             life: 4000
           })
         }
@@ -409,7 +409,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item updated!',
-            key: 'bc',
+            key: 'br',
             life: 2000
           })
     
@@ -423,7 +423,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error updating the profit item. Try again.',
-            key: 'bc',
+            key: 'br',
             life: 4000
           })
         }
@@ -438,7 +438,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item added!',
-            key: 'bc',
+            key: 'br',
             life: 2000
           })
     
@@ -453,7 +453,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error adding the profit item. Try again.',
-            key: 'bc',
+            key: 'br',
             life: 4000
           })
         }
@@ -473,7 +473,7 @@ export class Profits implements OnInit {
         this.messageService.add({
           severity: 'success',
           detail: 'Profit removed.',
-          key: 'bc',
+          key: 'br',
           life: 4000
         })
     
@@ -483,7 +483,7 @@ export class Profits implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error deleting the profit. Try again.',
-          key: 'bc',
+          key: 'br',
           life: 4000
         })
       }
@@ -496,7 +496,7 @@ export class Profits implements OnInit {
         this.messageService.add({
           severity: 'success',
           detail: 'Profit removed.',
-          key: 'bc',
+          key: 'br',
           life: 4000
         })
     
@@ -506,7 +506,7 @@ export class Profits implements OnInit {
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error deleting the profit. Try again.',
-          key: 'bc',
+          key: 'br',
           life: 4000
         })
       }
