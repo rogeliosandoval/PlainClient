@@ -62,6 +62,26 @@ export class AuthService {
     return from(promise)
   }
 
+  clearAllAppCaches(): void {
+    const cacheKeys = [
+      'businessProfitsCache',
+      'businessTasksCache',
+      'personalTasksCache',
+      'userProfitsCache'
+    ]
+
+    cacheKeys.forEach(key => localStorage.removeItem(key))
+
+    // Also reset in-memory signals so UI clears immediately
+    this.sharedService.businessProfits.set([])
+    this.sharedService.businessTasks.set([])
+    this.sharedService.userProfits.set([])
+    this.sharedService.personalTasks.set([])
+    this.sharedService.dialogClient.set(null)
+
+    console.log('🧹 All application caches cleared')
+  }
+
   async fetchCoreUserData(): Promise<void> {
     const auth = this.firebaseAuth.currentUser
 
@@ -126,7 +146,7 @@ export class AuthService {
       const businessId = userData.businessId
   
       if (!businessId) {
-        console.warn('[fetchCoreBusinessData] No businessId found in user data ❌')
+        console.info('[fetchCoreBusinessData] User has no business yet — skipping business load')
         this.coreBusinessData.set(null)
         return
       }
@@ -181,7 +201,7 @@ export class AuthService {
       }
   
       // Set and cache
-      console.log('[fetchCoreBusinessData] Fetched from Firestore ✅')
+      console.log('🔥 Business data reloaded from Firestore')
       this.coreBusinessData.set(compiledData)
       localStorage.setItem(cacheKey, JSON.stringify(compiledData))
       this.fetchBusinessClientAvatars()
@@ -499,6 +519,7 @@ export class AuthService {
     }
   }
 
+  // Team Members
   async addTeamMember(formData: any): Promise<void> {
     const memberId = uuidv4()
     const businessId = this.coreUserData()?.businessId

@@ -32,6 +32,11 @@ $theme-color-main-light: #37b6ff;
   pointer-events: none;
 }
 
+.dashboard-disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .standard-dark {
   color: white;
   background-color: rgb(24, 24, 24);

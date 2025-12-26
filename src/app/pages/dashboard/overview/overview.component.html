@@ -1,36 +1,38 @@
-<div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
-  <div class="first-widgets">
-    <div class="total-clients small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
-      <i class="pi pi-users" style="background-color: rgb(191, 226, 255);"></i>
-      <div class="small-widget__info">
-        <strong>0</strong>
-        <span>Total Clients</span>
+@if (!sharedService.hardLoading() && sharedService.showOverview()) {
+  <div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
+    <div class="first-widgets">
+      <div class="total-clients small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+        <i class="pi pi-users" style="background-color: rgb(191, 226, 255);"></i>
+        <div class="small-widget__info">
+          <strong>0</strong>
+          <span>Total Clients</span>
+        </div>
+      </div>
+      <div class="total-profits small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+        <i class="pi pi-money-bill" style="background-color: rgb(206, 255, 205);"></i>
+        <div class="small-widget__info">
+          <strong>$0 /Mo</strong>
+          <span>Total Profits</span>
+        </div>
+      </div>
+      <div class="next-task small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+        <i class="pi pi-list-check" style="background-color: rgb(255, 205, 205);"></i>
+        <div class="small-widget__info">
+          <strong>All caught up</strong>
+          <span>Next Task</span>
+        </div>
+      </div>
+      <div class="notifications small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+        <i class="pi pi-bell" style="background-color: rgb(255, 239, 205);"></i>
+        <div class="small-widget__info">
+          <strong>0 New</strong>
+          <span>Notifications</span>
+        </div>
       </div>
     </div>
-    <div class="total-profits small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
-      <i class="pi pi-money-bill" style="background-color: rgb(206, 255, 205);"></i>
-      <div class="small-widget__info">
-        <strong>$0 /Mo</strong>
-        <span>Total Profits</span>
-      </div>
-    </div>
-    <div class="next-task small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
-      <i class="pi pi-list-check" style="background-color: rgb(255, 205, 205);"></i>
-      <div class="small-widget__info">
-        <strong>All caught up</strong>
-        <span>Next Task</span>
-      </div>
-    </div>
-    <div class="notifications small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
-      <i class="pi pi-bell" style="background-color: rgb(255, 239, 205);"></i>
-      <div class="small-widget__info">
-        <strong>0 New</strong>
-        <span>Notifications</span>
-      </div>
-    </div>
+  
+    <!-- <div class="business-name">
+      Chubby Designs
+    </div> -->
   </div>
-
-  <!-- <div class="business-name">
-    Chubby Designs
-  </div> -->
-</div>
+}

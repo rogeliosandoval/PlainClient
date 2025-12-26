@@ -3,7 +3,7 @@
     <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
   } @else {
     <!-- Top Navbar -->
-    <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+    <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()" [class.dashboard-disabled]="sharedService.hardLoading() || showStartupFormDialog()">
       <div class="top-nav-logo" routerLink="/dashboard/">
         @if (sharedService.darkMode()) {
           <img class="logo" ngSrc="/assets/images/logo-light.svg" alt="logo" draggable="false" width="200" height="48">
@@ -49,7 +49,7 @@
   
     <!-- Side Navbar & Router Outlet -->
      <div class="main-container" [class.p-sidebar-dark]="sharedService.darkMode()">
-      <div class="side-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+      <div class="side-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()" [class.dashboard-disabled]="sharedService.hardLoading() || showStartupFormDialog()">
         <div class="side-nav-head">
           <span [style.color]="sharedService.darkMode() ? 'white' : 'black'"><i class="pi pi-briefcase"></i>{{ authService.coreUserData()?.businessId ? authService.coreBusinessData()?.name : 'Your Business Name' }}</span>
           <button class="add-client-button" (click)="sharedService.clientFormType.set('add'); sharedService.showClientFormDialog.set(true)">Add Client <i class="pi pi-plus"></i></button>

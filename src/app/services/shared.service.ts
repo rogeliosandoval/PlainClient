@@ -8,6 +8,8 @@ import { isPlatformBrowser } from '@angular/common'
 export class SharedService {
   darkMode = signal<boolean>(false)
   loading = signal<boolean>(false)
+  hardLoading = signal<boolean>(false)
+  showOverview = signal<boolean>(false)
   showAvatarUploadDialog = signal<boolean>(false)
   showClientFormDialog = signal<boolean>(false)
   clientFormType = signal<string>('')

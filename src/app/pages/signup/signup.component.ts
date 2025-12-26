@@ -65,6 +65,9 @@ export class Signup implements OnInit {
         })
       })
       .then(() => {
+        this.authService.clearAllAppCaches()
+      })
+      .then(() => {
         this.sharedService.loading.set(false)
       })
       .then(() => {

@@ -108,27 +108,34 @@ export class Dashboard implements OnInit {
 
   public async initializeApp(): Promise<void> {
     this.sharedService.loading.set(true)
+    this.sharedService.hardLoading.set(true)
     await this.authService.fetchCoreUserData()
     await this.authService.fetchCoreBusinessData()
     .then(async () => {
-      if (this.sharedService.fromLogin()) {
-        await this.authService.fetchPersonalProfits()
-        await this.authService.fetchBusinessProfits()
-        await this.authService.fetchBusinessTasks()
-        await this.authService.fetchPersonalTasks()
-        this.sharedService.fromLogin.set(false)
-      } else {
-        this.authService.loadPersonalProfits()
-        this.authService.loadBusinessProfits()
-        this.authService.loadBusinessTasks()
-        this.authService.loadPersonalTasks()
-      }
       if (!this.authService.coreUserData()?.businessId) {
         this.showStartupFormDialog.set(true)
+        setTimeout(() => {
+          console.log(this.sharedService.hardLoading(), this.sharedService.showOverview())
+        }, 2000)
+      } else {
+        if (this.sharedService.fromLogin()) {
+          await this.authService.fetchPersonalProfits()
+          await this.authService.fetchBusinessProfits()
+          await this.authService.fetchBusinessTasks()
+          await this.authService.fetchPersonalTasks()
+          this.sharedService.fromLogin.set(false)
+          this.sharedService.showOverview.set(true)
+        } else {
+          this.authService.loadPersonalProfits()
+          this.authService.loadBusinessProfits()
+          this.authService.loadBusinessTasks()
+          this.authService.loadPersonalTasks()
+        }
       }
     })
     .then(() => {
       this.sharedService.loading.set(false)
+      this.sharedService.hardLoading.set(false)
     })
   }
 
@@ -333,6 +340,7 @@ export class Dashboard implements OnInit {
   }  
 
   public startupFormTrigger(data: any): void {
+    this.sharedService.hardLoading.set(true)
     if (data.type === 'add') {
       this.saveBusinessName(data.businessName)
     } else {
@@ -360,13 +368,17 @@ export class Dashboard implements OnInit {
             ownerId: uid, // Reference the owner
           })
 
-          await setDoc(userRef, { businessId: businessId }, { merge: true })
+          await setDoc(userRef, { businessId: businessId }, { merge: true }).then(() => {
+            this.authService.clearBusinessDataCache.set(true)
+          })
 
           await this.authService.fetchCoreUserData()
 
           await this.authService.fetchCoreBusinessData()
           .then(() => {
             this.showStartupFormDialog.set(false)
+            this.sharedService.hardLoading.set(false)
+            this.sharedService.showOverview.set(true)
           })
           .then(() => {
             this.addBusinessDialog.resetForm()
@@ -398,6 +410,8 @@ export class Dashboard implements OnInit {
     setTimeout(() => {
       this.authService.logout().subscribe({
         next: () => {
+          this.authService.clearAllAppCaches()
+          this.sharedService.showOverview.set(false)
           this.router.navigateByUrl('/login')
           this.sharedService.loading.set(false)
         }
