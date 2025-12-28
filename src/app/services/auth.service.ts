@@ -67,19 +67,22 @@ export class AuthService {
       'businessProfitsCache',
       'businessTasksCache',
       'personalTasksCache',
-      'userProfitsCache'
+      'userProfitsCache',
     ]
 
     cacheKeys.forEach(key => localStorage.removeItem(key))
 
-    // Also reset in-memory signals so UI clears immediately
+    // 👇 Reset but keep the key
+    localStorage.setItem('coreBusinessDataCache', JSON.stringify({}))
+
+    // Reset in-memory signals
     this.sharedService.businessProfits.set([])
     this.sharedService.businessTasks.set([])
     this.sharedService.userProfits.set([])
     this.sharedService.personalTasks.set([])
     this.sharedService.dialogClient.set(null)
 
-    console.log('🧹 All application caches cleared')
+    console.log('🧹 All application caches cleared (coreBusinessDataCache reset)')
   }
 
   async fetchCoreUserData(): Promise<void> {

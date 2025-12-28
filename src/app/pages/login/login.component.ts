@@ -50,6 +50,7 @@ export class Login implements OnInit {
 
   ngOnInit(): void {
     this.primengConfig.ripple = true
+    this.authService.clearAllAppCaches()
   }
 
   public login(): void {

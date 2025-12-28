@@ -47,6 +47,7 @@ export class Signup implements OnInit {
 
   ngOnInit(): void {
     this.primengConfig.ripple = true
+    this.authService.clearAllAppCaches()
   }
 
   public register(): void {

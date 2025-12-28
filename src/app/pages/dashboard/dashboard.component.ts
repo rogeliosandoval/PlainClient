@@ -114,9 +114,6 @@ export class Dashboard implements OnInit {
     .then(async () => {
       if (!this.authService.coreUserData()?.businessId) {
         this.showStartupFormDialog.set(true)
-        setTimeout(() => {
-          console.log(this.sharedService.hardLoading(), this.sharedService.showOverview())
-        }, 2000)
       } else {
         if (this.sharedService.fromLogin()) {
           await this.authService.fetchPersonalProfits()
@@ -130,6 +127,7 @@ export class Dashboard implements OnInit {
           this.authService.loadBusinessProfits()
           this.authService.loadBusinessTasks()
           this.authService.loadPersonalTasks()
+          this.sharedService.showOverview.set(true)
         }
       }
     })
