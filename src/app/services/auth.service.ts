@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core'
+import { Injectable, inject, signal, PLATFORM_ID, Inject } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore'
@@ -6,6 +6,7 @@ import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fi
 import { v4 as uuidv4 } from 'uuid'
 import { UserData, BusinessData, ClientData, Contact } from '../interfaces/user.interface'
 import { SharedService } from './shared.service'
+import { isPlatformBrowser } from '@angular/common'
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,11 @@ export class AuthService {
   businessClientAvatars = signal<string[] | null>([])
   dialogClient = signal<any>(null)
   clearBusinessDataCache = signal<boolean>(false)
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
+
 
   register(email: string, username: string, password: string): Observable<UserCredential> {
     const promise = this.firebaseAuth.setPersistence(browserSessionPersistence)
@@ -63,26 +69,31 @@ export class AuthService {
   }
 
   clearAllAppCaches(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return // 🚫 Not in browser → do nothing
+    }
+
     const cacheKeys = [
       'businessProfitsCache',
       'businessTasksCache',
       'personalTasksCache',
       'userProfitsCache',
+      'darkMode'
     ]
 
     cacheKeys.forEach(key => localStorage.removeItem(key))
 
-    // 👇 Reset but keep the key
+    // Keep key but empty it
     localStorage.setItem('coreBusinessDataCache', JSON.stringify({}))
 
-    // Reset in-memory signals
+    // Reset in-memory state
     this.sharedService.businessProfits.set([])
     this.sharedService.businessTasks.set([])
     this.sharedService.userProfits.set([])
     this.sharedService.personalTasks.set([])
     this.sharedService.dialogClient.set(null)
 
-    console.log('🧹 All application caches cleared (coreBusinessDataCache reset)')
+    console.log('🧹 All application caches cleared')
   }
 
   async fetchCoreUserData(): Promise<void> {
