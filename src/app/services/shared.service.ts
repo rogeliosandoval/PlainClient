@@ -19,6 +19,7 @@ export class SharedService {
   businessTasks = signal<any[]>([])
   personalTasks = signal<any[]>([])
   fromLogin = signal<boolean>(false)
+  newMemberJoining = signal<boolean>(false)
 
   constructor(
       @Inject(PLATFORM_ID)
