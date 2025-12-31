@@ -1,0 +1,40 @@
+<div class="signup-container">
+  <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '#282828' : ''">
+    @if(sharedService.darkMode()) {
+      <img ngSrc="/assets/images/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
+    } @else {
+      <img ngSrc="/assets/images/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
+    }
+    <span class="little-note">You've been invited to join a business! Complete the form to finish your registration.</span>
+    <form id="entry-form" [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="name">Your Name:</label>
+        <input id="name" type="text" pInputText variant="filled" placeholder="Name" formControlName="name" autocomplete="name"/>
+      </div>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="email">Your Email:</label>
+        <input id="email" type="text" pInputText variant="filled" placeholder="Email" formControlName="email" autocomplete="email"/>
+      </div>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="password">Create Password:</label>
+        <p-password inputId="password" [toggleMask]="true" variant="filled" placeholder="Password" feedback="false" formControlName="password" minlength="4" autocomplete="off"/>
+      </div>
+      <p-button label="Join" type="submit" [disabled]="registerForm.invalid || sharedService.loading()"></p-button>
+      @if (sharedService.loading()) {
+        <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
+      }
+      @if (errorMessage() !== '') {
+        <div class="error" [class.disabled]="sharedService.loading()">
+          {{ errorMessage() }}
+        </div>
+      }
+    </form>
+    <!-- <div class="divider">Or:</div>
+    <div class="google-button" [class.disabled]="sharedService.loading()">
+      <img ngSrc="/assets/images/google-icon.png" alt="google icon" width="20" height="20" draggable="false">
+      <span>Register with Google</span>
+    </div>
+    <span class="action" routerLink="/login" [class.disabled]="sharedService.loading()">Already registered?</span> -->
+  </div>
+  <tc-footer/>
+</div>

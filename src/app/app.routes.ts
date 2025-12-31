@@ -15,6 +15,7 @@ import { Profile } from './pages/dashboard/profile/profile.component'
 import { Inbox } from './pages/dashboard/inbox/inbox.component'
 import { AccountSettings } from './pages/dashboard/account-settings/account-settings.component'
 import { ClientDetails } from './pages/dashboard/clients/client-details/client-details.component'
+import { BusinessSignup } from './pages/business-signup/business-signup.component'
 
 export const routes: Routes = [
   {
@@ -31,6 +32,11 @@ export const routes: Routes = [
   {
     path: 'login',
     component: Login,
+    canActivate: [AuthNonuserGuard]
+  },
+  {
+    path: 'business-signup/:businessId',
+    component: BusinessSignup,
     canActivate: [AuthNonuserGuard]
   },
   {

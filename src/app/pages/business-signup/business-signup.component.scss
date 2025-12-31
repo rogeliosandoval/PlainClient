@@ -1,0 +1,192 @@
+@use '../../../variables.scss' as variables;
+
+.signup-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  animation: fadeIn 0.2s linear;
+
+  @include variables.media('phone') {
+    justify-content: flex-start;
+    align-items: normal;
+  }
+}
+
+.form-container-dark {
+  form {
+    .input-container, .checkbox-container {
+      label {
+        color: white;
+      }
+    }
+  }
+
+  .divider {
+    color: white;
+
+    &:before, &:after {
+      background-color: white;
+    }
+  }
+
+  .google-button {
+    color: white;
+    border: 1px solid variables.$theme-color-main-light;
+  }
+
+  .action {
+    color: variables.$theme-color-main-light;
+  }
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgb(234, 234, 234);
+  gap: 20px;
+  padding: 35px;
+  border-radius: 15px;
+  -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.1);
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.1);
+
+  img {
+    @include variables.media('phone') {
+      max-width: 90%;
+    }
+  }
+
+  form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 330px;
+
+    p-progressSpinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    p-button {
+      margin-top: 10px;
+    }
+
+    @include variables.media('phone') {
+      width: 100%;
+    }
+  }
+
+  @include variables.media('phone') {
+    border-radius: 0;
+  }
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  label {
+    font-size: 1rem;
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+    color: rgb(68, 68, 68);
+  }
+
+  input {
+    margin: auto;
+    width: 100%;
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+  }
+}
+
+.divider {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 1rem;
+  opacity: 0.6;
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  width: 100%;
+  color: black;
+
+  &:before {
+    display: inline-block;
+    content: '';
+    height: 1px;
+    width: 100%;
+    background-color: black;
+  }
+
+  &:after {
+    display: inline-block;
+    content: '';
+    height: 1px;
+    width: 100%;
+    background-color: black;
+  }
+}
+
+.google-button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid variables.$theme-color-main;
+  border-radius: 5px;
+  color: black;
+
+  img {
+    margin-right: auto;
+  }
+
+  span {
+    margin: auto;
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.action {
+  font-size: 0.9rem;
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  color: variables.$theme-color-main;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.error {
+  font-size: 0.9rem;
+  font-family: "Outfit", sans-serif;
+  font-weight: 500;
+  color: rgb(217, 105, 105);
+}
+
+.little-note {
+  text-align: center;
+  font-size: 1rem;
+  font-family: "Outfit", sans-serif;
+  color: #484848;
+  max-width: 330px;
+}
