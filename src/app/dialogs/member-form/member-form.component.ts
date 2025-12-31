@@ -26,28 +26,37 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
 export class MemberFormDialog {
   @Input() type: string = ''
   @Input() showMemberFormDialog: boolean = false
+  @Input() emailSent: boolean = false
   @Output() onClose = new EventEmitter<boolean>()
   @Output() onSubmit = new EventEmitter<any>()
   public dialogLoading = input<boolean>()
   public sharedService = inject(SharedService)
   public fillingForm = signal<boolean>(true)
-  public memberForm = new FormGroup({
-    member_name: new FormControl('', Validators.required),
-    member_position: new FormControl(''),
-    member_email: new FormControl('', Validators.email),
-    member_phone: new FormControl('')
+  public newMemberForm = new FormGroup({
+    member_email: new FormControl('', [Validators.required, Validators.email])
   })
+  // public memberForm = new FormGroup({
+  //   member_name: new FormControl('', Validators.required),
+  //   member_position: new FormControl(''),
+  //   member_email: new FormControl('', Validators.email),
+  //   member_phone: new FormControl('')
+  // })
 
   public closeDialog() {
     this.showMemberFormDialog = false
+    this.newMemberForm.reset()
     this.onClose.emit(false)
   }
 
-  public submitDialog(type: string): void {
-    const data = {
-      formData: this.memberForm.value,
-      type
-    }
-    this.onSubmit.emit(data)
+  public submit(): void {
+    this.onSubmit.emit(this.newMemberForm.value)
   }
+
+  // public submitDialog(type: string): void {
+  //   const data = {
+  //     formData: this.newMemberForm.value,
+  //     type
+  //   }
+  //   this.onSubmit.emit(data)
+  // }
 }

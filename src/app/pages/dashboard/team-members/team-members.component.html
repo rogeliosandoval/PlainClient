@@ -5,4 +5,4 @@
     <p-button label="Add Member +" (onClick)="showMemberFormDialog.set(true)"></p-button>
   </div>
 </div>
-<tcd-member-form #memberFormDialog [showMemberFormDialog]="showMemberFormDialog()" (onClose)="onDialogClose($event)" (onSubmit)="onSubmit($event)" [dialogLoading]="dialogLoading()"></tcd-member-form>
+<tcd-member-form #memberFormDialog [showMemberFormDialog]="showMemberFormDialog()" [emailSent]="emailSent()" (onClose)="onDialogClose($event)" (onSubmit)="onNewSubmit($event)" [dialogLoading]="dialogLoading()"></tcd-member-form>
