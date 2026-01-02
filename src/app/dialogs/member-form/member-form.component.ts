@@ -4,8 +4,9 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { InputTextModule } from 'primeng/inputtext'
 import { SharedService } from '../../services/shared.service'
 import { ButtonModule } from 'primeng/button'
-import { PhoneNumberDirective } from '../../directives/phone-number.directive'
+// import { PhoneNumberDirective } from '../../directives/phone-number.directive'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { AuthService } from '../../services/auth.service'
 
 @Component({
   selector: 'tcd-member-form',
@@ -16,7 +17,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
     ReactiveFormsModule,
     InputTextModule,
     ButtonModule,
-    PhoneNumberDirective,
+    // PhoneNumberDirective,
     ProgressSpinnerModule
   ],
   templateUrl: './member-form.component.html',
@@ -31,6 +32,7 @@ export class MemberFormDialog {
   @Output() onSubmit = new EventEmitter<any>()
   public dialogLoading = input<boolean>()
   public sharedService = inject(SharedService)
+  public authService = inject(AuthService)
   public fillingForm = signal<boolean>(true)
   public newMemberForm = new FormGroup({
     member_email: new FormControl('', [Validators.required, Validators.email])
@@ -49,7 +51,13 @@ export class MemberFormDialog {
   }
 
   public submit(): void {
-    this.onSubmit.emit(this.newMemberForm.value)
+    const data = {
+      member_email: this.newMemberForm.get('member_email')?.value,
+      link: `http://localhost:4200/business-signup/${this.authService.coreBusinessData()?.id}`,
+      businessName: this.authService.coreBusinessData()?.name
+    }
+
+    this.onSubmit.emit(data)
   }
 
   // public submitDialog(type: string): void {

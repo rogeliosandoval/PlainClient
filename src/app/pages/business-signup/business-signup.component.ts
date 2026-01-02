@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core'
 import { InputTextModule } from 'primeng/inputtext'
 import { ButtonModule } from 'primeng/button'
 import { PrimeNGConfig } from 'primeng/api'
-import { RouterLink, Router } from '@angular/router'
+import { ActivatedRoute, RouterLink, Router } from '@angular/router'
 import { PasswordModule } from 'primeng/password'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { SharedService } from '../../services/shared.service'
@@ -33,12 +33,14 @@ import { NgOptimizedImage } from '@angular/common'
 })
 
 export class BusinessSignup implements OnInit {
+  private activatedRoute = inject(ActivatedRoute)
   private firestore = inject(Firestore)
   private authService = inject(AuthService)
   private router = inject(Router)
   public sharedService = inject(SharedService)
   public primengConfig = inject(PrimeNGConfig)
   public errorMessage = signal<string>('')
+  private businessId: string = ''
   public registerForm = new FormGroup({
     name: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.email, Validators.required]),
@@ -48,6 +50,11 @@ export class BusinessSignup implements OnInit {
   ngOnInit(): void {
     this.primengConfig.ripple = true
     this.authService.clearAllAppCaches()
+    this.activatedRoute.params.subscribe({
+      next: response => {
+        this.businessId = response['businessId']
+      }
+    })
   }
 
   public register(): void {
@@ -55,7 +62,7 @@ export class BusinessSignup implements OnInit {
     const formData = this.registerForm.value
 
     setTimeout(() => {
-      console.log(formData)
+      console.log(formData, this.businessId)
       this.sharedService.loading.set(false)
       // lastValueFrom(this.authService.register(formData.email!, formData.name!, formData.password!))
       // .then(async (userInfo: UserCredential) => {

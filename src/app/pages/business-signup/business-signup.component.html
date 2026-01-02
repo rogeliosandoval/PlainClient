@@ -5,7 +5,7 @@
     } @else {
       <img ngSrc="/assets/images/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
     }
-    <span class="little-note">You've been invited to join a business! Complete the form to finish your registration.</span>
+    <span class="little-note" [style.color]="sharedService.darkMode() ? '#FFFFFF' : '#484848'">You've been invited to join a business! Complete the form to finish your registration.</span>
     <form id="entry-form" [formGroup]="registerForm" (ngSubmit)="register()">
       <div class="input-container" [class.disabled]="sharedService.loading()">
         <label for="name">Your Name:</label>

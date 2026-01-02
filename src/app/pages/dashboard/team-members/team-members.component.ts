@@ -30,8 +30,22 @@ export class TeamMembers implements OnInit {
 
   }
 
-  public onNewSubmit(data: any): void {
+  public async onNewSubmit(data: any): Promise<void> {
     this.dialogLoading.set(true)
+
+    // try {
+    //   const serviceId = 'service_p4c4afr'
+    //   const templateId = 'template_fqc7tqu'
+    //   const publicKey = 'pga-b9sXMPiAuDijd'
+
+    //   const templateParams = {
+    //     to_email: data.member_email,
+    //     link: data.link,
+    //     businessName: data.businessName
+    //   }
+    // } catch {
+
+    // }
 
     setTimeout(() => {
       console.log(data)
