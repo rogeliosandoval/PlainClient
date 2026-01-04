@@ -5,6 +5,7 @@ import { MemberFormDialog } from '../../../dialogs/member-form/member-form.compo
 import { MessageService } from 'primeng/api'
 import { SharedService } from '../../../services/shared.service'
 import { StandardFormData } from '../../../interfaces/other.interface'
+import emailjs from 'emailjs-com'
 
 @Component({
   selector: 'tc-team-members',
@@ -33,25 +34,42 @@ export class TeamMembers implements OnInit {
   public async onNewSubmit(data: any): Promise<void> {
     this.dialogLoading.set(true)
 
-    // try {
-    //   const serviceId = 'service_p4c4afr'
-    //   const templateId = 'template_fqc7tqu'
-    //   const publicKey = 'pga-b9sXMPiAuDijd'
+    try {
+      const serviceId = 'service_wodgvrb'
+      const templateId = 'template_fqc7tqu'
+      const publicKey = 'pga-b9sXMPiAuDijd'
 
-    //   const templateParams = {
-    //     to_email: data.member_email,
-    //     link: data.link,
-    //     businessName: data.businessName
-    //   }
-    // } catch {
+      const templateParams = {
+        to_email: data.member_email,
+        link: data.link,
+        businessName: data.businessName
+      }
 
-    // }
-
-    setTimeout(() => {
-      console.log(data)
+      emailjs.send(serviceId, templateId, templateParams, publicKey).then(() => {
+        this.dialogLoading.set(false)
+        this.emailSent.set(true)
+      }).catch((err) => {
+        console.log(err)
+        this.dialogLoading.set(false)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'There was an error. Try again.',
+          key: 'br',
+          life: 4000,
+        })
+      })
+    } catch(err) {
+      console.log(err)
       this.dialogLoading.set(false)
-      this.emailSent.set(true)
-    }, 2000)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error. Try again.',
+        key: 'br',
+        life: 4000,
+      })
+    }
   }
 
   // public async onSubmit(data: StandardFormData): Promise<void> {
