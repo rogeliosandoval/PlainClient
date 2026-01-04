@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, PLATFORM_ID, Inject } from '@angular/core'
-import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user } from '@angular/fire/auth'
+import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
@@ -18,6 +18,7 @@ export class AuthService {
   firebaseAuth = inject(Auth)
   sharedService = inject(SharedService)
   user$ = user(this.firebaseAuth)
+  authReady = signal(false)
   currentUserSignal = signal<any>(undefined)
   coreUserData = signal<UserData | null>(null)
   coreBusinessData = signal<BusinessData | null>(null)
@@ -27,7 +28,13 @@ export class AuthService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      onAuthStateChanged(this.firebaseAuth, () => {
+        this.authReady.set(true)
+      })
+    }
+  }
 
 
   register(email: string, username: string, password: string): Observable<UserCredential> {
