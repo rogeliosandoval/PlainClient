@@ -348,7 +348,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item updated!',
-            key: 'br',
+            key: 'bc',
             life: 2000
           })
     
@@ -362,7 +362,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error updating the profit item. Try again.',
-            key: 'br',
+            key: 'bc',
             life: 4000
           })
         }
@@ -377,7 +377,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item added!',
-            key: 'br',
+            key: 'bc',
             life: 2000
           })
     
@@ -392,7 +392,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error adding the profit item. Try again.',
-            key: 'br',
+            key: 'bc',
             life: 4000
           })
         }
@@ -409,7 +409,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item updated!',
-            key: 'br',
+            key: 'bc',
             life: 2000
           })
     
@@ -423,7 +423,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error updating the profit item. Try again.',
-            key: 'br',
+            key: 'bc',
             life: 4000
           })
         }
@@ -438,7 +438,7 @@ export class Profits implements OnInit {
           this.messageService.add({
             severity: 'success',
             detail: 'Profit item added!',
-            key: 'br',
+            key: 'bc',
             life: 2000
           })
     
@@ -453,7 +453,7 @@ export class Profits implements OnInit {
             severity: 'error',
             summary: 'Error',
             detail: 'There was an error adding the profit item. Try again.',
-            key: 'br',
+            key: 'bc',
             life: 4000
           })
         }
@@ -462,28 +462,30 @@ export class Profits implements OnInit {
   }
 
   async triggerDeleteProfit(profitId: string) {
-    this.dialogLoading = true
+    this.sharedService.loading.set(true)
 
     if (this.databaseType() === 'business') {
       try {
         await this.authService.deleteBusinessProfit(profitId)
         this.filteredBusinessProfits.set(this.sharedService.getSortedBusinessProfits())
         this.filterBusinessProfitItems(this.filterBusinessLabel())
+        this.sharedService.loading.set(false)
     
         this.messageService.add({
           severity: 'success',
           detail: 'Profit removed.',
-          key: 'br',
+          key: 'bc',
           life: 4000
         })
     
       } catch (err) {
         console.log(err)
+        this.sharedService.loading.set(false)
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error deleting the profit. Try again.',
-          key: 'br',
+          key: 'bc',
           life: 4000
         })
       }
@@ -492,21 +494,23 @@ export class Profits implements OnInit {
         await this.authService.deletePersonalProfit(profitId)
         this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
         this.filterPersonalProfitItems(this.filterPersonalLabel())
+        this.sharedService.loading.set(false)
     
         this.messageService.add({
           severity: 'success',
           detail: 'Profit removed.',
-          key: 'br',
+          key: 'bc',
           life: 4000
         })
     
       } catch (err) {
         console.log(err)
+        this.sharedService.loading.set(false)
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'There was an error deleting the profit. Try again.',
-          key: 'br',
+          key: 'bc',
           life: 4000
         })
       }
