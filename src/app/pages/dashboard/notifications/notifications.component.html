@@ -1,5 +1,5 @@
 <div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
-    <div class="no-notifications">
+    <div class="no-notifications" [class.disabled]="sharedService.loading()">
         <i class="pi pi-bell"></i>
         <span>You're all caught up!</span>
     </div>
