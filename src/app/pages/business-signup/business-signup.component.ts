@@ -62,35 +62,35 @@ export class BusinessSignup implements OnInit {
     const formData = this.registerForm.value
 
     setTimeout(() => {
-      console.log(formData, this.businessId)
-      this.sharedService.loading.set(false)
-      // lastValueFrom(this.authService.register(formData.email!, formData.name!, formData.password!))
-      // .then(async (userInfo: UserCredential) => {
-      //   const uid = userInfo.user.uid
-      //   const userRef = doc(this.firestore, `users/${uid}`)
-      //   await setDoc(userRef, {
-      //     uid: uid,
-      //     name: formData.name,
-      //     email: formData.email
-      //   })
-      // })
-      // .then(() => {
-      //   this.authService.clearAllAppCaches()
-      // })
-      // .then(() => {
-      //   this.sharedService.loading.set(false)
-      // })
-      // .then(() => {
-      //   this.router.navigateByUrl('/dashboard/overview')
-      // })
-      // .catch(err => {
-      //   if (err.message == 'Firebase: Error (auth/email-already-in-use).') {
-      //     this.errorMessage.set('This email is already in use. Use a different one.')
-      //   } else {
-      //     this.errorMessage.set(err.message)
-      //   }
-      //   this.sharedService.loading.set(false)
-      // })
+      this.sharedService.newMemberJoining.set(true)
+      this.sharedService.newMemberJoiningBusinessId = this.businessId
+      lastValueFrom(this.authService.register(formData.email!, formData.name!, formData.password!))
+      .then(async (userInfo: UserCredential) => {
+        const uid = userInfo.user.uid
+        const userRef = doc(this.firestore, `users/${uid}`)
+        await setDoc(userRef, {
+          uid: uid,
+          name: formData.name,
+          email: formData.email
+        })
+      })
+      .then(() => {
+        this.authService.clearAllAppCaches()
+      })
+      .then(() => {
+        this.sharedService.loading.set(false)
+      })
+      .then(() => {
+        this.router.navigateByUrl('/dashboard/overview')
+      })
+      .catch(err => {
+        if (err.message == 'Firebase: Error (auth/email-already-in-use).') {
+          this.errorMessage.set('This email is already in use. Use a different one.')
+        } else {
+          this.errorMessage.set(err.message)
+        }
+        this.sharedService.loading.set(false)
+      })
     }, 2000)
   }
 }

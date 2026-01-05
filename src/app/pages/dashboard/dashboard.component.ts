@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/button'
 import { DialogModule } from 'primeng/dialog'
 import { PrimeNGConfig } from 'primeng/api'
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms'
-import { collection, doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore'
+import { collection, doc, Firestore, getDoc, increment, setDoc, updateDoc } from '@angular/fire/firestore'
 import { Auth } from '@angular/fire/auth'
 import { ToastModule } from 'primeng/toast'
 import { MessageService } from 'primeng/api'
@@ -342,7 +342,7 @@ export class Dashboard implements OnInit {
     if (data.type === 'add') {
       this.saveBusinessName(data.businessName)
     } else {
-      this.joinBusiness()
+      this.joinBusinessById(this.sharedService.newMemberJoiningBusinessId)
     }
   }
 
@@ -398,8 +398,69 @@ export class Dashboard implements OnInit {
     })
   }
 
-  public joinBusiness(): void {
-    console.log('JOIN BUSINESS FUNCTION')
+  public async joinBusinessById(businessId: string) {
+    this.dialogLoading.set(true)
+
+    this.authService.user$
+      .pipe(take(1))
+      .subscribe({
+        next: async (user: any) => {
+          if (!user?.uid) return
+
+          try {
+            const uid = user.uid
+            const userRef = doc(this.firestore, `users/${uid}`)
+            const businessRef = doc(this.firestore, `businesses/${businessId}`)
+
+            // 1️⃣ Assign businessId to user
+            await setDoc(userRef, {
+              businessId
+            }, { merge: true })
+
+            // 2️⃣ Increment business member count
+            await updateDoc(businessRef, {
+              members: increment(1),
+            })
+
+            // 3️⃣ Clear & refetch cached data
+            this.authService.clearBusinessDataCache.set(true)
+
+            await this.authService.fetchCoreUserData()
+            await this.authService.fetchCoreBusinessData()
+            await this.authService.fetchBusinessProfits()
+            await this.authService.fetchBusinessTasks().then(() => {
+              this.showStartupFormDialog.set(false)
+              this.sharedService.hardLoading.set(false)
+              this.sharedService.showOverview.set(true)
+              this.sharedService.newMemberJoining.set(false)
+              this.sharedService.newMemberJoiningBusinessId = ''
+            })
+            this.dialogLoading.set(false)
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Joined Business',
+              detail: 'You have successfully joined the business!',
+              key: 'br',
+              life: 4000,
+            })
+          } catch (err) {
+            console.error('Error joining business:', err)
+            this.dialogLoading.set(false)
+
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Unable to join business. Please check the Business ID.',
+              key: 'br',
+              life: 4000,
+            })
+          }
+        },
+        error: (err) => {
+          console.error(err)
+          this.dialogLoading.set(false)
+        },
+      })
   }
 
   public signOff(): void {
