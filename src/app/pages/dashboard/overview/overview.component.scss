@@ -10,10 +10,9 @@
 
 .first-widgets {
   display: flex;
-  justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 25px;
   animation: fadeInAndSlideInBottom 0.2s linear;
 
   @media screen and (max-width: 1000px) {
@@ -22,6 +21,7 @@
 }
 
 .small-widget {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,14 +29,6 @@
   height: 130px;
   width: 280px;
   border-radius: 15px;
-
-  .pi {
-    font-weight: 600;
-    font-size: 2rem;
-    padding: 11px;
-    border-radius: 50%;
-    color: black;
-  }
 
   strong, span {
     font-family: "Outfit", sans-serif;
@@ -53,9 +45,40 @@
   }
 }
 
+.main-pi {
+  font-weight: 600;
+  font-size: 2rem;
+  padding: 11px;
+  border-radius: 50%;
+  color: black;
+}
+
+.menu-pi {
+  position: absolute;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  color: gray;
+  font-size: 1.3rem;
+  top: 5px;
+  right: 10px;
+  padding: 10px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(223, 223, 223, 0.188);
+  }
+}
+
 .small-widget__info {
   display: flex;
   align-items: baseline;
   flex-direction: column;
   gap: 2px;
 }
+
+  .task-note {
+    font-weight: 600;
+    font-size: 1rem;
+    max-width: 150px;
+    font-family: "Outfit", sans-serif;
+  }

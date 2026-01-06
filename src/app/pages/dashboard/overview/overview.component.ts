@@ -1,13 +1,18 @@
-import { Component, computed, inject, OnInit } from '@angular/core'
+import { Component, computed, inject, OnInit, signal } from '@angular/core'
 import { SharedService } from '../../../services/shared.service'
 import { AuthService } from '../../../services/auth.service'
 import { CurrencyPipe } from '@angular/common'
+import { MenuItem } from 'primeng/api'
+import { MenuModule } from 'primeng/menu'
+import { TruncatePipe } from '../../../pipes/truncate.pipe'
 
 @Component({
   selector: 'tc-overview',
   standalone: true,
   imports: [
-    CurrencyPipe
+    CurrencyPipe,
+    MenuModule,
+    TruncatePipe
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -16,13 +21,23 @@ import { CurrencyPipe } from '@angular/common'
 export class Overview implements OnInit {
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
+  public showBusinessProfit = signal<boolean>(true)
+  public profitOptions: MenuItem[] | undefined
 
   ngOnInit(): void {
-    
+    this.profitOptions = [
+      {
+        label: 'Toggle Type',
+        icon: 'pi pi-money',
+        command: () => {
+          this.showBusinessProfit.set(!this.showBusinessProfit())
+        }
+      }
+    ]
   }
 
   public ness(): void {
-    console.log(this.authService.coreBusinessData())
+    console.log(this.sharedService.personalTasks())
   }
 
   public parseAmount(amountStr: string): number {
@@ -38,4 +53,30 @@ export class Overview implements OnInit {
       return p.profitType === 'Income' ? acc + amt : acc - amt
     }, 0)
   })
+
+  public totalPersonalProfit = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits.reduce((acc, p) => {
+      const amt = this.parseAmount(p.amount)
+      return p.profitType === 'Income' ? acc + amt : acc - amt
+    }, 0)
+  })
+
+  getMostRecentBusinessTask() {
+    const tasks = this.sharedService.businessTasks() || []
+    if (!tasks.length) return null
+
+    return tasks.reduce((latest, current) =>
+      current.createdAt > latest.createdAt ? current : latest
+    )
+  }
+
+  getMostRecentPersonalTask() {
+    const tasks = this.sharedService.personalTasks() || []
+    if (!tasks.length) return null
+
+    return tasks.reduce((latest, current) =>
+      current.createdAt > latest.createdAt ? current : latest
+    )
+  }
 }
