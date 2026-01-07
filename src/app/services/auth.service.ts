@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, PLATFORM_ID, Inject } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
-import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc } from '@angular/fire/firestore'
+import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { UserData, BusinessData, ClientData, Contact } from '../interfaces/user.interface'
@@ -764,6 +764,59 @@ export class AuthService {
   
     // --------------------------
     // 3. Update Signal
+    // --------------------------
+    this.sharedService.userProfits.set(updatedList)
+  }
+
+  async deletePersonalProfitsByIds(profitIds: string[]): Promise<void> {
+    const uid = this.coreUserData()?.uid
+    if (!uid) throw new Error('No user ID found')
+
+    if (!profitIds.length) return
+
+    // --------------------------
+    // 1️⃣ Delete from Firestore (batch)
+    // --------------------------
+    const batch = writeBatch(this.firestore)
+
+    profitIds.forEach(profitId => {
+      const ref = doc(this.firestore, `users/${uid}/profits/${profitId}`)
+      batch.delete(ref)
+    })
+
+    await batch.commit()
+
+    // --------------------------
+    // 2️⃣ Update Local Cache
+    // --------------------------
+    const cacheKey = 'userProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList: any[] = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Remove all deleted profits
+        updatedList = parsed.filter(
+          (p: any) => !profitIds.includes(p.id)
+        )
+
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating profit cache after bulk delete, refetching...', err)
+        await this.fetchPersonalProfits()
+        return
+      }
+    } else {
+      // No cache? Just refetch
+      await this.fetchPersonalProfits()
+      return
+    }
+
+    // --------------------------
+    // 3️⃣ Update Signal
     // --------------------------
     this.sharedService.userProfits.set(updatedList)
   }

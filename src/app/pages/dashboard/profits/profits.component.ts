@@ -187,6 +187,54 @@ export class Profits implements OnInit {
     }
   }
 
+  public triggerDeleteProfits(): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete these items?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: 'none',
+      rejectIcon: 'none',
+      rejectButtonStyleClass: 'p-button-text',
+      accept: async () => {
+        try {
+          this.sharedService.loading.set(true)
+          await this.authService.deletePersonalProfitsByIds(this.selectedProfitIds).catch(err => {
+            console.log(err)
+            this.sharedService.loading.set(false)
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'There was an error deleting the profits. Try again.',
+              key: 'bc',
+              life: 4000
+            })
+          })
+          this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
+          this.filterPersonalProfitItems(this.filterPersonalLabel())
+          this.selectedProfitIds = []
+          this.selectingProfits.set(false)
+          this.sharedService.loading.set(false)
+          this.messageService.add({
+            severity: 'success',
+            detail: 'Profits removed.',
+            key: 'bc',
+            life: 4000
+          })
+        } catch (err) {
+          console.log(err)
+          this.sharedService.loading.set(false)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error deleting the profits. Try again.',
+            key: 'bc',
+            life: 4000
+          })
+        }
+      }
+    })
+  }
+
   public selectAllProfits(): void {
     this.selectedProfitIds = [
       ...new Set(this.filteredPersonalProfits().map(item => item.id))
@@ -531,7 +579,6 @@ export class Profits implements OnInit {
           key: 'bc',
           life: 4000
         })
-    
       } catch (err) {
         console.log(err)
         this.sharedService.loading.set(false)

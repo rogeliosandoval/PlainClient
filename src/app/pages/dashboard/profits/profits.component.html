@@ -5,7 +5,7 @@
       @if (selectingProfits()) {
         <p-button label="Select All" (onClick)="selectAllProfits()"></p-button>
         <p-button label="Deselect All" (onClick)="selectedProfitIds = []"></p-button>
-        <p-button label="Delete" icon="pi pi-trash" iconPos="right" severity="danger" (onClick)="test()" [disabled]="selectedProfitIds.length === 0"/>
+        <p-button label="Delete" icon="pi pi-trash" iconPos="right" severity="danger" (onClick)="triggerDeleteProfits()" [disabled]="selectedProfitIds.length === 0"/>
         <div class="add-button-container">
           <p-button label="Cancel" iconPos="right" (onClick)="selectingProfits.set(false); selectedProfitIds = []"/>
         </div>
