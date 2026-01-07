@@ -2,16 +2,25 @@
   <div class="tab-menu-desktop">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {
-      <p-button [label]="filterPersonalLabel()" icon="pi pi-filter" iconPos="right" (click)="filterMenu.toggle($event)"/>
-      <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
-      <p-button label="Download CSV" icon="pi pi-download" iconPos="right" disabled/>
-      <div class="add-button-container">
-        <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); logicType.set('add')"></p-button>
-      </div>
+      @if (selectingProfits()) {
+        <p-button label="Select All" (onClick)="selectAllProfits()"></p-button>
+        <p-button label="Deselect All" (onClick)="selectedProfitIds = []"></p-button>
+        <p-button label="Delete" icon="pi pi-trash" iconPos="right" severity="danger" (onClick)="test()" [disabled]="selectedProfitIds.length === 0"/>
+        <div class="add-button-container">
+          <p-button label="Cancel" iconPos="right" (onClick)="selectingProfits.set(false); selectedProfitIds = []"/>
+        </div>
+      } @else {
+        <p-button [label]="filterPersonalLabel()" icon="pi pi-filter" iconPos="right" (click)="filterMenu.toggle($event)"/>
+        <p-button label="Select" iconPos="right" (onClick)="selectingProfits.set(true)"/>
+        <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
+        <div class="add-button-container">
+          <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); logicType.set('add')"></p-button>
+        </div>
+      }
     } @else if (sharedService.businessProfits().length !== 0 && showBusinessProfits()) {
       <p-button [label]="filterBusinessLabel()" icon="pi pi-filter" iconPos="right" (click)="filterMenu.toggle($event)"/>
+      <p-button label="Select" iconPos="right" (onClick)="selectingProfits.set(true)"/>
       <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
-      <p-button label="Download CSV" icon="pi pi-download" iconPos="right" disabled/>
       <div class="add-button-container">
         <p-button label="Add Income/Expense +" (onClick)="showProfitFormDialog.set(true); logicType.set('add')"></p-button>
       </div>
@@ -96,15 +105,19 @@
       <div class="profit-container">
         <div class="profit-items">
           @for (item of filteredPersonalProfits(); track item.id) {
-            <div class="profit-item" [class.profit-item-dark]="sharedService.darkMode()">
+            <div class="profit-item" [class.profit-item-dark]="sharedService.darkMode()" [class.selectable]="selectingProfits()" (click)="toggleProfit(item.id)">
               @if (!sharedService.darkMode()) {
-                <div class="profit-item__expense" [style.color]="item.profitType === 'Expense' ? 'red' : '#06a506'">${{ item.amount }}</div>
+                <div class="profit-item__expense" [class.selected]="selectedProfitIds.includes(item.id)" [style.color]="item.profitType === 'Expense' ? 'red' : '#06a506'">${{ item.amount }}</div>
               } @else {
-                <div class="profit-item__expense" [style.color]="item.profitType === 'Expense' ? '#fc6363' : '#48df57'">${{ item.amount }}</div>
+                <div class="profit-item__expense" [class.selected]="selectedProfitIds.includes(item.id)" [style.color]="item.profitType === 'Expense' ? '#fc6363' : '#48df57'">${{ item.amount }}</div>
               }
-              <div class="profit-item__name">{{ item.name }}</div>
-              <div class="profit-item__note">{{ item.note }}</div>
-              <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); profitItemData = item"></i>
+              <div class="profit-item__name" [class.selected]="selectedProfitIds.includes(item.id)">{{ item.name }}</div>
+              <div class="profit-item__note" [class.selected]="selectedProfitIds.includes(item.id)">{{ item.note }}</div>
+              @if (selectingProfits()) {
+                <p-checkbox name="profit" [value]="item.id" [(ngModel)]="selectedProfitIds" binary="false" (click)="$event.stopPropagation()"/>
+              } @else {
+                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); profitItemData = item"></i>
+              }
             </div>
           }
           <p-menu #menu [model]="profitOptions" popup="true" appendTo="body"/>

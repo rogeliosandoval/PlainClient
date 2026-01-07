@@ -140,9 +140,23 @@
     }
   }
 
+  p-checkbox {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+
   @include variables.media('tablet') {
     width: 100%;
   }
+}
+
+.selectable {
+  cursor: pointer;
+}
+
+.selected {
+  opacity: 0.4;
 }
 
 .profit-item-dark {

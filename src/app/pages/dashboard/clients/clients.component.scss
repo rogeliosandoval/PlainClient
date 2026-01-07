@@ -43,7 +43,7 @@ p-progressSpinner {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 25px;
   width: 100%;
 
   @include variables.media('phone') {

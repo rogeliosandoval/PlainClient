@@ -11,6 +11,8 @@ import { SharedService } from '../../../services/shared.service'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ConfirmationService } from 'primeng/api'
 import { CurrencyPipe } from '@angular/common'
+import { CheckboxModule } from 'primeng/checkbox'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'tc-profits',
@@ -21,7 +23,9 @@ import { CurrencyPipe } from '@angular/common'
     ProfitFormDialog,
     MenuModule,
     ConfirmDialogModule,
-    CurrencyPipe
+    CurrencyPipe,
+    CheckboxModule,
+    FormsModule
   ],
   providers: [ConfirmationService],
   templateUrl: './profits.component.html',
@@ -48,7 +52,8 @@ export class Profits implements OnInit {
   public filteredBusinessProfits = signal<any[]>([])
   public filterPersonalLabel = signal<string>('Oldest/Newest')
   public filterBusinessLabel = signal<string>('Oldest/Newest')
-
+  public selectingProfits = signal<boolean>(false)
+  public selectedProfitIds: string[] = []
   
   ngOnInit(): void {
     this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
@@ -60,6 +65,8 @@ export class Profits implements OnInit {
         command: () => {
           this.databaseType.set('business')
           this.showBusinessProfits.set(true)
+          this.selectingProfits.set(false)
+          this.selectedProfitIds = []
         }
       },
       {
@@ -68,6 +75,8 @@ export class Profits implements OnInit {
         command: () => {
           this.databaseType.set('personal')
           this.showBusinessProfits.set(false)
+          this.selectingProfits.set(false)
+          this.selectedProfitIds = []
         }
       }
     ]
@@ -166,6 +175,26 @@ export class Profits implements OnInit {
         }
       }
     ]
+  }
+
+  public toggleProfit(id: string): void {
+    if (this.selectingProfits()) {
+      if (this.selectedProfitIds.includes(id)) {
+        this.selectedProfitIds = this.selectedProfitIds.filter(x => x !== id)
+      } else {
+        this.selectedProfitIds = [...this.selectedProfitIds, id]
+      }
+    }
+  }
+
+  public selectAllProfits(): void {
+    this.selectedProfitIds = [
+      ...new Set(this.filteredPersonalProfits().map(item => item.id))
+    ]
+  }
+
+  public test(): void {
+    console.log(this.selectedProfitIds)
   }
 
   public onDialogClose(newState: boolean) {
