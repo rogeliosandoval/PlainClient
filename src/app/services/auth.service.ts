@@ -1006,6 +1006,62 @@ export class AuthService {
     // --------------------------
     this.sharedService.businessProfits.set(updatedList)
   }
+
+  async deleteBusinessProfitsByIds(profitIds: string[]): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) throw new Error('No business ID found')
+
+    if (!profitIds.length) return
+
+    // --------------------------
+    // 1️⃣ Delete from Firestore (batch)
+    // --------------------------
+    const batch = writeBatch(this.firestore)
+
+    profitIds.forEach(profitId => {
+      const ref = doc(
+        this.firestore,
+        `businesses/${businessId}/profits/${profitId}`
+      )
+      batch.delete(ref)
+    })
+
+    await batch.commit()
+
+    // --------------------------
+    // 2️⃣ Update Local Cache
+    // --------------------------
+    const cacheKey = 'businessProfitsCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    let updatedList: any[] = []
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        // Remove all deleted profits
+        updatedList = parsed.filter(
+          (p: any) => !profitIds.includes(p.id)
+        )
+
+        localStorage.setItem(cacheKey, JSON.stringify(updatedList))
+      } catch (err) {
+        console.warn('Error updating business profit cache after bulk delete, refetching...', err)
+        await this.fetchBusinessProfits()
+        return
+      }
+    } else {
+      // No cache? Just refetch
+      await this.fetchBusinessProfits()
+      return
+    }
+
+    // --------------------------
+    // 3️⃣ Update Signal
+    // --------------------------
+    this.sharedService.businessProfits.set(updatedList)
+  }
   //
 
   async addBusinessTask(formData: any): Promise<void> {

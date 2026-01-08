@@ -196,9 +196,32 @@ export class Profits implements OnInit {
       rejectIcon: 'none',
       rejectButtonStyleClass: 'p-button-text',
       accept: async () => {
-        try {
-          this.sharedService.loading.set(true)
-          await this.authService.deletePersonalProfitsByIds(this.selectedProfitIds).catch(err => {
+        if (this.databaseType() === 'business') {
+          try {
+            this.sharedService.loading.set(true)
+            await this.authService.deleteBusinessProfitsByIds(this.selectedProfitIds).catch(err => {
+              console.log(err)
+              this.sharedService.loading.set(false)
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'There was an error deleting the profits. Try again.',
+                key: 'bc',
+                life: 4000
+              })
+            })
+            this.filteredBusinessProfits.set(this.sharedService.getSortedBusinessProfits())
+            this.filterBusinessProfitItems(this.filterBusinessLabel())
+            this.selectedProfitIds = []
+            this.selectingProfits.set(false)
+            this.sharedService.loading.set(false)
+            this.messageService.add({
+              severity: 'success',
+              detail: 'Profits removed.',
+              key: 'bc',
+              life: 4000
+            })
+          } catch (err) {
             console.log(err)
             this.sharedService.loading.set(false)
             this.messageService.add({
@@ -208,41 +231,58 @@ export class Profits implements OnInit {
               key: 'bc',
               life: 4000
             })
-          })
-          this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
-          this.filterPersonalProfitItems(this.filterPersonalLabel())
-          this.selectedProfitIds = []
-          this.selectingProfits.set(false)
-          this.sharedService.loading.set(false)
-          this.messageService.add({
-            severity: 'success',
-            detail: 'Profits removed.',
-            key: 'bc',
-            life: 4000
-          })
-        } catch (err) {
-          console.log(err)
-          this.sharedService.loading.set(false)
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'There was an error deleting the profits. Try again.',
-            key: 'bc',
-            life: 4000
-          })
+          }
+        } else {
+          try {
+            this.sharedService.loading.set(true)
+            await this.authService.deletePersonalProfitsByIds(this.selectedProfitIds).catch(err => {
+              console.log(err)
+              this.sharedService.loading.set(false)
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'There was an error deleting the profits. Try again.',
+                key: 'bc',
+                life: 4000
+              })
+            })
+            this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
+            this.filterPersonalProfitItems(this.filterPersonalLabel())
+            this.selectedProfitIds = []
+            this.selectingProfits.set(false)
+            this.sharedService.loading.set(false)
+            this.messageService.add({
+              severity: 'success',
+              detail: 'Profits removed.',
+              key: 'bc',
+              life: 4000
+            })
+          } catch (err) {
+            console.log(err)
+            this.sharedService.loading.set(false)
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'There was an error deleting the profits. Try again.',
+              key: 'bc',
+              life: 4000
+            })
+          }
         }
       }
     })
   }
 
   public selectAllProfits(): void {
-    this.selectedProfitIds = [
-      ...new Set(this.filteredPersonalProfits().map(item => item.id))
-    ]
-  }
-
-  public test(): void {
-    console.log(this.selectedProfitIds)
+    if (this.databaseType() === 'business') {
+      this.selectedProfitIds = [
+        ...new Set(this.filteredBusinessProfits().map(item => item.id))
+      ]
+    } else {
+      this.selectedProfitIds = [
+        ...new Set(this.filteredPersonalProfits().map(item => item.id))
+      ]
+    }
   }
 
   public onDialogClose(newState: boolean) {
