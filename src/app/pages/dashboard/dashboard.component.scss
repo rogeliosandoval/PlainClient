@@ -188,7 +188,6 @@
 // #region Side Navbar
 .side-nav {
   display: flex;
-  align-items: center;
   flex-direction: column;
   width: 280px;
   overflow-y: auto;
@@ -235,6 +234,7 @@
 
 .nav-active {
   color: black;
+  background-color: whitesmoke;
 
   span {
     &:hover {
@@ -245,6 +245,7 @@
 
 .nav-active-dark {
   color: white;
+  background-color: rgb(54, 54, 54);
 }
 
 .pi-active {
@@ -285,6 +286,8 @@
 .side-nav-links-dark {
   .side-nav-link {
     &:hover {
+      background-color: rgb(54, 54, 54);
+
       .pi {
         color: variables.$theme-color-main-light;
       }
@@ -300,26 +303,29 @@
   display: flex;
   flex-direction: column;
   align-items: baseline;
-  gap: 40px;
 }
 
 .side-nav-link {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 20px;
   font-size: 1.1rem;
   font-family: "Outfit", sans-serif;
   font-weight: 700;
-  transition: 0.1s linear;
+  // transition: 0.1s linear;
+  width: 100%;
+  height: 60px;
+  padding: 0 2.5rem;
 
   .pi {
     font-size: 1.5rem;
     font-weight: bold;
+    margin-left: auto;
   }
 
   &:hover {
     cursor: pointer;
+    background-color: whitesmoke;
     
     .pi {
       color: variables.$theme-color-main;

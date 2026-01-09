@@ -60,55 +60,55 @@
               routerLink="/dashboard/overview"
               [class.nav-active]="grabRoute().startsWith('/dashboard/overview')"
               [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/overview')">
+              <span>Overview</span>
               <i class="pi pi-chart-pie"
                 [class.pi-active]="grabRoute().startsWith('/dashboard/overview')"
                 [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/overview')"></i>
-              <span>Overview</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/clients"
               [class.nav-active]="grabRoute().startsWith('/dashboard/clients')"
               [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/clients')">
+              <span>Clients</span>
               <i class="pi pi-users"
                 [class.pi-active]="grabRoute().startsWith('/dashboard/clients')"
                 [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/clients')"></i>
-              <span>Clients</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/team-members"
               [class.nav-active]="grabRoute().startsWith('/dashboard/team-members')"
               [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/team-members')">
+              <span>Team Members</span>
               <i class="pi pi-face-smile"
                 [class.pi-active]="grabRoute().startsWith('/dashboard/team-members')"
                 [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/team-members')"></i>
-              <span>Team Members</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/profits"
               [class.nav-active]="grabRoute().startsWith('/dashboard/profits')"
               [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/profits')">
+              <span>Profits</span>
               <i class="pi pi-money-bill"
                 [class.pi-active]="grabRoute().startsWith('/dashboard/profits')"
                 [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/profits')"></i>
-              <span>Profits</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/task-manager"
               [class.nav-active]="grabRoute().startsWith('/dashboard/task-manager')"
               [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/task-manager')">
+              <span>Task Manager</span>
               <i class="pi pi-list-check"
                 [class.pi-active]="grabRoute().startsWith('/dashboard/task-manager')"
                 [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/task-manager')"></i>
-              <span>Task Manager</span>
             </div>
             <div class="side-nav-link"
               routerLink="/dashboard/notifications"
               [class.nav-active]="grabRoute().startsWith('/dashboard/notifications')"
-              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/notifications')" >
+              [class.nav-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/notifications')">
+              <span>Notifications</span>
               <i class="pi pi-bell"
                 [class.pi-active]="grabRoute().startsWith('/dashboard/notifications')"
                 [class.pi-active-dark]="sharedService.darkMode() && grabRoute().startsWith('/dashboard/notifications')"></i>
-              <span>Notifications</span>
             </div>
           </div>
         </div>
@@ -175,7 +175,9 @@
           </div>
         </div>
       </p-sidebar>
-      <router-outlet/>
+      @if (sharedService.showOverview()) {
+        <router-outlet/>
+      }
     </div>
     <p-toast position="bottom-right" key="br" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"/>
     <p-toast position="bottom-center" key="bc" [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"/>
