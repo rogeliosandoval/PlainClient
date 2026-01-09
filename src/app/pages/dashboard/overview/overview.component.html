@@ -66,9 +66,8 @@
         </div>
       </div>
     </div>
-  
-    <!-- <div class="business-name">
-      Chubby Designs
-    </div> -->
+    <div class="chart-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+      <canvas id="incomeExpenseChart"></canvas>
+    </div>
   </div>
 }

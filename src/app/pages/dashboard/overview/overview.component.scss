@@ -1,13 +1,5 @@
 @use '../../../../variables.scss' as variables;
 
-.business-name {
-  font-size: 2rem;
-  font-weight: bold;
-  font-family: "Outfit", sans-serif;
-  font-weight: 500;
-  margin-top: 20px;
-}
-
 .first-widgets {
   display: flex;
   align-items: center;
@@ -76,9 +68,18 @@
   gap: 2px;
 }
 
-  .task-note {
-    font-weight: 600;
-    font-size: 1rem;
-    max-width: 150px;
-    font-family: "Outfit", sans-serif;
-  }
+.task-note {
+  font-weight: 600;
+  font-size: 1rem;
+  max-width: 150px;
+  font-family: "Outfit", sans-serif;
+}
+
+.chart-container {
+  max-width: 600px;
+  height: auto;
+  margin-top: 25px;
+  padding: 1rem;
+  // background-color: #fff;
+  border-radius: 15px;
+}
