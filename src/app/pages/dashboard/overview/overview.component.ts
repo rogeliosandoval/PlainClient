@@ -62,20 +62,26 @@ export class Overview implements OnInit {
     }, 0)
   })
 
-  getMostRecentBusinessTask() {
+  getMostRecentIncompleteBusinessTask() {
     const tasks = this.sharedService.businessTasks() || []
     if (!tasks.length) return null
 
-    return tasks.reduce((latest, current) =>
+    const incompleteTasks = tasks.filter(t => !t.completed)
+    if (!incompleteTasks.length) return null
+
+    return incompleteTasks.reduce((latest, current) =>
       current.createdAt > latest.createdAt ? current : latest
     )
   }
 
-  getMostRecentPersonalTask() {
+  getMostRecentIncompletePersonalTask() {
     const tasks = this.sharedService.personalTasks() || []
     if (!tasks.length) return null
 
-    return tasks.reduce((latest, current) =>
+    const incompleteTasks = tasks.filter(t => !t.completed)
+    if (!incompleteTasks.length) return null
+
+    return incompleteTasks.reduce((latest, current) =>
       current.createdAt > latest.createdAt ? current : latest
     )
   }

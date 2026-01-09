@@ -12,7 +12,7 @@
         <form class="taskForm" [formGroup]="taskForm" (ngSubmit)="quickAddTask()">
           <p-inputGroup [class.disabled]="addingTask()">
             <input type="text" pInputText placeholder="Quick add a task..." formControlName="task"/>
-            <button type="submit" pButton icon="pi pi-plus"></button>
+            <button type="submit" pButton icon="pi pi-plus" [disabled]="taskForm.invalid"></button>
           </p-inputGroup>
         </form>
         <div class="tasks" [class.disabled]="addingTask()">
@@ -57,7 +57,7 @@
         <form class="taskForm" [formGroup]="taskForm" (ngSubmit)="quickAddTask()">
           <p-inputGroup [class.disabled]="addingTask()">
             <input type="text" pInputText placeholder="Quick add a task..." formControlName="task"/>
-            <button type="submit" pButton icon="pi pi-plus"></button>
+            <button type="submit" pButton icon="pi pi-plus" [disabled]="taskForm.invalid"></button>
           </p-inputGroup>
         </form>
         <div class="tasks" [class.disabled]="addingTask()">

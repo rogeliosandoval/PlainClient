@@ -39,10 +39,10 @@
       <div class="next-task small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
         <i class="pi pi-list-check main-pi" style="background-color: rgb(255, 205, 205);"></i>
         <div class="small-widget__info">
-          @if (sharedService.businessTasks().length > 0) {
-            <div class="task-note">{{ getMostRecentBusinessTask().task | truncate: 32 }}</div>
+          @if (getMostRecentIncompleteBusinessTask()) {
+            <div class="task-note">{{ getMostRecentIncompleteBusinessTask().task | truncate: 32 }}</div>
           } @else {
-            <strong>All caught up</strong>
+            <strong [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" style="font-size: 1.25rem;">All caught up! 🎉</strong>
           }
           <span>Next Business Task</span>
         </div>
@@ -50,10 +50,10 @@
       <div class="next-task small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
         <i class="pi pi-list-check main-pi" style="background-color: rgb(255, 205, 205);"></i>
         <div class="small-widget__info">
-          @if (sharedService.personalTasks().length > 0) {
-            <div class="task-note">{{ getMostRecentPersonalTask().task | truncate: 35 }}</div>
+          @if (getMostRecentIncompletePersonalTask()) {
+            <div class="task-note">{{ getMostRecentIncompletePersonalTask().task | truncate: 35 }}</div>
           } @else {
-            <strong>All caught up</strong>
+            <strong [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" style="font-size: 1.25rem;">All caught up! 🎉</strong>
           }
           <span>Next Personal Task</span>
         </div>
