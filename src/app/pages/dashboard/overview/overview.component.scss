@@ -80,7 +80,10 @@
   height: auto;
   margin-top: 25px;
   padding: 1rem;
-  // background-color: #fff;
   border-radius: 15px;
   animation: fadeInAndSlideInBottom 0.2s linear;
+
+  @include variables.media('tablet') {
+    width: 100%;
+  }
 }
