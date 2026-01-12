@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, inject, signal } from '@angular/core'
+import { Component, OnInit, ViewChild, computed, inject, signal } from '@angular/core'
 import { Router, RouterOutlet } from '@angular/router'
 import { AuthService } from '../../services/auth.service'
 import { SharedService } from '../../services/shared.service'
@@ -136,6 +136,46 @@ export class Dashboard implements OnInit {
       this.sharedService.hardLoading.set(false)
     })
   }
+
+  public async addIncomeExpenseToArray(): Promise<void> {
+    const currentMonth = new Date().toLocaleDateString('default', { month: 'long' })
+    const uid = this.authService.coreUserData()?.uid
+    const cashId = uuidv4()
+    const cashRef = doc(this.firestore, `users/${uid}/monthlyProfits/${cashId}`)
+
+    const newCashFlow = {
+      id: cashId,
+      month: currentMonth,
+      income: Number(this.totalPersonalIncome().toFixed(2)),
+      expense: Number(this.totalPersonalExpenses().toFixed(2))
+    }
+
+    await setDoc(cashRef, newCashFlow).then(() => {
+      console.log('SUCCESS!!')
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  public parseAmount(amountStr: string): number {
+    const normalized = amountStr.replace(/,/g, '')
+    const num = parseFloat(normalized)
+    return isNaN(num) ? 0 : num
+  }
+
+  public totalPersonalIncome = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits
+      .filter(p => p.profitType === 'Income')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
+  })
+
+  public totalPersonalExpenses = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits
+      .filter(p => p.profitType === 'Expense')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
+  })
 
   public grabRoute() {
     return this.router.url

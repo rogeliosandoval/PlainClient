@@ -83,7 +83,7 @@ export class Overview implements OnInit, AfterViewInit {
       plugins: {
         title: {
           display: true,
-          text: 'Income/Expense Chart Per Month',
+          text: 'Personal Income/Expense Per Month',
           color: textColor
         },
         legend: {
@@ -109,12 +109,12 @@ export class Overview implements OnInit, AfterViewInit {
     return [
       {
         label: 'Income',
-        data: [2000, 1500, 1700, 1800],
+        data: [4800.00],
         backgroundColor: isDark ? '#35a640ff' : '#22c55e'
       },
       {
         label: 'Expenses',
-        data: [1000, 1200, 1600, 400],
+        data: [3068.96],
         backgroundColor: isDark ? '#c74c4cff' : '#d73d3dff'
       }
     ]
@@ -140,6 +140,20 @@ export class Overview implements OnInit, AfterViewInit {
       const amt = this.parseAmount(p.amount)
       return p.profitType === 'Income' ? acc + amt : acc - amt
     }, 0)
+  })
+
+  public totalPersonalIncome = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits
+      .filter(p => p.profitType === 'Income')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
+  })
+
+  public totalPersonalExpenses = computed(() => {
+    const profits = this.sharedService.userProfits()
+    return profits
+      .filter(p => p.profitType === 'Expense')
+      .reduce((sum, p) => sum + this.parseAmount(p.amount), 0)
   })
 
   getMostRecentIncompleteBusinessTask() {
