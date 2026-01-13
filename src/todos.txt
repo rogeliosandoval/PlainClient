@@ -6,19 +6,13 @@ TODOS:
 
 - redesign home page and add fade in
 
-- add join business feature for members who register for a business
-
 - implement google auth sign in
 
 - add "add client" to mobile
 
 - double check best practices for optimization on images and code
 
-- implement team member logic
-
 - implement add note logic to clients
-
-- begin implementing task list logic
 
 - implement email confirm on sign up
 
