@@ -18,8 +18,4 @@ TODOS:
 
 - implement timeout session
 
-- add padding to login/signup form when you make vertical space less
-
 - implement inbox logic/add more settings to account-settings and inbox
-
-- fix chartjs issue, keeping the profit numbers up to date with chart
