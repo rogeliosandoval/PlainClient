@@ -120,6 +120,7 @@ export class Dashboard implements OnInit {
           await this.authService.fetchBusinessProfits()
           await this.authService.fetchBusinessTasks()
           await this.authService.fetchPersonalTasks()
+          // await this.addIncomeExpenseToArray()
           this.sharedService.fromLogin.set(false)
           this.sharedService.showOverview.set(true)
         } else {
@@ -127,6 +128,7 @@ export class Dashboard implements OnInit {
           this.authService.loadBusinessProfits()
           this.authService.loadBusinessTasks()
           this.authService.loadPersonalTasks()
+          // await this.addIncomeExpenseToArray()
           this.sharedService.showOverview.set(true)
         }
       }
@@ -138,23 +140,20 @@ export class Dashboard implements OnInit {
   }
 
   public async addIncomeExpenseToArray(): Promise<void> {
-    const currentMonth = new Date().toLocaleDateString('default', { month: 'long' })
     const uid = this.authService.coreUserData()?.uid
-    const cashId = uuidv4()
-    const cashRef = doc(this.firestore, `users/${uid}/monthlyProfits/${cashId}`)
+    if (!uid) return
+
+    const currentMonth = new Date().toLocaleDateString('default', { month: 'long', year: 'numeric' })
+    const cashRef = doc(this.firestore, `users/${uid}/monthlyProfits/${currentMonth}`)
 
     const newCashFlow = {
-      id: cashId,
       month: currentMonth,
       income: Number(this.totalPersonalIncome().toFixed(2)),
-      expense: Number(this.totalPersonalExpenses().toFixed(2))
+      expense: Number(this.totalPersonalExpenses().toFixed(2)),
+      updatedAt: new Date().toISOString()
     }
 
-    await setDoc(cashRef, newCashFlow).then(() => {
-      console.log('SUCCESS!!')
-    }).catch((err) => {
-      console.log(err)
-    })
+    await setDoc(cashRef, newCashFlow, { merge: true }).catch(err => console.error(err))
   }
 
   public parseAmount(amountStr: string): number {

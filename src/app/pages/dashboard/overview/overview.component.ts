@@ -6,6 +6,7 @@ import { MenuItem } from 'primeng/api'
 import { MenuModule } from 'primeng/menu'
 import { TruncatePipe } from '../../../pipes/truncate.pipe'
 import { Chart } from 'chart.js/auto'
+import { doc, setDoc, Firestore } from '@angular/fire/firestore'
 
 @Component({
   selector: 'tc-overview',
@@ -20,6 +21,7 @@ import { Chart } from 'chart.js/auto'
 })
 
 export class Overview implements OnInit, AfterViewInit {
+  public firestore = inject(Firestore)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
   public showBusinessProfit = signal<boolean>(true)
@@ -50,7 +52,7 @@ export class Overview implements OnInit, AfterViewInit {
     this.chart = new Chart('incomeExpenseChart', {
       type: 'bar',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        labels: this.sharedService.monthLabels,
         datasets: this.getDatasets(this.sharedService.darkMode())
       },
       options: this.getChartOptions(this.sharedService.darkMode())
@@ -63,7 +65,10 @@ export class Overview implements OnInit, AfterViewInit {
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    // await this.addIncomeExpenseToArray()
+    await this.authService.loadMonthlyIncomeExpenseArrays()
+    this.refreshChart()
     // this.profitOptions = [
     //   {
     //     label: 'Toggle Type',
@@ -73,6 +78,14 @@ export class Overview implements OnInit, AfterViewInit {
     //     }
     //   }
     // ]
+  }
+
+  private refreshChart(): void {
+    if (!this.chart) return
+
+    this.chart.data.labels = this.sharedService.monthLabels
+    this.chart.data.datasets = this.getDatasets(this.sharedService.darkMode())
+    this.chart.update()
   }
 
   private getChartOptions(isDark: boolean) {
@@ -109,15 +122,32 @@ export class Overview implements OnInit, AfterViewInit {
     return [
       {
         label: 'Income',
-        data: [4800.00],
+        data: this.sharedService.personalIncomeMonthArray,
         backgroundColor: isDark ? '#35a640ff' : '#22c55e'
       },
       {
         label: 'Expenses',
-        data: [3068.96],
+        data: this.sharedService.personalExpenseMonthArray,
         backgroundColor: isDark ? '#c74c4cff' : '#d73d3dff'
       }
     ]
+  }
+
+  public async addIncomeExpenseToArray(): Promise<void> {
+    const uid = this.authService.coreUserData()?.uid
+    if (!uid) return
+
+    const currentMonth = new Date().toLocaleDateString('default', { month: 'long', year: 'numeric' })
+    const cashRef = doc(this.firestore, `users/${uid}/monthlyProfits/${currentMonth}`)
+
+    const newCashFlow = {
+      month: currentMonth,
+      income: Number(this.totalPersonalIncome().toFixed(2)),
+      expense: Number(this.totalPersonalExpenses().toFixed(2)),
+      updatedAt: new Date().toISOString()
+    }
+
+    await setDoc(cashRef, newCashFlow, { merge: true }).catch(err => console.error(err))
   }
 
   public parseAmount(amountStr: string): number {

@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, PLATFORM_ID, Inject } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
-import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore'
+import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { UserData, BusinessData, ClientData, Contact } from '../interfaces/user.interface'
@@ -1520,5 +1520,42 @@ export class AuthService {
       console.warn('Error toggling personal task completion, refetching...', err)
       await this.fetchPersonalTasks()
     }
+  }
+
+  public async loadMonthlyIncomeExpenseArrays(): Promise<void> {
+    // 🛑 Guard: already loaded this session
+    // if (this.sharedService.personalIncomeMonthArray.length) {
+    //   return
+    // }
+
+    const uid = this.coreUserData()?.uid
+    if (!uid) return
+
+    // Clear arrays to avoid duplicates
+    this.sharedService.personalIncomeMonthArray = []
+    this.sharedService.personalExpenseMonthArray = []
+    this.sharedService.monthLabels = []
+
+    const profitsRef = collection(this.firestore, `users/${uid}/monthlyProfits`)
+    const q = query(profitsRef, orderBy('updatedAt', 'asc'))
+
+    const snapshot = await getDocs(q)
+
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data()
+
+      if (typeof data['month'] === 'string') {
+        const shortMonth = new Date(`${data['month']} 1`).toLocaleString('default', { month: 'short' })
+        this.sharedService.monthLabels.push(shortMonth)
+      }
+
+      if (typeof data['income'] === 'number') {
+        this.sharedService.personalIncomeMonthArray.push(data['income'])
+      }
+
+      if (typeof data['expense'] === 'number') {
+        this.sharedService.personalExpenseMonthArray.push(data['expense'])
+      }
+    })
   }
 }

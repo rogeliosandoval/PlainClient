@@ -21,6 +21,9 @@ export class SharedService {
   fromLogin = signal<boolean>(false)
   newMemberJoining = signal<boolean>(false)
   newMemberJoiningBusinessId: string = ''
+  personalIncomeMonthArray: number[] = []
+  personalExpenseMonthArray: number[] = []
+  monthLabels: string[] = []
 
   constructor(
       @Inject(PLATFORM_ID)

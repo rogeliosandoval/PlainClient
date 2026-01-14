@@ -51,7 +51,6 @@
      <div class="main-container" [class.p-sidebar-dark]="sharedService.darkMode()">
       <div class="side-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()" [class.dashboard-disabled]="sharedService.hardLoading() || showStartupFormDialog()">
         <div class="side-nav-head">
-          <button (click)="addIncomeExpenseToArray()">TESTING</button>
           <span [style.color]="sharedService.darkMode() ? 'white' : 'black'"><i class="pi pi-briefcase"></i>{{ authService.coreUserData()?.businessId ? authService.coreBusinessData()?.name : 'Your Business Name' }}</span>
           <button class="add-client-button" (click)="sharedService.clientFormType.set('add'); sharedService.showClientFormDialog.set(true)">Add Client <i class="pi pi-plus"></i></button>
         </div>
