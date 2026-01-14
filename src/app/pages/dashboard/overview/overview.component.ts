@@ -26,6 +26,7 @@ export class Overview implements OnInit, AfterViewInit {
   public authService = inject(AuthService)
   public showBusinessProfit = signal<boolean>(true)
   public profitOptions: MenuItem[] | undefined
+  public chartIsUpdating = signal<boolean>(true)
   private chart: Chart | null = null
   private destroyRef = inject(DestroyRef)
 
@@ -66,6 +67,7 @@ export class Overview implements OnInit, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
+    // TODO: add an if condition to check whether the initial income or expense changed, if so THEN run this / also add spinner in chart when loading
     // await this.addIncomeExpenseToArray()
     await this.authService.loadMonthlyIncomeExpenseArrays()
     this.refreshChart()
@@ -86,6 +88,7 @@ export class Overview implements OnInit, AfterViewInit {
     this.chart.data.labels = this.sharedService.monthLabels
     this.chart.data.datasets = this.getDatasets(this.sharedService.darkMode())
     this.chart.update()
+    this.chartIsUpdating.set(false)
   }
 
   private getChartOptions(isDark: boolean) {
