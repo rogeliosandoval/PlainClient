@@ -1557,5 +1557,15 @@ export class AuthService {
         this.sharedService.personalExpenseMonthArray.push(data['expense'])
       }
     })
+
+    // Get last (most recent) month values
+    const lastIncome =
+      this.sharedService.personalIncomeMonthArray[this.sharedService.personalIncomeMonthArray.length - 1]
+
+    const lastExpense =
+      this.sharedService.personalExpenseMonthArray[this.sharedService.personalExpenseMonthArray.length - 1]
+
+    this.sharedService.lastPersonalMonthlyIncome = lastIncome ?? null
+    this.sharedService.lastPersonalMonthlyExpense = lastExpense ?? null
   }
 }

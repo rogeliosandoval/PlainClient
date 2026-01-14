@@ -23,6 +23,8 @@ export class SharedService {
   newMemberJoiningBusinessId: string = ''
   personalIncomeMonthArray: number[] = []
   personalExpenseMonthArray: number[] = []
+  lastPersonalMonthlyIncome: number | null = null
+  lastPersonalMonthlyExpense: number | null = null
   monthLabels: string[] = []
 
   constructor(

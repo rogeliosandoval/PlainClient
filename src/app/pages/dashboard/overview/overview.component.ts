@@ -7,6 +7,7 @@ import { MenuModule } from 'primeng/menu'
 import { TruncatePipe } from '../../../pipes/truncate.pipe'
 import { Chart } from 'chart.js/auto'
 import { doc, setDoc, Firestore } from '@angular/fire/firestore'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
 
 @Component({
   selector: 'tc-overview',
@@ -14,7 +15,8 @@ import { doc, setDoc, Firestore } from '@angular/fire/firestore'
   imports: [
     CurrencyPipe,
     MenuModule,
-    TruncatePipe
+    TruncatePipe,
+    ProgressSpinnerModule
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -67,8 +69,13 @@ export class Overview implements OnInit, AfterViewInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // TODO: add an if condition to check whether the initial income or expense changed, if so THEN run this / also add spinner in chart when loading
-    // await this.addIncomeExpenseToArray()
+    const currentIncome = Number(this.totalPersonalIncome().toFixed(2))
+    const currentExpense = Number(this.totalPersonalExpenses().toFixed(2))
+
+    if (this.hasMonthlyTotalsChanged(currentIncome, currentExpense)) {
+      await this.addIncomeExpenseToArray()
+    }
+
     await this.authService.loadMonthlyIncomeExpenseArrays()
     this.refreshChart()
     // this.profitOptions = [
@@ -134,6 +141,17 @@ export class Overview implements OnInit, AfterViewInit {
         backgroundColor: isDark ? '#c74c4cff' : '#d73d3dff'
       }
     ]
+  }
+
+  public hasMonthlyTotalsChanged(currentIncome: number, currentExpense: number): boolean {
+    if (this.sharedService.lastPersonalMonthlyIncome === null || this.sharedService.lastPersonalMonthlyExpense === null) {
+      return true // nothing to compare yet
+    }
+
+    return (
+      currentIncome !== this.sharedService.lastPersonalMonthlyIncome ||
+      currentExpense !== this.sharedService.lastPersonalMonthlyExpense
+    )
   }
 
   public async addIncomeExpenseToArray(): Promise<void> {
