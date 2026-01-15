@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
   public loadApp = signal<boolean>(false)
   private lastScrollTop = 0
   private lastDirection: 'up' | 'down' | null = null
-  private readonly SCROLL_THRESHOLD = 20 // px
+  private readonly SCROLL_THRESHOLD = 80 // px
   
   ngOnInit(): void {
     this.authService.user$.subscribe((user: any) => {
@@ -63,15 +63,11 @@ export class AppComponent implements OnInit {
     this.lastScrollTop = currentScrollTop
   }
 
-  // foundation set to implement hide button on profit page. consider checking the route to only run this logic on profits page
-
   private onScrollDown(): void {
-    console.log('Scrolling DOWN')
-    // hide navbar, collapse header, etc
+    this.sharedService.showProfitOverlay.set(false)
   }
 
   private onScrollUp(): void {
-    console.log('Scrolling UP')
-    // show navbar, expand header, etc
+    this.sharedService.showProfitOverlay.set(true)
   }
 }

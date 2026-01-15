@@ -1,7 +1,9 @@
 <div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''" #profitsScroll>
-  <div class="mobile-overlay">
-    <i class="pi pi-plus" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'"></i>
-  </div>
+  @if (sharedService.showProfitOverlay()) {
+    <div class="mobile-overlay">
+      <i class="pi pi-plus" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="showProfitFormDialog.set(true); logicType.set('add')"></i>
+    </div>
+  }
   <div class="tab-menu-desktop">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {
@@ -56,7 +58,7 @@
           <i class="pi pi-print disabled" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'"></i>
         </div>
       }
-    } @else {
+    } @else if (sharedService.businessProfits().length !== 0 && showBusinessProfits()) {
       @if (selectingProfits()) {
         <p-button label="Select All" (onClick)="selectAllProfits()"></p-button>
         <p-button label="Deselect All" (onClick)="selectedProfitIds = []"></p-button>
