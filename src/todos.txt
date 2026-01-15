@@ -1,14 +1,12 @@
 TODOS: 
 
-- check numberOfClients update in the database
+- check numberOfClients update in the database/if they delete when you delete a client
 
 - redesign register page
 
 - redesign home page and add fade in
 
 - implement google auth sign in
-
-- add "add client" to mobile
 
 - double check best practices for optimization on images and code
 
@@ -19,3 +17,9 @@ TODOS:
 - implement timeout session
 
 - implement inbox logic/add more settings to account-settings and inbox
+
+- add bar on mobile for task manager
+
+- add "add client" to mobile
+
+- design team members page once they are in. most logic is already in place, just need to design it
