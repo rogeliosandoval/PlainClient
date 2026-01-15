@@ -206,3 +206,12 @@ textarea,
     color: white;
   }
 }
+
+@media (max-width: 920px) {
+  .p-toast-bottom-center {
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+  }
+}
