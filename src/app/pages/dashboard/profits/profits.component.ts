@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, OnInit, signal, ViewChild } from '@angular/core'
+import { Component, computed, ElementRef, inject, Input, OnInit, signal, ViewChild } from '@angular/core'
 import { AuthService } from '../../../services/auth.service'
 import { ButtonModule } from 'primeng/button'
 import { MessageService } from 'primeng/api'
@@ -33,6 +33,8 @@ import { FormsModule } from '@angular/forms'
 })
 
 export class Profits implements OnInit {
+  @ViewChild('profitsScroll') profitsScroll!: ElementRef<HTMLElement>
+  @ViewChild('profitSummary') profitSummary!: ElementRef<HTMLElement>
   @ViewChild('profitFormDialog') profitFormDialog!: ProfitFormDialog
   @Input() dialogLoading: boolean = true
   public sharedService = inject(SharedService)
@@ -54,6 +56,31 @@ export class Profits implements OnInit {
   public filterBusinessLabel = signal<string>('Oldest/Newest')
   public selectingProfits = signal<boolean>(false)
   public selectedProfitIds: string[] = []
+  private summaryTriggered = false
+
+  // onScroll(): void {
+  //   if (!this.profitsScroll || !this.profitSummary) return
+
+  //   const container = this.profitsScroll.nativeElement
+  //   const target = this.profitSummary.nativeElement
+
+  //   const containerRect = container.getBoundingClientRect()
+  //   const targetRect = target.getBoundingClientRect()
+
+  //   // check if target is visible within container viewport
+  //   const isInView =
+  //     targetRect.top < containerRect.bottom &&
+  //     targetRect.bottom > containerRect.top
+
+  //   if (isInView && !this.summaryTriggered) {
+  //     this.summaryTriggered = true
+  //     console.log('profitSummary is in view ✅')
+  //     // do your thing here (animate, load, etc)
+  //   }
+
+  //   // optional: reset when it leaves view so it can trigger again
+  //   if (!isInView) this.summaryTriggered = false
+  // }
   
   ngOnInit(): void {
     this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())

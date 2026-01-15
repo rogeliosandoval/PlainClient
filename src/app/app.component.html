@@ -1,5 +1,5 @@
 @if (loadApp()) {
-  <main [class.standard-dark]="sharedService.darkMode()">
-    <router-outlet/>
+  <main [class.standard-dark]="sharedService.darkMode()" (scroll)="onScroll($event)">
+    <router-outlet />
   </main>
 }

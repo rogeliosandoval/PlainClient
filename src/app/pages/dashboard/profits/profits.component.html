@@ -1,4 +1,7 @@
-<div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
+<div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''" #profitsScroll>
+  <div class="mobile-overlay">
+    <i class="pi pi-plus" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'"></i>
+  </div>
   <div class="tab-menu-desktop">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {
@@ -10,7 +13,7 @@
           <p-button label="Cancel" iconPos="right" (onClick)="selectingProfits.set(false); selectedProfitIds = []"/>
         </div>
       } @else {
-        <p-button [label]="filterPersonalLabel()" icon="pi pi-filter" iconPos="right" (click)="filterMenu.toggle($event)"/>
+        <p-button [label]="filterPersonalLabel()" icon="pi pi-filter" iconPos="right" (onClick)="filterMenu.toggle($event)"/>
         <p-button label="Select" iconPos="right" (onClick)="selectingProfits.set(true)"/>
         <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
         <div class="add-button-container">
@@ -26,7 +29,7 @@
           <p-button label="Cancel" iconPos="right" (onClick)="selectingProfits.set(false); selectedProfitIds = []"/>
         </div>
       } @else {
-        <p-button [label]="filterBusinessLabel()" icon="pi pi-filter" iconPos="right" (click)="filterMenu.toggle($event)"/>
+        <p-button [label]="filterBusinessLabel()" icon="pi pi-filter" iconPos="right" (onClick)="filterMenu.toggle($event)"/>
         <p-button label="Select" iconPos="right" (onClick)="selectingProfits.set(true)"/>
         <p-button label="Print" icon="pi pi-print" iconPos="right" disabled/>
         <div class="add-button-container">
@@ -39,7 +42,35 @@
   <div class="tab-menu-mobile">
     <p-tabMenu [model]="items" [(activeItem)]="activeItem"/>
     @if (sharedService.userProfits().length !== 0 && !showBusinessProfits()) {
-      <p-button label="Options" icon="pi pi-ellipsis-v" iconPos="right"/>
+      @if (selectingProfits()) {
+        <p-button label="Select All" (onClick)="selectAllProfits()"></p-button>
+        <p-button label="Deselect All" (onClick)="selectedProfitIds = []"></p-button>
+        <p-button label="Delete" icon="pi pi-trash" iconPos="right" severity="danger" (onClick)="triggerDeleteProfits()" [disabled]="selectedProfitIds.length === 0"/>
+        <div class="add-button-container">
+          <p-button label="Cancel" iconPos="right" (onClick)="selectingProfits.set(false); selectedProfitIds = []"/>
+        </div>
+      } @else {
+        <div class="tab-menu-mobile-options">
+          <i class="pi pi-filter" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="filterMenu.toggle($event)"></i>
+          <i class="pi pi-check-square" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="selectingProfits.set(true)"></i>
+          <i class="pi pi-print disabled" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'"></i>
+        </div>
+      }
+    } @else {
+      @if (selectingProfits()) {
+        <p-button label="Select All" (onClick)="selectAllProfits()"></p-button>
+        <p-button label="Deselect All" (onClick)="selectedProfitIds = []"></p-button>
+        <p-button label="Delete" icon="pi pi-trash" iconPos="right" severity="danger" (onClick)="triggerDeleteProfits()" [disabled]="selectedProfitIds.length === 0"/>
+        <div class="add-button-container">
+          <p-button label="Cancel" iconPos="right" (onClick)="selectingProfits.set(false); selectedProfitIds = []"/>
+        </div>
+      } @else {
+        <div class="tab-menu-mobile-options">
+          <i class="pi pi-filter" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="filterMenu.toggle($event)"></i>
+          <i class="pi pi-check-square" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="selectingProfits.set(true)"></i>
+          <i class="pi pi-print disabled" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'"></i>
+        </div>
+      }
     }
   </div>
   @if (showBusinessProfits()) {
@@ -135,7 +166,7 @@
           }
           <p-menu #menu [model]="profitOptions" popup="true" appendTo="body"/>
         </div>
-        <div class="profit-summary">
+        <div class="profit-summary" #profitSummary>
           <div class="profit-summary-clipboard" [class.profit-summary-clipboard-dark]="sharedService.darkMode()">
             <div class="profit-summary-clipboard--title">Monthly Report</div>
             <div class="profit-summary-clipboard--items">

@@ -54,6 +54,7 @@
   align-items: center;
   gap: 1rem;
   height: 3.6rem;
+  flex-wrap: wrap;
 
   @media screen and (max-width: 1399px) {
     display: flex;
@@ -61,10 +62,47 @@
 
   @include variables.media('phone') {
     height: auto;
-    flex-direction: column;
 
     p-button .p-button {
       width: 100%;
+    }
+  }
+}
+
+.tab-menu-mobile-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  .pi {
+    padding: 1rem;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: 500;
+  }
+}
+
+.mobile-overlay {
+  display: none;
+
+  @media screen and (max-width: 1000px) {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+
+    .pi {
+      padding: 1rem;
+      border-radius: 15px;
+      font-size: 1.4rem;
+      color: white;
+      font-weight: 500;
     }
   }
 }

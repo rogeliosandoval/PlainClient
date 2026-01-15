@@ -19,6 +19,9 @@ export class AppComponent implements OnInit {
   public authService = inject(AuthService)
   public sharedService = inject(SharedService)
   public loadApp = signal<boolean>(false)
+  private lastScrollTop = 0
+  private lastDirection: 'up' | 'down' | null = null
+  private readonly SCROLL_THRESHOLD = 20 // px
   
   ngOnInit(): void {
     this.authService.user$.subscribe((user: any) => {
@@ -33,5 +36,42 @@ export class AppComponent implements OnInit {
         this.loadApp.set(true)
       }
     })
+  }
+
+  onScroll(event: Event): void {
+    const el = event.target as HTMLElement
+    const currentScrollTop = el.scrollTop
+    const delta = currentScrollTop - this.lastScrollTop
+
+    // ignore tiny scroll movements (mobile jitter)
+    if (Math.abs(delta) < this.SCROLL_THRESHOLD) {
+      return
+    }
+
+    const direction: 'up' | 'down' =
+      delta > 0 ? 'down' : 'up'
+
+    // fire only when direction changes
+    if (direction !== this.lastDirection) {
+      direction === 'down'
+        ? this.onScrollDown()
+        : this.onScrollUp()
+
+      this.lastDirection = direction
+    }
+
+    this.lastScrollTop = currentScrollTop
+  }
+
+  // foundation set to implement hide button on profit page. consider checking the route to only run this logic on profits page
+
+  private onScrollDown(): void {
+    console.log('Scrolling DOWN')
+    // hide navbar, collapse header, etc
+  }
+
+  private onScrollUp(): void {
+    console.log('Scrolling UP')
+    // show navbar, expand header, etc
   }
 }
