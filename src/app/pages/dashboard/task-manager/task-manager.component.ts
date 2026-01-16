@@ -92,12 +92,6 @@ export class TaskManager implements OnInit {
             await this.authService.togglePersonalTaskCompleted(this.selectedTask.id)
           }
           this.addingTask.set(false)
-          this.messageService.add({
-            severity: 'success',
-            detail: 'Task completed!',
-            key: 'br',
-            life: 2000
-          })
         }
       },
       {
@@ -138,12 +132,6 @@ export class TaskManager implements OnInit {
             await this.authService.togglePersonalTaskCompleted(this.selectedTask.id)
           }
           this.addingTask.set(false)
-          this.messageService.add({
-            severity: 'success',
-            detail: 'Task marked incomplete.',
-            key: 'br',
-            life: 2000
-          })
         }
       },
       {

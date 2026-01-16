@@ -7,6 +7,11 @@
     </div>
   } @else {
     <div class="clients" [class.disabled]="sharedService.loading() || loadingClients()">
+      @if (sharedService.showOverlay()) {
+        <div class="mobile-overlay">
+          <i class="pi pi-plus" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="sharedService.clientFormType.set('add') ;sharedService.showClientFormDialog.set(true)"></i>
+        </div>
+      }
       @for (client of authService.coreBusinessData()?.clients; track client.id) {
         <div class="client" [class.dark-client]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
           <div class="client-header">

@@ -5,6 +5,30 @@ p-progressSpinner {
   padding: 2.5rem;
 }
 
+.mobile-overlay {
+  display: none;
+
+  @media screen and (max-width: 1000px) {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+    animation: fadeInAndSlideInBottom 0.2s linear;
+
+    .pi {
+      padding: 1rem;
+      border-radius: 15px;
+      font-size: 1.4rem;
+      color: white;
+      font-weight: 500;
+    }
+  }
+}
+
 .no-clients {
   display: flex;
   justify-content: center;
@@ -40,6 +64,7 @@ p-progressSpinner {
 }
 
 .clients {
+  position: relative;
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;

@@ -26,7 +26,7 @@ export class SharedService {
   lastPersonalMonthlyIncome: number | null = null
   lastPersonalMonthlyExpense: number | null = null
   monthLabels: string[] = []
-  showProfitOverlay = signal<boolean>(true)
+  showOverlay = signal<boolean>(true)
 
   constructor(
       @Inject(PLATFORM_ID)

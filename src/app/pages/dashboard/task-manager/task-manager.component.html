@@ -6,6 +6,11 @@
     }
   </div>
   @if (showBusinessTasks()) {
+    @if (sharedService.showOverlay() && sharedService.businessTasks().length > 0) {
+      <div class="mobile-overlay">
+        <i class="pi pi-plus" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="showTaskFormDialog.set(true); this.type.set('add')"></i>
+      </div>
+    }
     @if (sharedService.businessTasks().length > 0) {
       <div class="tasks-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
         <div class="tasks-title">{{ authService.coreBusinessData()?.name }} Task List</div>
@@ -51,6 +56,11 @@
       </div>
     }
   } @else {
+    @if (sharedService.showOverlay() && sharedService.personalTasks().length > 0) {
+      <div class="mobile-overlay">
+        <i class="pi pi-plus" [style.background-color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'" (click)="showTaskFormDialog.set(true); this.type.set('add')"></i>
+      </div>
+    }
     @if (sharedService.personalTasks().length > 0) {
       <div class="tasks-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
         <div class="tasks-title">Your Task List</div>

@@ -83,7 +83,7 @@ export class Profits implements OnInit {
   // }
   
   ngOnInit(): void {
-    this.sharedService.showProfitOverlay.set(true)
+    this.sharedService.showOverlay.set(true)
     this.filteredPersonalProfits.set(this.sharedService.getSortedPersonalProfits())
     this.filteredBusinessProfits.set(this.sharedService.getSortedBusinessProfits())
     this.items = [

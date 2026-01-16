@@ -8,8 +8,6 @@ TODOS:
 
 - implement google auth sign in
 
-- double check best practices for optimization on images and code
-
 - implement add note logic to clients
 
 - implement email confirm on sign up
@@ -17,9 +15,5 @@ TODOS:
 - implement timeout session
 
 - implement inbox logic/add more settings to account-settings and inbox
-
-- add bar on mobile for task manager
-
-- add "add client" to mobile
 
 - design team members page once they are in. most logic is already in place, just need to design it

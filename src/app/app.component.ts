@@ -64,10 +64,10 @@ export class AppComponent implements OnInit {
   }
 
   private onScrollDown(): void {
-    this.sharedService.showProfitOverlay.set(false)
+    this.sharedService.showOverlay.set(false)
   }
 
   private onScrollUp(): void {
-    this.sharedService.showProfitOverlay.set(true)
+    this.sharedService.showOverlay.set(true)
   }
 }

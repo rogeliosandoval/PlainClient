@@ -55,6 +55,7 @@ export class Clients implements OnInit {
   public showContactListDialog = signal<boolean>(false)
 
   ngOnInit(): void {
+    this.sharedService.showOverlay.set(true)
     // setTimeout(() => {
     //   this.loadingClients.set(false)
     // }, 700)
