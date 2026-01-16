@@ -18,7 +18,10 @@
             @if(loadingClients()) {
               <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
             }
-            <img class="client-logo" [ngSrc]="client.avatarUrl || '/assets/images/avatars/default-business-avatar.png'" alt="client logo" draggable="false" width="160" height="160" priority>
+            <img class="client-logo" [ngSrc]="client.avatarUrl || '/assets/images/avatars/default-business-avatar.png'" alt="client logo" draggable="false" width="160" height="160" (load)="imageLoaded[client.id] = true">
+            @if (!imageLoaded[client.id]) {
+              <p-skeleton width="160px" height="160px"/>
+            }
             <div class="menu">
               <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); this.sharedService.dialogClient.set(client)"></i>
               <p-menu #menu [model]="clientOptions" popup="true" appendTo="body"/>

@@ -93,9 +93,15 @@ p-progressSpinner {
 }
 
 .client-header {
+  position: relative;
   display: flex;
   justify-content: space-between;
   width: 100%;
+
+  p-skeleton {
+    position: absolute;
+    left: 0;
+  }
 }
 
 .client-logo {

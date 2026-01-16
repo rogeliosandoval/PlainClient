@@ -17,6 +17,7 @@ import { FormatPhonePipe } from '../../../pipes/format-phone.pipe'
 import { ContactListDialog } from '../../../dialogs/contact-list/contact-list.component'
 import { NgOptimizedImage } from '@angular/common'
 import { ClientFormData } from '../../../interfaces/other.interface'
+import { SkeletonModule } from 'primeng/skeleton'
 
 @Component({
   selector: 'tc-clients',
@@ -32,7 +33,8 @@ import { ClientFormData } from '../../../interfaces/other.interface'
     ContactFormDialog,
     FormatPhonePipe,
     ContactListDialog,
-    NgOptimizedImage
+    NgOptimizedImage,
+    SkeletonModule
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
@@ -53,6 +55,7 @@ export class Clients implements OnInit {
   public dialogLoading = signal<boolean>(false)
   public showContactFormDialog = signal<boolean>(false)
   public showContactListDialog = signal<boolean>(false)
+  public imageLoaded: Record<string, boolean> = {}
 
   ngOnInit(): void {
     this.sharedService.showOverlay.set(true)
