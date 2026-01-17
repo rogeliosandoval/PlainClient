@@ -17,3 +17,5 @@ TODOS:
 - implement inbox logic/add more settings to account-settings and inbox
 
 - design team members page once they are in. most logic is already in place, just need to design it
+
+- look into adding weather or a few other widgets on overview page
