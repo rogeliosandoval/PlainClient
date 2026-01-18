@@ -7,29 +7,38 @@
           <p-progressSpinner class="chart-spinner" ariaLabel="loading" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
         }
       </div>
-      <div class="forecast-container">
+      <div class="forecast-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
         @if (fetchingWeather()) {
           <p-progressSpinner class="chart-spinner" ariaLabel="loading" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"/>
         } @else {
-          <div class="location-title">{{ weatherLocation.name }}</div>
+          <div class="location-title">{{ weatherLocation.name }}, {{ weatherLocation.region }}</div>
           <div class="current-day">
             <img src="{{weatherToday.day.condition.icon}}" alt="{{weatherToday.day.condition.text}}">
             <div class="current-day__details">
               <div class="current-day__details--condition">{{ weatherToday.day.condition.text }}</div>
-              <div class="current-day__details--temp">57°F</div>
+              <div class="current-day__details--temp">{{ weatherToday.day.avgtemp_f | number:'1.0-0' }}<span>°F</span></div>
+              <div>H:{{ weatherToday.day.maxtemp_f | number:'1.0-0' }} | L:{{ weatherToday.day.mintemp_f | number:'1.0-0' }}</div>
             </div>
             <div class="current-date">
               <strong>Today</strong>
-              {{ weatherToday.date }}
+              {{ weatherToday.date | date:'EEEE, MMM d' }}
             </div>
           </div>
-          <!-- <div class="days">
+          <div class="days">
             @for (day of weatherTwoDayForecast; track day) {
               <div class="day">
-                {{ day.date }}
+                <img src="{{day.day.condition.icon}}" alt="{{day.day.condition.text}}">
+                <div class="day-details">
+                  <div class="day-details__condition">{{ day.day.condition.text }}</div>
+                  <div class="day-details__temp">{{ day.day.avgtemp_f | number:'1.0-0' }}°F</div>
+                  <div style="font-size: 0.8rem;">H:{{ day.day.maxtemp_f | number:'1.0-0' }} | L:{{ day.day.mintemp_f | number:'1.0-0' }}</div>
+                </div>
+                <div class="day-date">
+                  {{ day.date | date:'EEEE, MMM d' }}
+                </div>
               </div>
             }
-          </div> -->
+          </div>
         }
       </div>
     </div>
