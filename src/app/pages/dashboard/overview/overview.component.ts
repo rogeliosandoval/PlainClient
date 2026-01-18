@@ -1,4 +1,5 @@
 import { Component, computed, inject, OnInit, signal, AfterViewInit, effect, DestroyRef } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { SharedService } from '../../../services/shared.service'
 import { AuthService } from '../../../services/auth.service'
 import { CurrencyPipe } from '@angular/common'
@@ -8,6 +9,30 @@ import { TruncatePipe } from '../../../pipes/truncate.pipe'
 import { Chart } from 'chart.js/auto'
 import { doc, setDoc, Firestore } from '@angular/fire/firestore'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { HttpClient } from '@angular/common/http'
+
+interface weatherResponse {
+  location: {
+    name: string
+    region: string
+  },
+  current: {
+    condition: {
+      icon: string
+      text: string
+    }
+    temp_f: number
+    temp_c: number
+    gust_mph: number
+    feelslike_f: number
+    feelslike_c: number
+    last_updated: string
+    wind_mph: number
+  },
+  forecast: {
+    forecastday: any[]
+  }
+}
 
 @Component({
   selector: 'tc-overview',
@@ -16,7 +41,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner'
     CurrencyPipe,
     MenuModule,
     TruncatePipe,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    CommonModule
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -31,6 +57,12 @@ export class Overview implements OnInit, AfterViewInit {
   public chartIsUpdating = signal<boolean>(true)
   private chart: Chart | null = null
   private destroyRef = inject(DestroyRef)
+  private httpClient = inject(HttpClient)
+  public fetchingWeather = signal<boolean>(true)
+  public weatherLocation: any
+  public weatherToday: any
+  public weatherTwoDayForecast: any
+  public weatherAPI = 'http://api.weatherapi.com/v1/forecast.json?key=31aacf09836e489ba9230739261701&q=78217&days=3&aqi=no&alerts=no'
 
   constructor() {
     // ✅ effect is created in injection context here
@@ -75,6 +107,21 @@ export class Overview implements OnInit, AfterViewInit {
     if (this.hasMonthlyTotalsChanged(currentIncome, currentExpense)) {
       await this.addIncomeExpenseToArray()
     }
+
+    this.httpClient.get<weatherResponse>(this.weatherAPI).subscribe({
+      next: response => {
+        this.weatherLocation = response.location
+        this.weatherToday = response.forecast.forecastday[0]
+        this.weatherTwoDayForecast = response.forecast.forecastday.slice(1)
+        console.log(response)
+      },
+      complete: () => {
+        this.fetchingWeather.set(false)
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
 
     await this.authService.loadMonthlyIncomeExpenseArrays()
     this.refreshChart()
