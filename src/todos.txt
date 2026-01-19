@@ -4,6 +4,10 @@ TODOS:
 
 - redesign register page
 
+- implement password reset logic
+
+- implement delete account in settings
+
 - redesign home page and add fade in
 
 - implement google auth sign in
