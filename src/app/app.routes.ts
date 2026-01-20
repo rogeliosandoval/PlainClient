@@ -16,6 +16,8 @@ import { Inbox } from './pages/dashboard/inbox/inbox.component'
 import { AccountSettings } from './pages/dashboard/account-settings/account-settings.component'
 import { ClientDetails } from './pages/dashboard/clients/client-details/client-details.component'
 import { BusinessSignup } from './pages/business-signup/business-signup.component'
+import { VerifyEmail } from './pages/verify-email/verify-email.component'
+import { EmailVerifiedGuard } from './guards/emailverified.guard'
 
 export const routes: Routes = [
   {
@@ -40,9 +42,14 @@ export const routes: Routes = [
     canActivate: [AuthNonuserGuard]
   },
   {
+    path: 'verify-email',
+    component: VerifyEmail,
+    canActivate: [AuthUserGuard]
+  },
+  {
     path: 'dashboard',
     component: Dashboard,
-    canActivate: [AuthUserGuard],
+    canActivate: [AuthUserGuard, EmailVerifiedGuard],
     children: [
       { path: 'overview', component: Overview },
       { path: 'clients', component: Clients },

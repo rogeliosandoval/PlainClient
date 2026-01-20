@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
 import { CheckboxModule } from 'primeng/checkbox'
 import { NgOptimizedImage } from '@angular/common'
-import { Auth, sendPasswordResetEmail, UserCredential } from '@angular/fire/auth'
+import { Auth, sendPasswordResetEmail, UserCredential, reload } from '@angular/fire/auth'
 import { lastValueFrom } from 'rxjs'
 import { doc, setDoc, Firestore } from '@angular/fire/firestore'
 
@@ -78,7 +78,14 @@ export class Login implements OnInit {
             }
             this.sharedService.loading.set(false)
           },
-          complete: () => {
+          complete: async () => {
+            await reload(this.auth.currentUser!)
+
+            if (!this.auth.currentUser?.emailVerified) {
+              this.router.navigateByUrl('/verify-email')
+              return
+            }
+
             this.router.navigateByUrl('/dashboard')
           }
         })
@@ -97,7 +104,14 @@ export class Login implements OnInit {
             }
             this.sharedService.loading.set(false)
           },
-          complete: () => {
+          complete: async () => {
+            await reload(this.auth.currentUser!)
+
+            if (!this.auth.currentUser?.emailVerified) {
+              this.router.navigateByUrl('/verify-email')
+              return
+            }
+
             this.router.navigateByUrl('/dashboard')
           }
         })
@@ -153,10 +167,18 @@ export class Login implements OnInit {
         { merge: true }
       )
     })
-    .then(() => {
+    .then(async () => {
+      await reload(this.auth.currentUser!)
+
       this.authService.clearAllAppCaches()
       this.sharedService.fromLogin.set(true)
       this.sharedService.loading.set(false)
+
+      if (!this.auth.currentUser?.emailVerified) {
+        this.router.navigateByUrl('/verify-email')
+        return
+      }
+
       this.router.navigateByUrl('/dashboard')
     })
     .catch(err => {

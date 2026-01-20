@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
 import { lastValueFrom } from 'rxjs'
 import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore'
-import { UserCredential } from '@angular/fire/auth'
+import { UserCredential, reload } from '@angular/fire/auth'
 import { NgOptimizedImage } from '@angular/common'
 
 @Component({
@@ -74,7 +74,7 @@ export class Signup implements OnInit {
         this.sharedService.loading.set(false)
       })
       .then(() => {
-        this.router.navigateByUrl('/dashboard/overview')
+        this.router.navigateByUrl('/verify-email')
       })
       .catch(err => {
         if (err.message == 'Firebase: Error (auth/email-already-in-use).') {
@@ -111,8 +111,17 @@ export class Signup implements OnInit {
     .then(() => {
       this.authService.clearAllAppCaches()
     })
-    .then(() => {
+    .then(async () => {
+      await reload(this.authService.firebaseAuth.currentUser!)
+
+      this.authService.clearAllAppCaches()
       this.sharedService.loading.set(false)
+
+      if (!this.authService.firebaseAuth.currentUser?.emailVerified) {
+        this.router.navigateByUrl('/verify-email')
+        return
+      }
+
       this.router.navigateByUrl('/dashboard/overview')
     })
     .catch(err => {

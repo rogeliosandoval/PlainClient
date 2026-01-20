@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, PLATFORM_ID, Inject } from '@angular/core'
-import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth'
+import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
@@ -52,6 +52,10 @@ export class AuthService {
       })
       .then(async(response: UserCredential) => {
         await updateProfile(response.user, { displayName: username })
+
+        // 🔑 Send verification email
+        await sendEmailVerification(response.user)
+        
         return response
       })
 
