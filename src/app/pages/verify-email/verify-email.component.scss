@@ -1,0 +1,37 @@
+@use '../../../variables.scss' as variables;
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  animation: fadeIn 0.2s linear;
+  padding: 1rem;
+
+  img {
+    margin-bottom: 1rem;
+  }
+}
+
+.message {
+  font-size: 1.2rem;
+  font-family: "Outfit", sans-serif;
+  text-align: center;
+  margin-bottom: 1rem;
+
+  @include variables.media('phone') {
+    font-size: 1rem;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  @include variables.media('phone') {
+    flex-direction: column;
+  }
+}

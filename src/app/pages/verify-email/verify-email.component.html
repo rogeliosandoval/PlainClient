@@ -1,0 +1,8 @@
+<div class="container">
+  <img src="/assets/images/logo.svg" alt="logo" width="317" height="76" routerLink="/">
+  <div class="message">You need to verify your email.<br/> Check your inbox and click the verification link!</div>
+  <div class="actions">
+    <p-button label="Resend Verification Email" (onClick)="resendEmail()"></p-button>
+    <p-button label="I verified! Continue" (onClick)="continue()"></p-button>
+  </div>
+</div>
