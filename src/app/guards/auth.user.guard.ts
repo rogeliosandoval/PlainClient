@@ -18,13 +18,13 @@ export class AuthUserGuard {
       return this.authService.user$.pipe(
         map(user => {
           if (!user) {
-            this.router.navigateByUrl('login')
+            this.router.navigateByUrl('/login')
             return false
           }
           return true
         }),
         catchError(() => {
-          this.router.navigateByUrl('login')
+          this.router.navigateByUrl('/login')
           return of(false)
         })
       )
