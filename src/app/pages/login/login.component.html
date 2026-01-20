@@ -6,7 +6,7 @@
       <img ngSrc="/assets/images/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
     }
     @if (forgotPassword()) {
-      <form id="entry-form" [formGroup]="resetPasswordForm" (ngSubmit)="sendResetLink()">
+      <form id="entry-form" [formGroup]="resetPasswordForm" (ngSubmit)="onForgot()">
         @if (resetLinkSent()) {
           <p style="margin: 0;">A link has been sent. Please check your email for further instruction. Thank you!</p>
           <span class="no-receive" aria-label="resend link" (click)="resetLinkSent.set(false)">Didn't receive it? Try resending it.</span>

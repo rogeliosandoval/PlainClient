@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
 import { CheckboxModule } from 'primeng/checkbox'
 import { NgOptimizedImage } from '@angular/common'
+import { Auth, sendPasswordResetEmail } from '@angular/fire/auth'
 
 @Component({
   selector: 'tc-login',
@@ -32,6 +33,7 @@ import { NgOptimizedImage } from '@angular/common'
 })
 
 export class Login implements OnInit {
+  private auth = inject(Auth)
   private authService = inject(AuthService)
   private router = inject(Router)
   public sharedService = inject(SharedService)
@@ -107,5 +109,22 @@ export class Login implements OnInit {
       this.resetLinkSent.set(true)
       this.sharedService.loading.set(false)
     }, 1500)
+  }
+
+  // Send Password Reset Link
+  public onForgot(): void {
+    let email = this.resetPasswordForm.get('email')?.value
+    this.sharedService.loading.set(true)
+
+    setTimeout(() => {
+      sendPasswordResetEmail(this.auth, email!).then(() => {
+        this.sharedService.loading.set(false)
+        this.resetLinkSent.set(true)
+      })
+      .catch((error) => {
+        this.sharedService.loading.set(false)
+        alert('Error: ' + error.message)
+      })
+    }, 2000)
   }
 }
