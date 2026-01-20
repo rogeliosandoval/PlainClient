@@ -62,7 +62,9 @@ export class Signup implements OnInit {
         await setDoc(userRef, {
           uid: uid,
           name: formData.name,
-          email: formData.email
+          email: formData.email,
+          provider: 'password',
+          createdAt: new Date().toISOString()
         })
       })
       .then(() => {
@@ -83,5 +85,40 @@ export class Signup implements OnInit {
         this.sharedService.loading.set(false)
       })
     }, 2000)
+  }
+
+  public signUpWithGoogle(): void {
+    lastValueFrom(this.authService.signInWithGoogle())
+    .then(async (userInfo: UserCredential) => {
+      const user = userInfo.user
+      const uid = user.uid
+
+      const userRef = doc(this.firestore, `users/${uid}`)
+
+      await setDoc(
+        userRef,
+        {
+          uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          provider: 'google',
+          createdAt: new Date().toISOString()
+        },
+        { merge: true } // 👈 important for repeat logins
+      )
+    })
+    .then(() => {
+      this.authService.clearAllAppCaches()
+    })
+    .then(() => {
+      this.sharedService.loading.set(false)
+      this.router.navigateByUrl('/dashboard/overview')
+    })
+    .catch(err => {
+      console.error(err)
+      this.errorMessage.set('Google sign-in failed. Please try again.')
+      this.sharedService.loading.set(false)
+    })
   }
 }

@@ -50,7 +50,7 @@
         }
       </form>
       <div class="divider">Or:</div>
-      <div class="google-button" [class.disabled]="sharedService.loading()" aria-label="login with google">
+      <div class="google-button" [class.disabled]="sharedService.loading()" aria-label="login with google" (click)="loginWithGoogle()">
         <img ngSrc="/assets/images/google-icon.png" alt="google icon" width="20" height="20" draggable="false">
         <span>Login with Google</span>
       </div>

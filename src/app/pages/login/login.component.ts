@@ -11,7 +11,9 @@ import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
 import { CheckboxModule } from 'primeng/checkbox'
 import { NgOptimizedImage } from '@angular/common'
-import { Auth, sendPasswordResetEmail } from '@angular/fire/auth'
+import { Auth, sendPasswordResetEmail, UserCredential } from '@angular/fire/auth'
+import { lastValueFrom } from 'rxjs'
+import { doc, setDoc, Firestore } from '@angular/fire/firestore'
 
 @Component({
   selector: 'tc-login',
@@ -33,6 +35,7 @@ import { Auth, sendPasswordResetEmail } from '@angular/fire/auth'
 })
 
 export class Login implements OnInit {
+  private firestore = inject(Firestore)
   private auth = inject(Auth)
   private authService = inject(AuthService)
   private router = inject(Router)
@@ -126,5 +129,40 @@ export class Login implements OnInit {
         alert('Error: ' + error.message)
       })
     }, 2000)
+  }
+
+  public loginWithGoogle(): void {
+    lastValueFrom(this.authService.signInWithGoogle())
+    .then(async (userInfo: UserCredential) => {
+      const user = userInfo.user
+      const uid = user.uid
+
+      const userRef = doc(this.firestore, `users/${uid}`)
+
+      // Ensure Firestore user exists (or update it)
+      await setDoc(
+        userRef,
+        {
+          uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          provider: 'google',
+          lastLoginAt: new Date().toISOString()
+        },
+        { merge: true }
+      )
+    })
+    .then(() => {
+      this.authService.clearAllAppCaches()
+      this.sharedService.fromLogin.set(true)
+      this.sharedService.loading.set(false)
+      this.router.navigateByUrl('/dashboard')
+    })
+    .catch(err => {
+      console.error(err)
+      this.errorMessage.set('Google login failed. Please try again.')
+      this.sharedService.loading.set(false)
+    })
   }
 }

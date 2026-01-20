@@ -29,7 +29,7 @@
       }
     </form>
     <div class="divider">Or:</div>
-    <div class="google-button" [class.disabled]="sharedService.loading()">
+    <div class="google-button" [class.disabled]="sharedService.loading()" (click)="signUpWithGoogle()">
       <img ngSrc="/assets/images/google-icon.png" alt="google icon" width="20" height="20" draggable="false">
       <span>Register with Google</span>
     </div>

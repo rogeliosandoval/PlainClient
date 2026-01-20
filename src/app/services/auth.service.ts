@@ -1,5 +1,5 @@
 import { Injectable, inject, signal, PLATFORM_ID, Inject } from '@angular/core'
-import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged } from '@angular/fire/auth'
+import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
 import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
@@ -36,6 +36,14 @@ export class AuthService {
     }
   }
 
+  public signInWithGoogle(): Observable<UserCredential> {
+    const provider = new GoogleAuthProvider()
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    })
+
+    return from(signInWithPopup(this.firebaseAuth, provider))
+  }
 
   register(email: string, username: string, password: string): Observable<UserCredential> {
     const promise = this.firebaseAuth.setPersistence(browserSessionPersistence)
