@@ -123,6 +123,7 @@
   padding: 1.3rem;
   border-radius: 15px;
   font-family: "Outfit", sans-serif;
+  animation: fadeInAndSlideInBottom 0.2s linear;
 
   @include variables.media('tablet') {
     width: 100%;
