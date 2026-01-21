@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } 
 import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
 import { lastValueFrom } from 'rxjs'
-import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore'
+import { Firestore, collection, doc, getDoc, setDoc } from '@angular/fire/firestore'
 import { UserCredential, reload } from '@angular/fire/auth'
 import { NgOptimizedImage } from '@angular/common'
 
@@ -88,6 +88,8 @@ export class Signup implements OnInit {
   }
 
   public signUpWithGoogle(): void {
+    this.sharedService.loading.set(true)
+
     lastValueFrom(this.authService.signInWithGoogle())
     .then(async (userInfo: UserCredential) => {
       const user = userInfo.user
@@ -95,33 +97,35 @@ export class Signup implements OnInit {
 
       const userRef = doc(this.firestore, `users/${uid}`)
 
-      await setDoc(
-        userRef,
-        {
+      // ✅ Check if this user exists in YOUR app DB
+      const snap = await getDoc(userRef)
+      const isReturningUser = snap.exists()
+
+      if (!isReturningUser) {
+        // 🆕 First time in your app
+        await setDoc(userRef, {
           uid,
           name: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           provider: 'google',
           createdAt: new Date().toISOString()
-        },
-        { merge: true } // 👈 important for repeat logins
-      )
-    })
-    .then(() => {
-      this.authService.clearAllAppCaches()
+        })
+      } else {
+        // 🔁 Returning user
+        await setDoc(
+          userRef,
+          { lastLoginAt: new Date().toISOString() },
+          { merge: true }
+        )
+        this.sharedService.fromLogin.set(true)
+        this.authService.clearBusinessDataCache.set(true)
+      }
     })
     .then(async () => {
       await reload(this.authService.firebaseAuth.currentUser!)
-
       this.authService.clearAllAppCaches()
       this.sharedService.loading.set(false)
-
-      if (!this.authService.firebaseAuth.currentUser?.emailVerified) {
-        this.router.navigateByUrl('/verify-email')
-        return
-      }
-
       this.router.navigateByUrl('/dashboard/overview')
     })
     .catch(err => {

@@ -13,7 +13,7 @@ import { CheckboxModule } from 'primeng/checkbox'
 import { NgOptimizedImage } from '@angular/common'
 import { Auth, sendPasswordResetEmail, UserCredential, reload } from '@angular/fire/auth'
 import { lastValueFrom } from 'rxjs'
-import { doc, setDoc, Firestore } from '@angular/fire/firestore'
+import { doc, setDoc, Firestore, getDoc } from '@angular/fire/firestore'
 
 @Component({
   selector: 'tc-login',
@@ -146,6 +146,8 @@ export class Login implements OnInit {
   }
 
   public loginWithGoogle(): void {
+    this.sharedService.loading.set(true)
+
     lastValueFrom(this.authService.signInWithGoogle())
     .then(async (userInfo: UserCredential) => {
       const user = userInfo.user
@@ -153,37 +155,40 @@ export class Login implements OnInit {
 
       const userRef = doc(this.firestore, `users/${uid}`)
 
-      // Ensure Firestore user exists (or update it)
-      await setDoc(
-        userRef,
-        {
+      // ✅ Check if this user exists in YOUR app DB
+      const snap = await getDoc(userRef)
+      const isReturningUser = snap.exists()
+
+      if (!isReturningUser) {
+        // 🆕 First time in your app
+        await setDoc(userRef, {
           uid,
           name: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
           provider: 'google',
-          lastLoginAt: new Date().toISOString()
-        },
-        { merge: true }
-      )
+          createdAt: new Date().toISOString()
+        })
+      } else {
+        // 🔁 Returning user
+        await setDoc(
+          userRef,
+          { lastLoginAt: new Date().toISOString() },
+          { merge: true }
+        )
+        this.sharedService.fromLogin.set(true)
+        this.authService.clearBusinessDataCache.set(true)
+      }
     })
     .then(async () => {
-      await reload(this.auth.currentUser!)
-
+      await reload(this.authService.firebaseAuth.currentUser!)
       this.authService.clearAllAppCaches()
-      this.sharedService.fromLogin.set(true)
       this.sharedService.loading.set(false)
-
-      if (!this.auth.currentUser?.emailVerified) {
-        this.router.navigateByUrl('/verify-email')
-        return
-      }
-
-      this.router.navigateByUrl('/dashboard')
+      this.router.navigateByUrl('/dashboard/overview')
     })
     .catch(err => {
       console.error(err)
-      this.errorMessage.set('Google login failed. Please try again.')
+      this.errorMessage.set('Google sign-in failed. Please try again.')
       this.sharedService.loading.set(false)
     })
   }
