@@ -15,6 +15,7 @@ import { MessageService } from 'primeng/api'
 import { DialogModule } from 'primeng/dialog'
 import { AvatarUploadDialog } from '../../../dialogs/avatar-upload/avatar-upload.component'
 import { NgOptimizedImage } from '@angular/common'
+import { Auth, sendPasswordResetEmail } from '@angular/fire/auth'
 
 @Component({
   selector: 'tc-account-settings',
@@ -40,10 +41,12 @@ export class AccountSettings implements OnInit {
   private messageService = inject(MessageService)
   private firestore = inject(Firestore)
   private storage = inject(Storage)
+  private auth = inject(Auth)
   public primengConfig = inject(PrimeNGConfig)
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
   public savingChanges = signal<boolean>(false)
+  public savingBusinessChanges = signal<boolean>(false)
   public dialogLoading = signal<boolean>(false)
   public uploadAvatarType = signal<string>('')
   public defaultProfileForm: any
@@ -59,10 +62,51 @@ export class AccountSettings implements OnInit {
   public businessForm = new FormGroup({
     name: new FormControl(this.authService.coreBusinessData()?.name)
   })
+  public sendingResetEmail = signal<boolean>(false)
+  public emailInput: string = ''
 
   ngOnInit(): void {
     this.defaultProfileForm = this.profileForm.value
     this.defaultBusinessForm = this.businessForm.value
+  }
+
+  public sendResetLink(): void {
+    this.sendingResetEmail.set(true)
+    
+    setTimeout(() => {
+      sendPasswordResetEmail(this.auth, this.emailInput!).then(() => {
+        this.sendingResetEmail.set(false)
+        this.emailInput = ''
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Email Sent!',
+          detail: 'Check your email and follow the instructions to reset your password.',
+          key: 'br',
+          life: 8000,
+        })
+      })
+      .catch((err) => {
+        this.sendingResetEmail.set(false)
+        console.log(err)
+        if (err == 'FirebaseError: Firebase: Error (auth/invalid-email).') {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Invalid Email',
+            detail: 'Please enter a valid email and try again.',
+            key: 'br',
+            life: 4000,
+          })
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'There was an error. Try again',
+            key: 'br',
+            life: 4000,
+          })
+        }
+      })
+    }, 2000)
   }
 
   public triggerAvatarUpload(type: string): void {
@@ -288,7 +332,7 @@ export class AccountSettings implements OnInit {
   }
 
   public saveBusinessChanges(): void {
-    this.savingChanges.set(true)
+    this.savingBusinessChanges.set(true)
     const formData = this.businessForm.value
 
     setTimeout(() => {
@@ -305,6 +349,7 @@ export class AccountSettings implements OnInit {
 
             this.defaultBusinessForm = formData
 
+            this.authService.clearBusinessDataCache.set(true)
             await this.authService.fetchCoreBusinessData()
             .then(() => {
               this.messageService.add({
@@ -317,7 +362,7 @@ export class AccountSettings implements OnInit {
             })
             .then(() => {
               this.businessForm.markAsPristine()
-              this.savingChanges.set(false)
+              this.savingBusinessChanges.set(false)
             })
           }
         },

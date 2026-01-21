@@ -4,76 +4,81 @@
   <div class="route-container" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
     <div class="title" [class.disabled]="sharedService.loading()">Account Settings</div>
     <div class="form-container" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
-      <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Profile Info</div>
-      <form [formGroup]="profileForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveProfileChanges()">
+      <div class="form-label" [class.disabled]="sharedService.loading()">Profile Info</div>
+      <form [formGroup]="profileForm" [class.disabled]="sharedService.loading()" (ngSubmit)="saveProfileChanges()">
         @if (authService.coreUserData()?.avatarUrl) {
-          <div class="avatar-container">
+          <div class="avatar-container" [class.disabled]="savingChanges()">
             <img class="avatar" [ngSrc]="authService.coreUserData()?.avatarUrl || ''" alt="avatar" width="150" height="150" draggable="false" priority>
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('profile')"></i>
           </div>
         } @else {
-          <div class="avatar-container">
+          <div class="avatar-container" [class.disabled]="savingChanges()">
             <img class="avatar" ngSrc="/assets/images/avatars/default-avatar.png" alt="avatar" width="150" height="150" draggable="false" priority>
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('profile')"></i>
           </div>
         }
-        <div class="input-container" [class.disabled]="sharedService.loading()">
+        <div class="input-container" [class.disabled]="sharedService.loading() || savingChanges()">
           <label for="name">Your Name:</label>
           <input id="name" type="text" pInputText variant="filled" placeholder="Name" formControlName="name" autocomplete="name" maxlength="44"/>
         </div>
-        <div class="input-container" [class.disabled]="sharedService.loading()">
+        <div class="input-container" [class.disabled]="sharedService.loading() || savingChanges()">
           <label for="email">Email:</label>
           @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
             <div class="input-error">Please enter a valid email</div>
           }
           <input id="email" type="text" pInputText variant="filled" placeholder="Email" formControlName="email" autocomplete="email" maxlength="44"/>
         </div>
-        <div class="input-container" [class.disabled]="sharedService.loading()">
+        <div class="input-container" [class.disabled]="sharedService.loading() || savingChanges()">
           <label for="position">Position:</label>
           <input id="position" type="text" pInputText variant="filled" placeholder="Position" formControlName="position" autocomplete="off" maxlength="44"/>
         </div>
-        <div class="input-container" [class.disabled]="sharedService.loading()">
+        <div class="input-container" [class.disabled]="sharedService.loading() || savingChanges()">
           <label for="phone">Phone:</label>
           <input id="phone" type="tel" pInputText variant="filled" placeholder="(xxx) xxx-xxxx" formControlName="phone" phoneNumber minlength="10" autocomplete="tel" maxlength="14"/>
         </div>
-        <div class="input-container" [class.disabled]="sharedService.loading()">
+        <div class="input-container" [class.disabled]="sharedService.loading() || savingChanges()">
           <label for="location">Location:</label>
           <input id="location" type="text" pInputText variant="filled" placeholder="Location" formControlName="location" autocomplete="off" maxlength="44"/>
         </div>
-        <div class="input-container" [class.disabled]="sharedService.loading()">
+        <div class="input-container" [class.disabled]="sharedService.loading() || savingChanges()">
           <label for="message">Message:</label>
           <textarea id="message" rows="3" cols="30" pInputTextarea variant="filled" formControlName="message"  placeholder="Message to display on your profile" style="resize: none;" autocomplete="off"></textarea>
         </div>
         <div class="button-container">
-          <p-button label="Save Changes" type="submit" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
+          <p-button label="Save Changes" type="submit" [disabled]="!profileForm.dirty" [loading]="savingChanges()"></p-button>
           <p-button label="Cancel" severity="secondary" (onClick)="cancelProfileChanges()" [disabled]="!profileForm.dirty || savingChanges()"></p-button>
         </div>
       </form>
-      @if (savingChanges()) {
-        <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
-      }
-      <div class="form-label" [class.disabled]="sharedService.loading() || savingChanges()">Business Info</div>
-      <form [formGroup]="businessForm" [class.disabled]="sharedService.loading() || savingChanges()" (ngSubmit)="saveBusinessChanges()">
+
+      <div class="form-label" [class.disabled]="sharedService.loading()">Business Info</div>
+      <form [formGroup]="businessForm" [class.disabled]="sharedService.loading()" (ngSubmit)="saveBusinessChanges()">
         @if (authService.coreBusinessData()?.avatarUrl) {
-          <div class="avatar-container">
+          <div class="avatar-container" [class.disabled]="savingBusinessChanges()">
             <img class="avatar" [ngSrc]="authService.coreBusinessData()?.avatarUrl || ''" alt="avatar" width="150" height="150" draggable="false">
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('business')"></i>
           </div>
         } @else {
-          <div class="avatar-container">
+          <div class="avatar-container" [class.disabled]="savingBusinessChanges()">
             <img class="avatar" ngSrc="/assets/images/avatars/default-business-avatar.png" alt="avatar" width="150" height="150" draggable="false">
             <i class="pi pi-pencil" (click)="triggerAvatarUpload('business')"></i>
           </div>
         }
-        <div class="input-container" [class.disabled]="sharedService.loading()">
+        <div class="input-container" [class.disabled]="sharedService.loading() || savingBusinessChanges()">
           <label for="name">Business Name:</label>
           <input id="name" type="text" pInputText variant="filled" placeholder="Business Name" formControlName="name" autocomplete="name" maxlength="44"/>
         </div>
         <div class="button-container">
-          <p-button label="Save Changes" type="submit" [disabled]="!businessForm.dirty || savingChanges()"></p-button>
-          <p-button label="Cancel" severity="secondary" (onClick)="cancelBusinessChanges()" [disabled]="!businessForm.dirty || savingChanges()"></p-button>
+          <p-button label="Save Changes" type="submit" [disabled]="!businessForm.dirty" [loading]="savingBusinessChanges()"></p-button>
+          <p-button label="Cancel" severity="secondary" (onClick)="cancelBusinessChanges()" [disabled]="!businessForm.dirty"></p-button>
         </div>
       </form>
+
+      <div class="form-label" style="margin-top: 1rem;" [class.disabled]="sharedService.loading()">Reset Your Password</div>
+      <div class="reset-password-container">
+        <span>Enter your registered email and a reset link will be sent to you.</span>
+        <input type="email" pInputText variant="filled" placeholder="Email" [(ngModel)]="emailInput" [disabled]="sendingResetEmail()"/>
+        <p-button [label]="sendingResetEmail() ? 'Sending email...' : 'Send Reset Email'" type="submit" (onClick)="sendResetLink()" [loading]="sendingResetEmail()" [disabled]="emailInput === ''"></p-button>
+      </div>
     </div>
     <tcd-avatar-upload #avatarUploadDialog [showUploadAvatarDialog]="this.sharedService.showAvatarUploadDialog()" (onSubmit)="saveAvatar($event)" [dialogLoading]="dialogLoading()" [type]="uploadAvatarType()"/>
   </div>
