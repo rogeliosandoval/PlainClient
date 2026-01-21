@@ -1,8 +1,21 @@
 <div class="container">
-  <img src="/assets/images/logo.svg" alt="logo" width="317" height="76" routerLink="/">
+  @if (sharedService.darkMode()) {
+    <img class="logo" ngSrc="/assets/images/logo-light.svg" alt="logo" width="250" height="60" draggable="false" routerLink="/">
+  } @else {
+    <img class="logo" ngSrc="/assets/images/logo.svg" alt="logo" width="250" height="60" draggable="false" routerLink="/">
+  }
   <div class="message">You need to verify your email.<br/> Check your inbox and click the verification link!</div>
   <div class="actions">
-    <p-button label="Resend Verification Email" (onClick)="resendEmail()"></p-button>
-    <p-button label="I verified! Continue" (onClick)="continue()"></p-button>
+    <p-button label="Resend Verification Email" (onClick)="resendEmail()" [loading]="sendingEmail()" [disabled]="checking()"></p-button>
+    <p-button label="I verified! Continue" (onClick)="continue()" [loading]="checking()" [disabled]="sendingEmail()"></p-button>
   </div>
+  @if (sharedService.darkMode()) {
+    @if (message()) {
+      <span [style.color]="message() === 'Email has been sent!' ? '#48df57' : '#fc6363'">{{message()}}</span>
+    }
+  } @else {
+    @if (message()) {
+      <span [style.color]="message() === 'Email has been sent!' ? '#06a506' : 'red'">{{message()}}</span>
+    }
+  }
 </div>
