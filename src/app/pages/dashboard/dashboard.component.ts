@@ -422,8 +422,8 @@ export class Dashboard implements OnInit {
             this.dialogLoading.set(false)
             this.messageService.add({
               severity: 'success',
-              summary: 'Success',
-              detail: 'Business name has been added!',
+              summary: 'Account Created!',
+              detail: 'Welcome to TidyClient :)',
               key: 'br',
               life: 4000,
             })

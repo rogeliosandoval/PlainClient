@@ -71,7 +71,10 @@ export class BusinessSignup implements OnInit {
         await setDoc(userRef, {
           uid: uid,
           name: formData.name,
-          email: formData.email
+          email: formData.email,
+          joiningBusiness: true,
+          provider: 'password',
+          createdAt: new Date().toISOString()
         })
       })
       .then(() => {
@@ -81,7 +84,7 @@ export class BusinessSignup implements OnInit {
         this.sharedService.loading.set(false)
       })
       .then(() => {
-        this.router.navigateByUrl('/dashboard/overview')
+        this.router.navigateByUrl('/verify-email')
       })
       .catch(err => {
         if (err.message == 'Firebase: Error (auth/email-already-in-use).') {
