@@ -74,6 +74,7 @@ export class BusinessSignup implements OnInit {
           email: formData.email,
           joiningBusiness: true,
           provider: 'password',
+          businessIdRef: this.businessId,
           createdAt: new Date().toISOString()
         })
       })

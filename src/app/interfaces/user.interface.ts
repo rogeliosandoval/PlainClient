@@ -7,7 +7,9 @@ export interface UserData {
   name: string
   phone?: string
   position?: string
-  uid: string
+  uid: string,
+  joiningBusiness?: boolean,
+  businessIdRef?: string
 }
 
 export interface BusinessData {
