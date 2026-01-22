@@ -21,3 +21,5 @@ TODOS:
 - add logic to search bar
 
 - fix bug when joining business, exiting app and coming back
+
+- fix bug when someone joins a business, if they refresh during popup it goes back to welcome

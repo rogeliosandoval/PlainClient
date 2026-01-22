@@ -113,8 +113,10 @@ export class Dashboard implements OnInit {
     await this.authService.fetchCoreBusinessData()
     .then(async () => {
       if (!this.authService.coreUserData()?.businessId) {
+        console.log('the POP FORM IS HERE')
         this.showStartupFormDialog.set(true)
       } else {
+        console.log('the POP FORM IS NOT HERE')
         if (this.sharedService.fromLogin()) {
           await this.authService.fetchPersonalProfits()
           await this.authService.fetchBusinessProfits()
