@@ -124,6 +124,17 @@ export class Signup implements OnInit {
     })
     .then(async () => {
       await reload(this.authService.firebaseAuth.currentUser!)
+      await this.authService.fetchCoreUserData()
+
+      if (this.authService.coreUserData()?.joiningBusiness === true) {
+        this.authService.clearBusinessDataCache.set(false)
+        this.sharedService.newMemberJoining.set(true)
+        this.sharedService.newMemberJoiningBusinessId = this.authService.coreUserData()?.businessIdRef as string
+      } else if (!this.authService.coreUserData()?.businessId) {
+        this.authService.clearBusinessDataCache.set(false)
+      } else {
+        this.authService.clearBusinessDataCache.set(true)
+      }
       this.authService.clearAllAppCaches()
       this.sharedService.loading.set(false)
       this.router.navigateByUrl('/dashboard/overview')

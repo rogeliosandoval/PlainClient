@@ -113,7 +113,6 @@ export class Overview implements OnInit, AfterViewInit {
         this.weatherLocation = response.location
         this.weatherToday = response.forecast.forecastday[0]
         this.weatherTwoDayForecast = response.forecast.forecastday.slice(1)
-        console.log(response)
       },
       complete: () => {
         this.fetchingWeather.set(false)

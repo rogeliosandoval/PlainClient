@@ -47,7 +47,7 @@ export class VerifyEmail implements OnInit {
 
   public async continue(): Promise<void> {
     this.checking.set(true)
-    await reload(this.auth.currentUser!) //Test this, i moved it here but havent tested. see if it works
+    await reload(this.auth.currentUser!)
     await this.authService.fetchCoreUserData()
     .then(() => {
       if (this.authService.coreUserData()?.joiningBusiness) {
@@ -56,7 +56,7 @@ export class VerifyEmail implements OnInit {
       }
     })
     .then(() => {
-      this.authService.clearAllAppCaches()
+      this.authService.clearBusinessDataCache.set(false)
     })
     if (this.auth.currentUser?.emailVerified) {
       this.router.navigateByUrl('/dashboard')

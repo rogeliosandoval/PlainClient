@@ -19,7 +19,3 @@ TODOS:
 - design team members page once they are in. most logic is already in place, just need to design it
 
 - add logic to search bar
-
-- fix bug when joining business, exiting app and coming back
-
-- fix bug when someone joins a business, if they refresh during popup it goes back to welcome

@@ -65,10 +65,9 @@ export class Login implements OnInit {
     setTimeout(() => {
       if (formData.checked?.includes('yes')) {
         this.sharedService.fromLogin.set(true)
-        this.authService.clearBusinessDataCache.set(true)
         this.authService.loginWithLocalPersistence(formData.email!, formData.password!).subscribe({
-          next: () => {
-            this.sharedService.loading.set(false)
+          next: async () => {
+            await this.authService.fetchCoreUserData()
           },
           error: err => {
             if (err.message == 'Firebase: Error (auth/invalid-credential).') {
@@ -81,21 +80,31 @@ export class Login implements OnInit {
           complete: async () => {
             await reload(this.auth.currentUser!)
 
-            if (!this.auth.currentUser?.emailVerified) {
-              this.router.navigateByUrl('/verify-email')
-              return
+            await this.authService.fetchCoreUserData()
+
+            if (this.authService.coreUserData()?.joiningBusiness === true) {
+              this.authService.clearBusinessDataCache.set(false)
+              this.sharedService.newMemberJoining.set(true)
+              this.sharedService.newMemberJoiningBusinessId = this.authService.coreUserData()?.businessIdRef as string
+            } else {
+              this.authService.clearBusinessDataCache.set(true)
             }
 
-            this.router.navigateByUrl('/dashboard')
+            setTimeout(() => {
+              if (!this.auth.currentUser?.emailVerified) {
+                this.router.navigateByUrl('/verify-email')
+                return
+              }
+  
+              this.router.navigateByUrl('/dashboard')
+              this.sharedService.loading.set(false)
+            }, 500)
           }
         })
       } else {
         this.sharedService.fromLogin.set(true)
         this.authService.clearBusinessDataCache.set(true)
         this.authService.loginWithSessionPersistence(formData.email!, formData.password!).subscribe({
-          next: () => {
-            this.sharedService.loading.set(false)
-          },
           error: err => {
             if (err.message == 'Firebase: Error (auth/invalid-credential).') {
               this.errorMessage.set('Wrong email or password. Please try again.')
@@ -107,12 +116,25 @@ export class Login implements OnInit {
           complete: async () => {
             await reload(this.auth.currentUser!)
 
-            if (!this.auth.currentUser?.emailVerified) {
-              this.router.navigateByUrl('/verify-email')
-              return
+            await this.authService.fetchCoreUserData()
+
+            if (this.authService.coreUserData()?.joiningBusiness === true) {
+              this.authService.clearBusinessDataCache.set(false)
+              this.sharedService.newMemberJoining.set(true)
+              this.sharedService.newMemberJoiningBusinessId = this.authService.coreUserData()?.businessIdRef as string
+            } else {
+              this.authService.clearBusinessDataCache.set(true)
             }
 
-            this.router.navigateByUrl('/dashboard')
+            setTimeout(() => {
+              if (!this.auth.currentUser?.emailVerified) {
+                this.router.navigateByUrl('/verify-email')
+                return
+              }
+  
+              this.router.navigateByUrl('/dashboard')
+              this.sharedService.loading.set(false)
+            }, 500)
           }
         })
       }
@@ -182,6 +204,17 @@ export class Login implements OnInit {
     })
     .then(async () => {
       await reload(this.authService.firebaseAuth.currentUser!)
+      await this.authService.fetchCoreUserData()
+
+      if (this.authService.coreUserData()?.joiningBusiness === true) {
+        this.authService.clearBusinessDataCache.set(false)
+        this.sharedService.newMemberJoining.set(true)
+        this.sharedService.newMemberJoiningBusinessId = this.authService.coreUserData()?.businessIdRef as string
+      } else if (!this.authService.coreUserData()?.businessId) {
+        this.authService.clearBusinessDataCache.set(false)
+      } else {
+        this.authService.clearBusinessDataCache.set(true)
+      }
       this.authService.clearAllAppCaches()
       this.sharedService.loading.set(false)
       this.router.navigateByUrl('/dashboard/overview')

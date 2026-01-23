@@ -113,10 +113,12 @@ export class Dashboard implements OnInit {
     await this.authService.fetchCoreBusinessData()
     .then(async () => {
       if (!this.authService.coreUserData()?.businessId) {
-        console.log('the POP FORM IS HERE')
+        if (this.authService.coreUserData()?.joiningBusiness) {
+          this.sharedService.newMemberJoining.set(true)
+          this.sharedService.newMemberJoiningBusinessId = this.authService.coreUserData()?.businessIdRef as string
+        }
         this.showStartupFormDialog.set(true)
       } else {
-        console.log('the POP FORM IS NOT HERE')
         if (this.sharedService.fromLogin()) {
           await this.authService.fetchPersonalProfits()
           await this.authService.fetchBusinessProfits()
@@ -455,7 +457,8 @@ export class Dashboard implements OnInit {
 
             // 1️⃣ Assign businessId to user
             await setDoc(userRef, {
-              businessId
+              businessId,
+              joiningBusiness: false
             }, { merge: true })
 
             // 2️⃣ Increment business member count
