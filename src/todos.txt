@@ -19,3 +19,7 @@ TODOS:
 - design team members page once they are in. most logic is already in place, just need to design it
 
 - add logic to search bar
+
+- implement the option to show business profits on chartjs
+
+- include history on profits (ex: last updated by <user> at <time>)
