@@ -553,17 +553,19 @@ export class AuthService {
   }
 
   // Team Members
-  async addTeamMember(formData: any): Promise<void> {
-    const memberId = uuidv4()
+  async addTeamMember(data: any): Promise<void> {
+    const memberId = data.id
     const businessId = this.coreUserData()?.businessId
     const memberRef = doc(this.firestore, `businesses/${businessId}/team/${memberId}`)
 
     const newMember = {
-      id: memberId,
-      name: formData.member_name,
-      position: formData.member_position,
-      email: formData.member_email,
-      phone: formData.member_phone,
+      id: data.id,
+      name: data.name,
+      position: data.position,
+      email: data.email,
+      phone: data.phone,
+      location: data.location,
+      message: data.message,
       createdAt: new Date().toISOString()
     }
 

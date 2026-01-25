@@ -53,7 +53,7 @@
       <div class="team-mates small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
         <i class="pi pi-face-smile main-pi" style="background-color: rgb(223, 205, 255);"></i>
         <div class="small-widget__info">
-          <strong>0</strong>
+          <strong>{{ authService.coreBusinessData()?.members }}</strong>
           <span>Team Members</span>
         </div>
       </div>
