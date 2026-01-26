@@ -282,7 +282,6 @@ export class AccountSettings implements OnInit {
     this.savingChanges.set(true)
     const formData = this.profileForm.getRawValue()
 
-    console.log(formData)
     await this.authService.addTeamMember(formData)
 
     setTimeout(() => {

@@ -416,6 +416,17 @@ export class Dashboard implements OnInit {
           await this.authService.fetchCoreUserData()
 
           await this.authService.fetchCoreBusinessData()
+
+          const teamMemberData = {
+            id: this.authService.coreUserData()?.uid,
+            name: this.authService.coreUserData()?.name,
+            position: '',
+            email: this.authService.coreUserData()?.email,
+            phone: '',
+            location: '',
+            message: ''
+          }
+          await this.authService.addTeamMember(teamMemberData)
           .then(() => {
             this.showStartupFormDialog.set(false)
             this.sharedService.hardLoading.set(false)
@@ -469,8 +480,19 @@ export class Dashboard implements OnInit {
             // 3️⃣ Clear & refetch cached data
             this.authService.clearBusinessDataCache.set(true)
 
+            const teamMemberData = {
+              id: this.authService.coreUserData()?.uid,
+              name: this.authService.coreUserData()?.name,
+              position: '',
+              email: this.authService.coreUserData()?.email,
+              phone: '',
+              location: '',
+              message: ''
+            }
+
             await this.authService.fetchCoreUserData()
             await this.authService.fetchCoreBusinessData()
+            await this.authService.addTeamMember(teamMemberData)
             await this.authService.fetchBusinessProfits()
             await this.authService.fetchBusinessTasks().then(() => {
               this.showStartupFormDialog.set(false)

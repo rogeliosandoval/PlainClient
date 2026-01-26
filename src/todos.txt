@@ -23,3 +23,7 @@ TODOS:
 - implement the option to show business profits on chartjs
 
 - include history on profits (ex: last updated by <user> at <time>)
+
+- add to account settings an option to join a business / logic and all
+
+- implement a guard for when someone is joining a business but modifies the url. Maybe put flag to check if businessid exists, if not then throw an err
