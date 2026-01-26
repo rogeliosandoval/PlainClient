@@ -72,32 +72,32 @@ export class TeamMembers implements OnInit {
     }
   }
 
-  // public async onSubmit(data: StandardFormData): Promise<void> {
-  //   this.dialogLoading.set(true)
+  public async onSubmit(data: StandardFormData): Promise<void> {
+    this.dialogLoading.set(true)
 
-  //   try {
-  //     await this.authService.addTeamMember(data.formData)
-  //     this.messageService.add({
-  //       severity: 'success',
-  //       summary: 'Success',
-  //       detail: 'Team member has been added!',
-  //       key: 'br',
-  //       life: 4000
-  //     })
-  //     this.dialogLoading.set(false)
-  //     this.showMemberFormDialog.set(false)
-  //   } catch (error) {
-  //     console.log(error)
-  //     this.messageService.add({
-  //       severity: 'error',
-  //       summary: 'Error',
-  //       detail: 'There was an error deleting contact. Try again.',
-  //       key: 'br',
-  //       life: 4000,
-  //     })
-  //     this.dialogLoading.set(false)
-  //   }
-  // }
+    try {
+      await this.authService.addTeamMember(data.formData)
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Team member has been added!',
+        key: 'br',
+        life: 4000
+      })
+      this.dialogLoading.set(false)
+      this.showMemberFormDialog.set(false)
+    } catch (error) {
+      console.log(error)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'There was an error deleting contact. Try again.',
+        key: 'br',
+        life: 4000,
+      })
+      this.dialogLoading.set(false)
+    }
+  }
 
   public onDialogClose(newState: boolean) {
     this.emailSent.set(false)

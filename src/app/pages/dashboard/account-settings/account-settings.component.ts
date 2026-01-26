@@ -51,6 +51,7 @@ export class AccountSettings implements OnInit {
   public uploadAvatarType = signal<string>('')
   public defaultProfileForm: any
   public profileForm = new FormGroup({
+    id: new FormControl(this.authService.coreUserData()?.uid),
     name: new FormControl(this.authService.coreUserData()?.name),
     email: new FormControl({ value: this.authService.coreUserData()?.email, disabled: true}),
     position: new FormControl(this.authService.coreUserData()?.position),
@@ -277,9 +278,12 @@ export class AccountSettings implements OnInit {
     this.businessForm.markAsPristine()
   }
 
-  public saveProfileChanges(): void {
+  public async saveProfileChanges(): Promise<void> {
     this.savingChanges.set(true)
-    const formData = this.profileForm.value
+    const formData = this.profileForm.getRawValue()
+
+    console.log(formData)
+    await this.authService.addTeamMember(formData)
 
     setTimeout(() => {
       this.authService.user$
