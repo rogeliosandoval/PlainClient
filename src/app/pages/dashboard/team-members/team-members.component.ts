@@ -28,7 +28,7 @@ export class TeamMembers implements OnInit {
   public emailSent = signal<boolean>(false)
 
   ngOnInit(): void {
-
+    console.log(this.sharedService.teamMembers())
   }
 
   public async onNewSubmit(data: any): Promise<void> {

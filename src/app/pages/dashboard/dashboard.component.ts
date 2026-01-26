@@ -124,7 +124,7 @@ export class Dashboard implements OnInit {
           await this.authService.fetchBusinessProfits()
           await this.authService.fetchBusinessTasks()
           await this.authService.fetchPersonalTasks()
-          // await this.addIncomeExpenseToArray()
+          await this.authService.fetchTeamMembers()
           this.sharedService.fromLogin.set(false)
           this.sharedService.showOverview.set(true)
         } else {
@@ -132,7 +132,6 @@ export class Dashboard implements OnInit {
           this.authService.loadBusinessProfits()
           this.authService.loadBusinessTasks()
           this.authService.loadPersonalTasks()
-          // await this.addIncomeExpenseToArray()
           this.sharedService.showOverview.set(true)
         }
       }
@@ -427,6 +426,7 @@ export class Dashboard implements OnInit {
             message: ''
           }
           await this.authService.addTeamMember(teamMemberData)
+          await this.authService.fetchTeamMembers()
           .then(() => {
             this.showStartupFormDialog.set(false)
             this.sharedService.hardLoading.set(false)
@@ -493,6 +493,7 @@ export class Dashboard implements OnInit {
             await this.authService.fetchCoreUserData()
             await this.authService.fetchCoreBusinessData()
             await this.authService.addTeamMember(teamMemberData)
+            await this.authService.fetchTeamMembers()
             await this.authService.fetchBusinessProfits()
             await this.authService.fetchBusinessTasks().then(() => {
               this.showStartupFormDialog.set(false)

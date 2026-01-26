@@ -604,6 +604,52 @@ export class AuthService {
     }
   }
 
+  async fetchTeamMembers(): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const teamRef = collection(
+      this.firestore,
+      `businesses/${businessId}/team`
+    )
+
+    try {
+      const snapshot = await getDocs(teamRef)
+
+      const members = snapshot.docs
+      .map(doc => doc.data())
+      .sort((a: any, b: any) =>
+        b.createdAt.localeCompare(a.createdAt)
+      )
+
+      // ----------------------------
+      // 1️⃣ Update SharedService signal
+      // ----------------------------
+      this.sharedService.teamMembers.set(members)
+
+      // ----------------------------
+      // 2️⃣ Sync into coreBusinessDataCache (optional but consistent)
+      // ----------------------------
+      const cacheKey = 'coreBusinessDataCache'
+      const cached = localStorage.getItem(cacheKey)
+
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached)
+          parsed.team = members
+          localStorage.setItem(cacheKey, JSON.stringify(parsed))
+          this.coreBusinessData.set(parsed)
+        } catch (err) {
+          console.warn('[fetchTeamMembers] Failed to sync cache', err)
+        }
+      }
+
+      console.log('✅ Team members fetched:', members.length)
+    } catch (error) {
+      console.error('[fetchTeamMembers] Failed to fetch team members ❌', error)
+    }
+  }
+
   // Personal Profit Logic
   async addPersonalProfit(formData: any): Promise<void> {
     const uid = this.coreUserData()?.uid
