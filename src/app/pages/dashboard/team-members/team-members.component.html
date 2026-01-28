@@ -4,11 +4,13 @@
       <p-button label="Add Member +" (onClick)="showMemberFormDialog.set(true)"></p-button>
       @for (member of sharedService.teamMembers(); track member.id) {
         <div class="member" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
-          <!-- <img src="/assets/images/avatars/personal-avatar.jpeg" alt="avatar"> -->
           @if (member?.avatarUrl) {
-            <img [ngSrc]="member.avatarUrl || ''" alt="avatar" width="200" height="200" draggable="false" priority>
+            <img [ngSrc]="member.avatarUrl || ''" alt="avatar" width="170" height="170" draggable="false" (load)="imageLoaded[member.id] = true" priority>
+            @if (!imageLoaded[member.id]) {
+              <p-skeleton width="170px" height="170px"/>
+            }
           } @else {
-            <img ngSrc="assets/images/avatars/default-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
+            <img ngSrc="assets/images/avatars/default-avatar.png" alt="avatar" width="170" height="170" draggable="false" priority>
           }
           <div class="member-info">
             <div class="member-info__name">{{ member.name }}</div>

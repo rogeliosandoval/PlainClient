@@ -7,6 +7,7 @@ import { SharedService } from '../../../services/shared.service'
 import { StandardFormData } from '../../../interfaces/other.interface'
 import emailjs from 'emailjs-com'
 import { NgOptimizedImage } from '@angular/common'
+import { SkeletonModule } from 'primeng/skeleton'
 
 @Component({
   selector: 'tc-team-members',
@@ -14,7 +15,8 @@ import { NgOptimizedImage } from '@angular/common'
   imports: [
     ButtonModule,
     MemberFormDialog,
-    NgOptimizedImage
+    NgOptimizedImage,
+    SkeletonModule
   ],
   templateUrl: './team-members.component.html',
   styleUrl: './team-members.component.scss'
@@ -28,6 +30,7 @@ export class TeamMembers implements OnInit {
   public dialogLoading = signal<boolean>(false)
   public messageService = inject(MessageService)
   public emailSent = signal<boolean>(false)
+  public imageLoaded: Record<string, boolean> = {}
 
   ngOnInit(): void {
     console.log(this.sharedService.teamMembers())

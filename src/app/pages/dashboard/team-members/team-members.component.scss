@@ -61,6 +61,11 @@
     }
   }
 
+  p-skeleton {
+    position: absolute;
+    left: 1rem;
+  }
+
   @include variables.media('tablet') {
     flex-direction: column;
   }
