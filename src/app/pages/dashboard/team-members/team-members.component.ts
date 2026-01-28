@@ -6,13 +6,15 @@ import { MessageService } from 'primeng/api'
 import { SharedService } from '../../../services/shared.service'
 import { StandardFormData } from '../../../interfaces/other.interface'
 import emailjs from 'emailjs-com'
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'tc-team-members',
   standalone: true,
   imports: [
     ButtonModule,
-    MemberFormDialog
+    MemberFormDialog,
+    NgOptimizedImage
   ],
   templateUrl: './team-members.component.html',
   styleUrl: './team-members.component.scss'

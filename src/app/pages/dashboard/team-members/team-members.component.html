@@ -1,6 +1,25 @@
 <div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   @if (sharedService.teamMembers().length > 0) {
-    There are team members
+    <div class="member-container">
+      <p-button label="Add Member +" (onClick)="showMemberFormDialog.set(true)"></p-button>
+      @for (member of sharedService.teamMembers(); track member.id) {
+        <div class="member" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+          <!-- <img src="/assets/images/avatars/personal-avatar.jpeg" alt="avatar"> -->
+          @if (member?.avatarUrl) {
+            <img [ngSrc]="member.avatarUrl || ''" alt="avatar" width="200" height="200" draggable="false" priority>
+          } @else {
+            <img ngSrc="assets/images/avatars/default-avatar.png" alt="avatar" width="200" height="200" draggable="false" priority>
+          }
+          <div class="member-info">
+            <div class="member-info__name">{{ member.name }}</div>
+            <div class="member-info__position" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ member.position }}</div>
+            <div class="member-info__phone"><i class="pi pi-phone"></i> {{ member.phone }}</div>
+            <div class="member-info__email"><i class="pi pi-envelope"></i> {{ member.email }}</div>
+            <div class="member-info__location"><i class="pi pi-map-marker"></i> {{ member.location }}</div>
+          </div>
+        </div>
+      }
+    </div>
   } @else {
     <div class="no-team-members">
       <img src="/assets/images/team.webp" alt="no team members" draggable="false" width="230" height="205" priority>
