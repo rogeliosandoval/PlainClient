@@ -12,12 +12,14 @@ TODOS:
 
 - implement timeout session
 
-- implement inbox logic/add more settings to account-settings (like delete cloud function) and inbox
+- implement inbox logic
 
 - add logic to search bar
 
 - implement the option to show business profits on chartjs
 
 - include history on profits (ex: last updated by <user> at <time>)
+
+- implement cloud function logic to delete a team member (needs to update storage, arrays, etc)
 
 - implement a guard for when someone is joining a business but modifies the url. Maybe put flag to check if businessid exists, if not then throw an err
