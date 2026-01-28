@@ -73,7 +73,38 @@
         </div>
       </form>
 
-      <div class="form-label" style="margin-top: 1rem;" [class.disabled]="sharedService.loading()">Reset Your Password</div>
+      <div class="form-label" style="margin-top: 1.2rem;" [class.disabled]="sharedService.loading()">Verified Emails to Join Your Business</div>
+
+      @if (showVerifiedEmails() ) {
+        @if (showEmailInput()) {
+          <p-inputGroup class="email-add-input" [class.disabled]="loadingVerifiedEmails()">
+            <button type="button" pButton [label]="loadingVerifiedEmails() ? 'Adding...' : 'Add'" (click)="addEmail()"></button>
+            <input pInputText [(ngModel)]="emailToAdd" placeholder="Enter email to verify"/>
+          </p-inputGroup>
+        }
+        <div class="verified-email-actions" [class.disabled]="loadingVerifiedEmails()">
+          @if (!showEmailInput()) {
+            <p-button label="Add Email" icon="pi pi-plus" iconPos="right" (onClick)="showEmailInput.set(true)"></p-button>
+          }
+          <p-button label="Hide Emails" icon="pi pi-eye-slash" iconPos="right" (onClick)="showVerifiedEmails.set(false)"></p-button>
+        </div>
+        @if (sharedService.verifiedEmails().length > 0) {
+          <div class="verified-emails" [class.disabled]="loadingVerifiedEmails()">
+            @for (email of sharedService.verifiedEmails(); track email) {
+              <div class="verified-email">
+                <span>{{ email }}</span>
+                <i class="pi pi-trash" (click)="deleteEmail(email)"></i>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="no-emails" [style.color]="sharedService.darkMode() ? 'rgb(255, 211, 129)' : 'rgb(215, 144, 12)'">Currently no emails are verified to join your business.</div>
+        }
+      } @else {
+        <p-button label="Show Verified Emails" icon="pi pi-eye" iconPos="right" (onClick)="showEmails()" [loading]="loadingVerifiedEmails()"></p-button>
+      }
+
+      <div class="form-label" style="margin-top: 1.2rem;" [class.disabled]="sharedService.loading()">Reset Your Password</div>
       <div class="reset-password-container">
         <span>Enter your registered email and a reset link will be sent to you.</span>
         <input type="email" pInputText variant="filled" placeholder="Email" [(ngModel)]="emailInput" [disabled]="sendingResetEmail()"/>

@@ -16,6 +16,8 @@ import { DialogModule } from 'primeng/dialog'
 import { AvatarUploadDialog } from '../../../dialogs/avatar-upload/avatar-upload.component'
 import { NgOptimizedImage } from '@angular/common'
 import { Auth, sendPasswordResetEmail } from '@angular/fire/auth'
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'tc-account-settings',
@@ -30,7 +32,9 @@ import { Auth, sendPasswordResetEmail } from '@angular/fire/auth'
     ProgressSpinnerModule,
     DialogModule,
     AvatarUploadDialog,
-    NgOptimizedImage
+    NgOptimizedImage,
+    InputGroupModule,
+    InputGroupAddonModule
   ],
   templateUrl: './account-settings.component.html',
   styleUrl: './account-settings.component.scss'
@@ -65,10 +69,37 @@ export class AccountSettings implements OnInit {
   })
   public sendingResetEmail = signal<boolean>(false)
   public emailInput: string = ''
+  public loadingVerifiedEmails = signal<boolean>(false)
+  public showVerifiedEmails = signal<boolean>(false)
+  public emailToAdd: any
+  public showEmailInput = signal<boolean>(false)
 
   ngOnInit(): void {
     this.defaultProfileForm = this.profileForm.value
     this.defaultBusinessForm = this.businessForm.value
+  }
+
+  public async addEmail(): Promise<void> {
+    this.loadingVerifiedEmails.set(true)
+    await this.authService.addVerifiedEmail(this.emailToAdd)
+    await this.authService.fetchVerifiedEmails(this.authService.coreBusinessData()?.id as string)
+    this.loadingVerifiedEmails.set(false)
+    this.showEmailInput.set(false)
+  }
+
+  public async deleteEmail(email: string): Promise<void> {
+    this.loadingVerifiedEmails.set(true)
+    await this.authService.deleteVerifiedEmail(email)
+    this.loadingVerifiedEmails.set(false)
+  }
+
+  public async showEmails(): Promise<void> {
+    this.loadingVerifiedEmails.set(true)
+    if (this.sharedService.verifiedEmails().length === 0) {
+      await this.authService.fetchVerifiedEmails(this.authService.coreBusinessData()?.id as string)
+    }
+    this.loadingVerifiedEmails.set(false)
+    this.showVerifiedEmails.set(true)
   }
 
   public sendResetLink(): void {
