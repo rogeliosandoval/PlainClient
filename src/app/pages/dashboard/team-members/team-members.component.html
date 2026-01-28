@@ -1,8 +1,12 @@
 <div class="route-container" [class.disabled]="sharedService.loading()" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
-  <div class="no-team-members">
-    <img src="/assets/images/team.webp" alt="no team members" draggable="false" width="230" height="205" priority>
-    <span>You currently have no team members. <br class="phone-break">Start adding some!</span>
-    <p-button label="Add Member +" (onClick)="showMemberFormDialog.set(true)"></p-button>
-  </div>
+  @if (sharedService.teamMembers().length > 0) {
+    There are team members
+  } @else {
+    <div class="no-team-members">
+      <img src="/assets/images/team.webp" alt="no team members" draggable="false" width="230" height="205" priority>
+      <span>You currently have no team members. <br class="phone-break">Start adding some!</span>
+      <p-button label="Add Member +" (onClick)="showMemberFormDialog.set(true)"></p-button>
+    </div>
+  }
 </div>
 <tcd-member-form #memberFormDialog [showMemberFormDialog]="showMemberFormDialog()" [emailSent]="emailSent()" (onClose)="onDialogClose($event)" (onSubmit)="onNewSubmit($event)" [dialogLoading]="dialogLoading()"></tcd-member-form>

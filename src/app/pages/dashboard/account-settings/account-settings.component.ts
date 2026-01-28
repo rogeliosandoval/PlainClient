@@ -136,6 +136,10 @@ export class AccountSettings implements OnInit {
         avatarUrl: avatarUrl
       }, { merge: true })
 
+      await this.authService.updateTeamMemberAvatar(this.authService.coreUserData()?.uid as string, avatarUrl).then(() => {
+        this.authService.fetchTeamMembers()
+      })
+
       await this.authService.fetchCoreUserData()
 
       this.messageService.add({
@@ -282,7 +286,9 @@ export class AccountSettings implements OnInit {
     this.savingChanges.set(true)
     const formData = this.profileForm.getRawValue()
 
-    await this.authService.addTeamMember(formData)
+    await this.authService.addTeamMember(formData).then(() => {
+      this.authService.fetchTeamMembers()
+    })
 
     setTimeout(() => {
       this.authService.user$

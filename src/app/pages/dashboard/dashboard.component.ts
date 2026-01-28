@@ -132,6 +132,7 @@ export class Dashboard implements OnInit {
           this.authService.loadBusinessProfits()
           this.authService.loadBusinessTasks()
           this.authService.loadPersonalTasks()
+          this.authService.getTeamMembers()
           this.sharedService.showOverview.set(true)
         }
       }

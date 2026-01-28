@@ -604,6 +604,45 @@ export class AuthService {
     }
   }
 
+  async updateTeamMemberAvatar(memberId: string, avatarUrl: string): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const memberRef = doc(
+      this.firestore,
+      `businesses/${businessId}/team/${memberId}`
+    )
+
+    // 1️⃣ Update Firestore (ONLY avatarUrl)
+    await updateDoc(memberRef, { avatarUrl })
+
+    // ----------------------------
+    // 2️⃣ Update local cache
+    // ----------------------------
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        if (Array.isArray(parsed.team)) {
+          parsed.team = parsed.team.map((member: any) =>
+            member.id === memberId
+              ? { ...member, avatarUrl }
+              : member
+          )
+
+          localStorage.setItem(cacheKey, JSON.stringify(parsed))
+          this.coreBusinessData.set(parsed)
+        }
+      } catch (e) {
+        console.warn('[updateTeamMemberAvatar] Cache update failed, refetching', e)
+        await this.fetchCoreBusinessData()
+      }
+    }
+  }
+
   async fetchTeamMembers(): Promise<void> {
     const businessId = this.coreUserData()?.businessId
     if (!businessId) return
@@ -647,6 +686,34 @@ export class AuthService {
       console.log('✅ Team members fetched:', members.length)
     } catch (error) {
       console.error('[fetchTeamMembers] Failed to fetch team members ❌', error)
+    }
+  }
+
+  getTeamMembers(): void {
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (!cached) {
+      // ❌ No cache → fetch from Firestore
+      this.fetchTeamMembers()
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(cached)
+
+      if (Array.isArray(parsed.team)) {
+        // ✅ Use cache
+        this.sharedService.teamMembers.set(parsed.team)
+        console.log('📦 Team members loaded from cache')
+        return
+      }
+
+      // Cache exists but team missing → fetch
+      this.fetchTeamMembers()
+    } catch (err) {
+      console.warn('[getTeamMembers] Cache invalid, refetching', err)
+      this.fetchTeamMembers()
     }
   }
 
