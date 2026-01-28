@@ -27,5 +27,3 @@ TODOS:
 - add to account settings an option to join a business / logic and all
 
 - implement a guard for when someone is joining a business but modifies the url. Maybe put flag to check if businessid exists, if not then throw an err
-
-- make sure to add avatar to team component to use on the DOM
