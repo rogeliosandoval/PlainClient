@@ -33,11 +33,13 @@ export class TeamMembers implements OnInit {
   public imageLoaded: Record<string, boolean> = {}
 
   ngOnInit(): void {
-    console.log(this.sharedService.teamMembers())
+
   }
 
   public async onNewSubmit(data: any): Promise<void> {
     this.dialogLoading.set(true)
+
+    await this.authService.addVerifiedEmail(data.member_email)
 
     try {
       const serviceId = 'service_wodgvrb'

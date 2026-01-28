@@ -14,10 +14,10 @@
           }
           <div class="member-info">
             <div class="member-info__name">{{ member.name }}</div>
-            <div class="member-info__position" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ member.position }}</div>
-            <div class="member-info__phone"><i class="pi pi-phone"></i> {{ member.phone }}</div>
+            <div class="member-info__position" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ member.position ? member.position : 'Team Member' }}</div>
+            <div class="member-info__phone"><i class="pi pi-phone"></i> {{ member.phone ? member.phone : 'N/A' }}</div>
             <div class="member-info__email"><i class="pi pi-envelope"></i> {{ member.email }}</div>
-            <div class="member-info__location"><i class="pi pi-map-marker"></i> {{ member.location }}</div>
+            <div class="member-info__location"><i class="pi pi-map-marker"></i> {{ member.location ? member.location : 'N/A' }}</div>
           </div>
         </div>
       }
