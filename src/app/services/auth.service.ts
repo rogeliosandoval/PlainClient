@@ -1,7 +1,7 @@
 import { Injectable, inject, signal, PLATFORM_ID, Inject } from '@angular/core'
 import { Auth, UserCredential, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut, updateProfile, user, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from '@angular/fire/auth'
 import { Observable, from } from 'rxjs'
-import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore'
+import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, increment, orderBy, query, setDoc, updateDoc, writeBatch } from '@angular/fire/firestore'
 import { Storage, deleteObject, getDownloadURL, listAll, ref } from '@angular/fire/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { UserData, BusinessData, ClientData, Contact } from '../interfaces/user.interface'
@@ -326,6 +326,12 @@ export class AuthService {
   
       // Delete client document
       await deleteDoc(clientDocRef)
+
+      const businessRef = doc(this.firestore, `businesses/${businessId}`)
+
+      await updateDoc(businessRef, {
+        numberOfClients: increment(-1)
+      })
   
       // Manually update cache
       const cacheKey = 'coreBusinessDataCache'

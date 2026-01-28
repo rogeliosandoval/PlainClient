@@ -230,6 +230,12 @@ export class Dashboard implements OnInit {
   
       // Save the new client to Firestore
       await setDoc(clientRef, newClient, { merge: true })
+
+      const businessRef = doc(this.firestore, `businesses/${businessId}`)
+
+      await updateDoc(businessRef, {
+        numberOfClients: increment(1)
+      })
   
       // Manually update cache
       const cacheKey = 'coreBusinessDataCache'

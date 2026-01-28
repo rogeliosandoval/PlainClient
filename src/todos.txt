@@ -1,7 +1,5 @@
 TODOS: 
 
-- check numberOfClients update in the database/if they delete when you delete a client
-
 - redesign register page
 
 - implement delete account in settings
@@ -14,14 +12,12 @@ TODOS:
 
 - implement timeout session
 
-- implement inbox logic/add more settings to account-settings and inbox
+- implement inbox logic/add more settings to account-settings (like delete cloud function) and inbox
 
 - add logic to search bar
 
 - implement the option to show business profits on chartjs
 
 - include history on profits (ex: last updated by <user> at <time>)
-
-- add to account settings an option to join a business / logic and all
 
 - implement a guard for when someone is joining a business but modifies the url. Maybe put flag to check if businessid exists, if not then throw an err
