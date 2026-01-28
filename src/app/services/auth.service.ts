@@ -723,6 +723,69 @@ export class AuthService {
     }
   }
 
+  async addVerifiedEmail(email: string): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId || !email) return
+
+    const emailRef = doc(
+      this.firestore,
+      `businesses/${businessId}/verifiedEmails/${email}`
+    )
+
+    await setDoc(emailRef, {
+      email,
+      verifiedAt: new Date().toISOString()
+    })
+
+    console.log('✅ Verified email added:', email)
+  }
+
+  async fetchVerifiedEmails(businessId: string): Promise<void> {
+    if (!businessId) throw new Error('INVALID_ID')
+
+    // 1️⃣ Verify business exists
+    const businessRef = doc(this.firestore, `businesses/${businessId}`)
+    const businessSnap = await getDoc(businessRef)
+
+    if (!businessSnap.exists()) {
+      throw new Error('BUSINESS_NOT_FOUND')
+    }
+
+    // 2️⃣ Fetch verified emails
+    const emailsRef = collection(
+      this.firestore,
+      `businesses/${businessId}/verifiedEmails`
+    )
+
+    const snapshot = await getDocs(emailsRef)
+    const emails = snapshot.docs.map(doc => doc.data()['email'])
+
+    this.sharedService.verifiedEmails.set(emails)
+  }
+
+  async deleteVerifiedEmail(email: string): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId || !email) return
+
+    const emailRef = doc(
+      this.firestore,
+      `businesses/${businessId}/verifiedEmails/${email}`
+    )
+
+    // 1️⃣ Delete from Firestore
+    await deleteDoc(emailRef)
+
+    // ----------------------------
+    // 2️⃣ Update SharedService signal (optional but recommended)
+    // ----------------------------
+    const current = this.sharedService.verifiedEmails()
+    this.sharedService.verifiedEmails.set(
+      current.filter(e => e !== email)
+    )
+
+    console.log('🗑️ Verified email removed:', email)
+  }
+
   // Personal Profit Logic
   async addPersonalProfit(formData: any): Promise<void> {
     const uid = this.coreUserData()?.uid

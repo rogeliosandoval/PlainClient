@@ -21,5 +21,3 @@ TODOS:
 - include history on profits (ex: last updated by <user> at <time>)
 
 - implement cloud function logic to delete a team member (needs to update storage, arrays, etc)
-
-- implement a guard for when someone is joining a business but modifies the url. Maybe put flag to check if businessid exists, if not then throw an err

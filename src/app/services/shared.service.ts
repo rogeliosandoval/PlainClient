@@ -28,6 +28,7 @@ export class SharedService {
   monthLabels: string[] = []
   showOverlay = signal<boolean>(true)
   teamMembers = signal<any[]>([])
+  verifiedEmails = signal<string[]>([])
 
   constructor(
       @Inject(PLATFORM_ID)

@@ -57,44 +57,55 @@ export class BusinessSignup implements OnInit {
     })
   }
 
-  public register(): void {
+  public async register(): Promise<void> {
     this.sharedService.loading.set(true)
     const formData = this.registerForm.value
-
-    setTimeout(() => {
-      this.sharedService.newMemberJoining.set(true)
-      this.sharedService.newMemberJoiningBusinessId = this.businessId
-      lastValueFrom(this.authService.register(formData.email!, formData.name!, formData.password!))
-      .then(async (userInfo: UserCredential) => {
-        const uid = userInfo.user.uid
-        const userRef = doc(this.firestore, `users/${uid}`)
-        await setDoc(userRef, {
-          uid: uid,
-          name: formData.name,
-          email: formData.email,
-          joiningBusiness: true,
-          provider: 'password',
-          businessIdRef: this.businessId,
-          createdAt: new Date().toISOString()
-        })
-      })
-      .then(() => {
-        this.authService.clearAllAppCaches()
-      })
-      .then(() => {
-        this.sharedService.loading.set(false)
-      })
-      .then(() => {
-        this.router.navigateByUrl('/verify-email')
-      })
-      .catch(err => {
-        if (err.message == 'Firebase: Error (auth/email-already-in-use).') {
-          this.errorMessage.set('This email is already in use. Use a different one.')
+    await this.authService.fetchVerifiedEmails(this.businessId)
+    .then(() => {
+      setTimeout(() => {
+        if (this.sharedService.verifiedEmails().includes(formData.email as string)) {
+          this.sharedService.newMemberJoining.set(true)
+          this.sharedService.newMemberJoiningBusinessId = this.businessId
+          lastValueFrom(this.authService.register(formData.email!, formData.name!, formData.password!))
+          .then(async (userInfo: UserCredential) => {
+            const uid = userInfo.user.uid
+            const userRef = doc(this.firestore, `users/${uid}`)
+            await setDoc(userRef, {
+              uid: uid,
+              name: formData.name,
+              email: formData.email,
+              joiningBusiness: true,
+              provider: 'password',
+              businessIdRef: this.businessId,
+              createdAt: new Date().toISOString()
+            })
+          })
+          .then(() => {
+            this.authService.clearAllAppCaches()
+          })
+          .then(() => {
+            this.sharedService.loading.set(false)
+          })
+          .then(() => {
+            this.router.navigateByUrl('/verify-email')
+          })
+          .catch(err => {
+            if (err.message == 'Firebase: Error (auth/email-already-in-use).') {
+              this.errorMessage.set('This email is already in use. Use a different one.')
+            } else {
+              this.errorMessage.set(err.message)
+            }
+            this.sharedService.loading.set(false)
+          })
         } else {
-          this.errorMessage.set(err.message)
+          this.errorMessage.set('This email is not verified. Use email this link was sent to or contact the owner to add your preferred email.')
+          this.sharedService.loading.set(false)
         }
-        this.sharedService.loading.set(false)
-      })
-    }, 2000)
+      }, 2000)
+    })
+    .catch(() => {
+      this.errorMessage.set('There was an error verifying the business ID, close and reopen this link and try again.')
+      this.sharedService.loading.set(false)
+    })
   }
 }
