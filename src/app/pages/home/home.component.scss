@@ -266,6 +266,7 @@
 
   img {
     max-width: 650px;
+    height: auto;
     border-radius: 15px;
     border: 5px solid #004aad;
 
@@ -293,6 +294,10 @@
     margin: 0;
     gap: 0.5rem;
   }
+}
+
+.light-border {
+  border: 5px solid #37b6ff !important;
 }
 
 .app-deets-one {

@@ -24,18 +24,26 @@
   </div>
 
   <div class="app-deets app-deets-one">
-    <img src="/assets/images/overview-light.webp" alt="clients dashboard">
+    @if (sharedService.darkMode()) {
+      <img [class.light-border]="sharedService.darkMode()" src="/assets/images/overview-dark.webp" alt="dashboard" width="650" height="374">
+    } @else {
+      <img src="/assets/images/overview-light.webp" alt="dashboard" width="650" height="374">
+    }
     <div class="app-deets__desc">
-      <p>TidyClient is a <strong>simple, easy-to-use CRM</strong> built for people who want to stay organized without the overwhelm of traditional tools. It helps you <strong>keep track of your clients, store important contact details, and manage everything</strong> in one clean, intuitive dashboard—so nothing slips through the cracks.</p>
+      <p>TidyClient is a <strong [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">simple, easy-to-use CRM</strong> built for people who want to stay organized without the overwhelm of traditional tools. It helps you <strong [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">keep track of your clients, store important contact details, and manage everything</strong> in one clean, intuitive dashboard—so nothing slips through the cracks.</p>
       <p>You can assign contacts to clients for quick reference, track tasks and expenses separately from your business, and invite team members to collaborate with full visibility into client details. TidyClient focuses on clarity, speed, and usability—giving you just what you need to run your business smoothly, without unnecessary complexity.</p>
     </div>
   </div>
 
   <div class="app-deets app-deets-two">
     <div class="app-deets__desc">
-      <p>TidyClient lets you <strong>keep your business and personal profits and tasks completely separate</strong>. Personal finances and tasks are private to you, while business data stays shared with your team—giving entrepreneurs, freelancers, and small business owners a simple way to stay organized without mixing work and life.</p>
+      <p>TidyClient lets you <strong [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">keep your business and personal profits and tasks completely separate</strong>. Personal finances and tasks are private to you, while business data stays shared with your team—giving entrepreneurs, freelancers, and small business owners a simple way to stay organized without mixing work and life.</p>
     </div>
-    <img src="/assets/images/profits-light.webp" alt="clients dashboard">
+    @if (sharedService.darkMode()) {
+      <img [class.light-border]="sharedService.darkMode()" src="/assets/images/profits-dark.webp" alt="profits page" width="650" height="374">
+    } @else {
+      <img src="/assets/images/profits-light.webp" alt="profits page" width="650" height="374">
+    }
   </div>
 
   <!-- [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" -->
