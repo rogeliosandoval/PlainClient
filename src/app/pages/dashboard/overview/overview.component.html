@@ -114,6 +114,13 @@
           <span>Notifications</span>
         </div>
       </div>
+      <div class="messages small-widget" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()">
+        <i class="pi pi-envelope main-pi" style="background-color: rgb(204, 204, 204);"></i>
+        <div class="small-widget__info">
+          <strong>0 New</strong>
+          <span>Messages</span>
+        </div>
+      </div>
     </div>
   </div>
 }
