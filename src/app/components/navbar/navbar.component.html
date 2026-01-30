@@ -1,15 +1,16 @@
 <nav class="navbar-container">
   @if (sharedService.darkMode()) {
-    <img class="logo" ngSrc="/assets/images/logo-light.svg" alt="logo" width="250" height="60" draggable="false">
+    <img class="logo" ngSrc="/assets/images/logo-light.svg" alt="logo" width="250" height="60" draggable="false" routerLink="/">
   } @else {
-    <img class="logo" ngSrc="/assets/images/logo.svg" alt="logo" width="250" height="60" draggable="false">
+    <img class="logo" ngSrc="/assets/images/logo.svg" alt="logo" width="250" height="60" draggable="false" routerLink="/">
   }
   <div class="nav-links">
     <!-- <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/home">Home</div> -->
-    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'">Pricing</div>
+    <!-- <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/about">About</div> -->
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/signup">Register</div>
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/login">Login</div>
-    <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/docs">Docs</div>
+    <!-- <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/docs">Docs</div> -->
+    <i class="pi pi-github"></i>
     @if (sharedService.darkMode() === false) {
       <i class="pi pi-moon" (click)="sharedService.toggleTheme()"></i>
     } @else {

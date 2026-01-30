@@ -25,7 +25,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 27px;
+  gap: 20px;
   font-family: "Outfit", sans-serif;
 
   @include variables.media('phone') {
@@ -53,11 +53,21 @@
   }
 }
 
+.pi-github {
+  font-size: 1.9rem;
+  transition: 0.1s linear;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+}
+
 .pi-moon {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   background-color: rgb(24, 24, 24);
   color: white;
-  padding: 11px;
+  padding: 8px;
   border-radius: 50%;
   animation: fadeIn 0.2s linear;
   transition: 0.1s linear;
@@ -69,10 +79,10 @@
 }
 
 .pi-sun {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   background-color: white;
   color: black;
-  padding: 11px;
+  padding: 8px;
   border-radius: 50%;
   animation: fadeIn 0.2s linear;
   transition: 0.1s linear;
