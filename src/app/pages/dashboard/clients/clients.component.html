@@ -27,7 +27,7 @@
               <p-menu #menu [model]="clientOptions" popup="true" appendTo="body"/>
             </div>
           </div>
-          <div class="client-name">{{ client?.name }}</div>
+          <div class="client-name" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">{{ client?.name }}</div>
           <div class="client-location">
             <i class="pi pi-map-marker"></i>
             @if (client.location) {
