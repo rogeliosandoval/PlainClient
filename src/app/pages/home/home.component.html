@@ -7,7 +7,7 @@
     <h2>Effortless Customer Management, Simplified for Small Businesses.</h2>
     <div class="button-container">
       <button class="sub-button" routerLink="/signup">Register</button>
-      <button class="main-button">Watch Demo</button>
+      <button class="main-button">Learn More</button>
     </div>
   </section>
   
@@ -22,7 +22,32 @@
       <img class="files float" ngSrc="/assets/images/files.webp" alt="files" width="80" height="80" draggable="false">
     </div>
   </div>
-  
+
+  <div class="app-deets app-deets-one">
+    <img src="/assets/images/overview-light.webp" alt="clients dashboard">
+    <div class="app-deets__desc">
+      <p>TidyClient is a <strong>simple, easy-to-use CRM</strong> built for people who want to stay organized without the overwhelm of traditional tools. It helps you <strong>keep track of your clients, store important contact details, and manage everything</strong> in one clean, intuitive dashboard—so nothing slips through the cracks.</p>
+      <p>You can assign contacts to clients for quick reference, track tasks and expenses separately from your business, and invite team members to collaborate with full visibility into client details. TidyClient focuses on clarity, speed, and usability—giving you just what you need to run your business smoothly, without unnecessary complexity.</p>
+    </div>
+  </div>
+
+  <div class="app-deets app-deets-two">
+    <div class="app-deets__desc">
+      <p>TidyClient lets you <strong>keep your business and personal profits and tasks completely separate</strong>. Personal finances and tasks are private to you, while business data stays shared with your team—giving entrepreneurs, freelancers, and small business owners a simple way to stay organized without mixing work and life.</p>
+    </div>
+    <img src="/assets/images/profits-light.webp" alt="clients dashboard">
+  </div>
+
+  <!-- [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" -->
+  <div class="quick-bio">
+    <img src="/assets/images/avatars/roger-headshot.png" alt="roger sandoval ceo" width="290" height="290">
+    <div class="quick-bio__desc">
+      <strong>👋 I’m Roger, <br class="phone-break"/>the creator of TidyClient.</strong>
+      <p>I built this because I needed a simple way to track clients while keeping my personal tasks and expenses separate from my business—without all the CRM clutter. It helped me stay organized, so I made it free for anyone to use!</p>
+      <p>Find a bug or have a question? Reach out to me at: <a href="mailto:rogelio.g.sandoval@gmail.com">rogelio.g.sandoval&#64;gmail.com</a></p>
+    </div>
+  </div>
+
   <section class="testimonials">
     <!-- <h2 class="testimonials-title">What Our Users Say</h2> -->
     <div class="testimonials-container">
@@ -36,7 +61,7 @@
       <div class="testimonial-box" [class.dark-testimonial-box]="sharedService.darkMode()">
         <p class="review">"The interface is so intuitive. I didn't need a tutorial to get started!"</p>
         <div class="reviewer">
-          <span class="name">John Doe</span>
+          <span class="name">Hannah Fikes</span>
           <div class="stars">★★★★★</div>
         </div>
       </div>
