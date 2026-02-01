@@ -17,7 +17,7 @@ import { filter } from 'rxjs'
 })
 
 export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLElement>
+  @ViewChild('scrollContainer') scrollContainer?: ElementRef<HTMLElement>
 
   public authService = inject(AuthService)
   public sharedService = inject(SharedService)
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         if (!this.router.url.startsWith('/dashboard')) {
-          this.scrollContainer.nativeElement.scrollTo({
+          this.scrollContainer?.nativeElement.scrollTo({
             top: 0,
             left: 0,
             behavior: 'auto'
