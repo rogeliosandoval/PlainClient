@@ -23,6 +23,8 @@
     </div>
   </div>
 
+  <div class="subtitle" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Personal/Business Management, Keep Them Separate</div>
+
   <div class="app-deets app-deets-one">
     @if (sharedService.darkMode()) {
       <img [class.light-border]="sharedService.darkMode()" src="/assets/images/overview-dark.webp" alt="dashboard" width="650" height="374">
