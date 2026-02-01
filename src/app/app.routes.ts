@@ -18,6 +18,8 @@ import { ClientDetails } from './pages/dashboard/clients/client-details/client-d
 import { BusinessSignup } from './pages/business-signup/business-signup.component'
 import { VerifyEmail } from './pages/verify-email/verify-email.component'
 import { EmailVerifiedGuard } from './guards/emailverified.guard'
+import { PrivacyPolicy } from './pages/privacy-policy/privacy-policy.component'
+import { Terms } from './pages/terms/terms.component'
 
 export const routes: Routes = [
   {
@@ -25,6 +27,16 @@ export const routes: Routes = [
     component: Home,
     canActivate: [AuthNonuserGuard],
     pathMatch: 'full'
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacyPolicy,
+    canActivate: [AuthNonuserGuard]
+  },
+  {
+    path: 'terms',
+    component: Terms,
+    canActivate: [AuthNonuserGuard]
   },
   {
     path: 'signup',

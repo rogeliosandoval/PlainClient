@@ -1,10 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { SharedService } from '../../services/shared.service';
+import { Component, inject } from '@angular/core'
+import { SharedService } from '../../services/shared.service'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'tc-footer',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'
 })
