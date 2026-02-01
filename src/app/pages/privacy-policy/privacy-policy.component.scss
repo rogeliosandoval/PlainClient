@@ -1,0 +1,78 @@
+@use '../../../variables.scss' as variables;
+
+.privacy-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  animation: fadeIn 0.2s linear;
+
+  @include variables.media('phone') {
+    padding: 20px 15px;
+  }
+}
+
+.privacy-content {
+  max-width: 900px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px; // tighter overall spacing
+  font-family: "Outfit", sans-serif;
+}
+
+.page-title {
+  font-size: 2.4rem;
+  font-weight: 600;
+
+  @include variables.media('phone') {
+    font-size: 2rem;
+  }
+}
+
+.updated-date {
+  font-size: 1rem;
+  opacity: 0.6;
+
+  @include variables.media('phone') {
+    font-size: 0.9rem;
+  }
+}
+
+.subtitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-top: 14px; // reduced spacing above titles
+  margin-bottom: 4px; // tighter title → text gap
+
+  @include variables.media('phone') {
+    font-size: 1.25rem;
+    margin-top: 12px;
+  }
+}
+
+p {
+  font-size: 1.05rem; // larger body text on desktop
+  line-height: 1.65;
+  font-weight: 400;
+
+  @include variables.media('phone') {
+    font-size: 0.95rem;
+  }
+}
+
+ul {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px; // tighter list spacing
+
+  li {
+    font-size: 1.05rem;
+    line-height: 1.6;
+
+    @include variables.media('phone') {
+      font-size: 0.95rem;
+    }
+  }
+}
