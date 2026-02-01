@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { SharedService } from '../../services/shared.service'
 import { Navbar } from '../../components/navbar/navbar.component'
@@ -21,10 +21,26 @@ import { AuthService } from '../../services/auth.service'
   styleUrl: './home.component.scss'
 })
 export class Home implements OnInit {
+  @ViewChild('detailsSection') detailsSection!: ElementRef<HTMLElement>
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
 
   ngOnInit(): void {
     this.authService.clearAllAppCaches()
+  }
+
+  scrollToDetails(): void {
+    if (!this.detailsSection) return
+
+    const scrollContainer = document.querySelector('main') as HTMLElement | null
+    if (!scrollContainer) return
+
+    const targetOffset =
+      this.detailsSection.nativeElement.offsetTop
+
+    scrollContainer.scrollTo({
+      top: targetOffset - 20, // small offset for spacing
+      behavior: 'smooth'
+    })
   }
 }

@@ -6,8 +6,6 @@ TODOS:
 
 - for reset password logic, maybe add a check to see if an email is valid within database
 
-- redesign home page and add fade in
-
 - implement add note logic to clients
 
 - implement timeout session
