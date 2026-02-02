@@ -170,7 +170,7 @@ export class AccountSettings implements OnInit {
       await this.authService.updateTeamMemberAvatar(this.authService.coreUserData()?.uid as string, avatarUrl).then(() => {
         this.authService.fetchTeamMembers()
       }).then(() => {
-        this.authService.getTeamMembers()
+        this.authService.loadTeamMembers()
       })
 
       await this.authService.fetchCoreUserData()

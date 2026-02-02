@@ -29,6 +29,8 @@ export class SharedService {
   showOverlay = signal<boolean>(true)
   teamMembers = signal<any[]>([])
   verifiedEmails = signal<string[]>([])
+  plan = signal<string>('')
+  clientNumber = signal<number>(0)
 
   constructor(
       @Inject(PLATFORM_ID)

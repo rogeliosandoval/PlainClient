@@ -112,7 +112,7 @@ export class AuthService {
     this.sharedService.personalTasks.set([])
     this.sharedService.dialogClient.set(null)
 
-    console.log('🧹 All application caches cleared')
+    // console.log('🧹 All application caches cleared')
   }
 
   async fetchCoreUserData(): Promise<void> {
@@ -243,6 +243,134 @@ export class AuthService {
       console.error('[fetchCoreBusinessData] Error fetching core business data ❌', error)
       this.coreBusinessData.set(null)
     }
+  }
+
+  async fetchBusinessPlan(): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const businessRef = doc(this.firestore, `businesses/${businessId}`)
+
+    try {
+      const snap = await getDoc(businessRef)
+      if (!snap.exists()) return
+
+      const plan = snap.data()['plan'] ?? null
+
+      // ----------------------------
+      // Update cache
+      // ----------------------------
+      const cacheKey = 'coreBusinessDataCache'
+      const cached = localStorage.getItem(cacheKey)
+
+      let parsed: any = {}
+      if (cached) {
+        try {
+          parsed = JSON.parse(cached)
+        } catch {
+          parsed = {}
+        }
+      }
+
+      parsed.plan = plan
+      localStorage.setItem(cacheKey, JSON.stringify(parsed))
+
+      // Keep in-memory store in sync
+      this.coreBusinessData.set(parsed)
+
+      // Store in SharedService
+      this.sharedService.plan.set(plan)
+
+      console.log('🔥 Business plan fetched from Firestore')
+    } catch (error) {
+      console.error('[fetchBusinessPlan] Failed ❌', error)
+    }
+  }
+
+  loadBusinessPlan(): void {
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        if (parsed.plan !== undefined) {
+          this.sharedService.plan.set(parsed.plan)
+          console.log('📦 Loaded business plan from cache')
+          return
+        }
+      } catch {
+        console.warn('[loadBusinessPlan] Cache corrupted, refetching...')
+      }
+    }
+
+    // No cache or missing plan → fetch from Firestore
+    this.fetchBusinessPlan()
+  }
+
+  async fetchBusinessClientLength(): Promise<void> {
+    const businessId = this.coreUserData()?.businessId
+    if (!businessId) return
+
+    const businessRef = doc(this.firestore, `businesses/${businessId}`)
+
+    try {
+      const snap = await getDoc(businessRef)
+      if (!snap.exists()) return
+
+      const clientNumber = snap.data()['numberOfClients'] ?? null
+
+      // ----------------------------
+      // Update cache
+      // ----------------------------
+      const cacheKey = 'coreBusinessDataCache'
+      const cached = localStorage.getItem(cacheKey)
+
+      let parsed: any = {}
+      if (cached) {
+        try {
+          parsed = JSON.parse(cached)
+        } catch {
+          parsed = {}
+        }
+      }
+
+      parsed.clientNumber = clientNumber
+      localStorage.setItem(cacheKey, JSON.stringify(parsed))
+
+      // Keep in-memory store in sync
+      this.coreBusinessData.set(parsed)
+
+      // Store in SharedService
+      this.sharedService.clientNumber.set(clientNumber)
+
+      console.log('🔥 Business clientNumber fetched from Firestore')
+    } catch (error) {
+      console.error('[fetchBusinessClientNumber] Failed ❌', error)
+    }
+  }
+
+  loadBusinessClientLength(): void {
+    const cacheKey = 'coreBusinessDataCache'
+    const cached = localStorage.getItem(cacheKey)
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached)
+
+        if (parsed.clientNumber !== undefined) {
+          this.sharedService.clientNumber.set(parsed.clientNumber)
+          console.log('📦 Loaded business ClientNumber from cache')
+          return
+        }
+      } catch {
+        console.warn('[loadBusinessClientNumber] Cache corrupted, refetching...')
+      }
+    }
+
+    // No cache or missing clientNumber → fetch from Firestore
+    this.fetchBusinessClientLength()
   }
   
   async deleteProfileAvatar(): Promise<void> {
@@ -688,14 +816,12 @@ export class AuthService {
           console.warn('[fetchTeamMembers] Failed to sync cache', err)
         }
       }
-
-      console.log('✅ Team members fetched:', members.length)
     } catch (error) {
       console.error('[fetchTeamMembers] Failed to fetch team members ❌', error)
     }
   }
 
-  getTeamMembers(): void {
+  loadTeamMembers(): void {
     const cacheKey = 'coreBusinessDataCache'
     const cached = localStorage.getItem(cacheKey)
 
@@ -711,7 +837,7 @@ export class AuthService {
       if (Array.isArray(parsed.team)) {
         // ✅ Use cache
         this.sharedService.teamMembers.set(parsed.team)
-        console.log('📦 Team members loaded from cache')
+        console.log('📦 Loaded team members from cache')
         return
       }
 

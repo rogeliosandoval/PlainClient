@@ -125,6 +125,8 @@ export class Dashboard implements OnInit {
           await this.authService.fetchBusinessTasks()
           await this.authService.fetchPersonalTasks()
           await this.authService.fetchTeamMembers()
+          await this.authService.fetchBusinessPlan()
+          await this.authService.fetchBusinessClientLength()
           this.sharedService.fromLogin.set(false)
           this.sharedService.showOverview.set(true)
         } else {
@@ -132,7 +134,9 @@ export class Dashboard implements OnInit {
           this.authService.loadBusinessProfits()
           this.authService.loadBusinessTasks()
           this.authService.loadPersonalTasks()
-          this.authService.getTeamMembers()
+          this.authService.loadTeamMembers()
+          this.authService.loadBusinessPlan()
+          this.authService.loadBusinessClientLength()
           this.sharedService.showOverview.set(true)
         }
       }
@@ -202,6 +206,12 @@ export class Dashboard implements OnInit {
   public async addClient(data: ClientFormData): Promise<void> {
     this.dialogLoading.set(true)
   
+    if (this.sharedService.plan() === 'free') {
+      this.dialogLoading.set(false)
+      alert('you cant!')
+      return
+    }
+    
     try {
       const clientId = uuidv4()
       const businessId = this.authService.coreUserData()?.businessId
@@ -411,6 +421,7 @@ export class Dashboard implements OnInit {
             id: businessId,
             name: businessName,
             numberOfClients: 0,
+            plan: 'free',
             members: 1, // Initial member count
             ownerId: uid, // Reference the owner
           })

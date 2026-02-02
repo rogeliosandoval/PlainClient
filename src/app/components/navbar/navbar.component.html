@@ -1,8 +1,8 @@
 <nav class="navbar-container">
   @if (sharedService.darkMode()) {
-    <img class="logo" ngSrc="/assets/images/logo-light.svg" alt="logo" width="250" height="60" draggable="false" routerLink="/">
+    <img class="logo" src="/assets/images/logo-light.svg" alt="logo" draggable="false" routerLink="/" width="250" height="55">
   } @else {
-    <img class="logo" ngSrc="/assets/images/logo.svg" alt="logo" width="250" height="60" draggable="false" routerLink="/">
+    <img class="logo" src="/assets/images/logo.svg" alt="logo" draggable="false" routerLink="/" width="250" height="55">
   }
   <div class="nav-links">
     <!-- <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/home">Home</div> -->
