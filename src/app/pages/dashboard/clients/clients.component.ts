@@ -137,6 +137,7 @@ export class Clients implements OnInit {
       })
       this.dialogLoading.set(false)
       this.showConfirmDialog.set(false)
+      this.authService.fetchBusinessClientLength()
     } catch (err) {
       console.log(err)
       this.dialogLoading.set(false)

@@ -206,9 +206,9 @@ export class Dashboard implements OnInit {
   public async addClient(data: ClientFormData): Promise<void> {
     this.dialogLoading.set(true)
   
-    if (this.sharedService.plan() === 'free') {
+    if (this.sharedService.plan() === 'free' && this.sharedService.clientNumber() >= 15) {
       this.dialogLoading.set(false)
-      alert('you cant!')
+      alert('You have reached your limit with the FREE plan. Upgrade to continue.')
       return
     }
     
@@ -246,6 +246,8 @@ export class Dashboard implements OnInit {
       await updateDoc(businessRef, {
         numberOfClients: increment(1)
       })
+
+      this.authService.fetchBusinessClientLength()
   
       // Manually update cache
       const cacheKey = 'coreBusinessDataCache'

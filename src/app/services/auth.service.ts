@@ -460,6 +460,8 @@ export class AuthService {
       await updateDoc(businessRef, {
         numberOfClients: increment(-1)
       })
+
+      await this.fetchBusinessClientLength()
   
       // Manually update cache
       const cacheKey = 'coreBusinessDataCache'
