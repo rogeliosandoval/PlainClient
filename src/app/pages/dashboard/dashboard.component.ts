@@ -445,7 +445,7 @@ export class Dashboard implements OnInit {
             this.messageService.add({
               severity: 'success',
               summary: 'Account Created!',
-              detail: 'Welcome to TidyClient :)',
+              detail: 'Welcome to PlainClient :)',
               key: 'br',
               life: 4000,
             })
