@@ -1,9 +1,9 @@
 <div class="login-container">
   <div class="form-container" [class.form-container-dark]="sharedService.darkMode()" [style.background-color]="sharedService.darkMode() ? '#282828' : ''">
     @if(sharedService.darkMode()) {
-      <img ngSrc="/assets/images/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
+      <img ngSrc="/assets/images/logo-light.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="329" height="74" priority>
     } @else {
-      <img ngSrc="/assets/images/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="317" height="75" priority>
+      <img ngSrc="/assets/images/logo.svg" alt="logo" routerLink="/" draggable="false" [style.pointer-events]="sharedService.loading() ? 'none' : ''" width="329" height="74" priority>
     }
     @if (forgotPassword()) {
       <form id="entry-form" [formGroup]="resetPasswordForm" (ngSubmit)="onForgot()">

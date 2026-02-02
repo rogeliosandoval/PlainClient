@@ -1,7 +1,11 @@
 <p-dialog header="{{ type === 'edit' ? 'Edit Member' : 'Add Member' }}" [modal]="true" (onHide)="closeDialog()" [(visible)]="showMemberFormDialog" [style]="{ width: '26rem' }">
   @if (!emailSent) {
-    <span class="note" style="text-align: left;" [style.color]="sharedService.darkMode() ? '#FFFFFF' : '#484848'">This will send an email to the recipient for them to register to your business.</span>
-    <form [formGroup]="newMemberForm" class="member-form" (ngSubmit)="submit()">
+    @if (this.sharedService.plan() === 'free' && sharedService.teamMembers().length >= 3) {
+      <div class="limit-message" [style.color]="sharedService.darkMode() ? 'orange' : 'rgb(190, 123, 0)'">You have reached your limit with the FREE plan. Upgrade to continue.</div>
+    } @else {
+      <span class="note" style="text-align: left;" [style.color]="sharedService.darkMode() ? '#FFFFFF' : '#484848'">This will send an email to the recipient for them to register to your business.</span>
+    }
+    <form [formGroup]="newMemberForm" class="member-form" (ngSubmit)="submit()" [class.disabled]="this.sharedService.plan() === 'free' && sharedService.teamMembers().length >= 3">
       <div class="input-group" [class.disabled]="dialogLoading()">
         <label for="member_email">Email</label>
         @if (newMemberForm.get('member_email')?.invalid && newMemberForm.get('member_email')?.dirty && newMemberForm.get('member_email')?.touched) {

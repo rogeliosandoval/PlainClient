@@ -39,6 +39,12 @@ export class TeamMembers implements OnInit {
   public async onNewSubmit(data: any): Promise<void> {
     this.dialogLoading.set(true)
 
+    if (this.sharedService.plan() === 'free' && this.sharedService.teamMembers().length >= 3) {
+      this.dialogLoading.set(false)
+      alert('You have reached your limit with the FREE plan. Upgrade to continue.')
+      return
+    }
+
     await this.authService.addVerifiedEmail(data.member_email)
 
     try {

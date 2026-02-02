@@ -6,9 +6,9 @@
     <div class="top-nav" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'" [class.disabled]="sharedService.loading()" [class.dashboard-disabled]="sharedService.hardLoading() || showStartupFormDialog()">
       <div class="top-nav-logo" routerLink="/dashboard/">
         @if (sharedService.darkMode()) {
-          <img class="logo" ngSrc="/assets/images/logo-light.svg" alt="logo" draggable="false" width="200" height="48">
+          <img class="logo" src="/assets/images/logo-light.svg" alt="logo" draggable="false" width="200" height="45">
         } @else {
-          <img class="logo" ngSrc="/assets/images/logo.svg" alt="logo" draggable="false" width="200" height="48">
+          <img class="logo" src="/assets/images/logo.svg" alt="logo" draggable="false" width="200" height="45">
         }
       </div>
       <div class="top-nav-search">

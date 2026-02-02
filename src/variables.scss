@@ -19,6 +19,18 @@ $breakpoints: (
 $theme-color-main: #004aad;
 $theme-color-main-light: #37b6ff;
 
+.limit-message {
+  display: block;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  padding-bottom: 0.5rem;
+  font-size: 1rem;
+  font-family: "Outfit", sans-serif;
+  width: 300px;
+  text-align: center;
+}
+
 .phone-break {
   display: none;
 

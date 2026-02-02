@@ -1,17 +1,5 @@
 @use '../../../variables.scss' as variables;
 
-.limit-message {
-  display: block;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  padding-bottom: 0.5rem;
-  font-size: 1rem;
-  font-family: "Outfit", sans-serif;
-  width: 300px;
-  text-align: center;
-}
-
 .first-load {
   position: absolute;
   top: 20%;
