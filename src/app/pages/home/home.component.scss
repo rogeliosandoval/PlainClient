@@ -183,6 +183,71 @@
   font-family: "Outfit", sans-serif;
 }
 
+// #region Pricing
+.pricing-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5rem auto 0;
+  gap: 4rem;
+
+  @include variables.media('tablet') {
+    flex-direction: column;
+  }
+
+  @include variables.media('phone') {
+    flex-direction: column;
+    margin-bottom: 3rem;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+}
+
+.price-block {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: column;
+  min-width: 300px;
+  font-family: "Outfit", sans-serif;
+  padding: 2rem;
+  border-radius: 15px;
+  gap: 1rem;
+}
+
+.price-block__label {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.price-block__amount {
+  font-size: 3.2rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+
+  small {
+    opacity: 0.8;
+    font-size: 1.2rem;
+  }
+}
+
+.price-block__features {
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+// #endregion
+
 // #region Testimonial Section
 .testimonials {
   font-family: Arial, sans-serif;

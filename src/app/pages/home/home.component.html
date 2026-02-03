@@ -18,8 +18,34 @@
       [style.border]="sharedService.darkMode() ? '2px solid white' : '2px solid black'">
       <div class="feature">✅ Easy To Use</div>
       <div class="feature">✅ Fast & Secure</div>
-      <div class="feature">✅ Absolutely <strong style="font-weight: bold;">FREE!</strong></div>
+      <div class="feature">✅ Get Started for <strong style="font-weight: bold;">FREE!</strong></div>
       <img class="files float" ngSrc="/assets/images/files.webp" alt="files" width="80" height="80" draggable="false">
+    </div>
+  </div>
+
+  <div class="pricing-container">
+    <div class="price-block" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+      <div class="price-block__label">Free</div>
+      <div class="price-block__amount">$0<small [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">/month</small></div>
+      <div class="price-block__features">
+        <div>✅ <span>Up to 15 clients</span></div>
+        <div>✅ <span>3 users</span></div>
+        <div>✅ <span>Up to 10 tasks</span></div>
+        <div>✅ <span>Unlimited profit items</span></div>
+      </div>
+      <p-button label="Start Free" routerLink="/signup"/>
+    </div>
+
+    <div class="price-block" [style.background-color]="sharedService.darkMode() ? 'rgb(42, 42, 42)' : 'white'">
+      <div class="price-block__label">Pro</div>
+      <div class="price-block__amount">$5<small [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">/month</small></div>
+      <div class="price-block__features">
+        <div>✅ <span>Unlimited clients</span></div>
+        <div>✅ <span>Unlimited users</span></div>
+        <div>✅ <span>Unlimited tasks</span></div>
+        <div>✅ <span>Unlimited profit items</span></div>
+      </div>
+      <p-button label="Upgrade Plan" disabled/>
     </div>
   </div>
 

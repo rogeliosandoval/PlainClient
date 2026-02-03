@@ -6,6 +6,8 @@ import { RouterLink } from '@angular/router'
 import { Footer } from '../../components/footer/footer.component'
 import { NgOptimizedImage } from '@angular/common'
 import { AuthService } from '../../services/auth.service'
+import { ButtonModule } from 'primeng/button'
+import { PrimeNGConfig } from 'primeng/api'
 
 @Component({
   selector: 'tc-home',
@@ -15,7 +17,8 @@ import { AuthService } from '../../services/auth.service'
     Navbar,
     Footer,
     RouterLink,
-    NgOptimizedImage
+    NgOptimizedImage,
+    ButtonModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -24,9 +27,11 @@ export class Home implements OnInit {
   @ViewChild('detailsSection') detailsSection!: ElementRef<HTMLElement>
   public sharedService = inject(SharedService)
   public authService = inject(AuthService)
+  public primengConfig = inject(PrimeNGConfig)
 
   ngOnInit(): void {
     this.authService.clearAllAppCaches()
+    this.primengConfig.ripple = true
   }
 
   scrollToDetails(): void {
