@@ -52,7 +52,7 @@
       <div class="no-tasks">
         <img src="/assets/images/business-task.webp" alt="no profits" draggable="false" width="200" height="200" priority>
         <div>Keep track of your business tasks!</div>
-        <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true); this.type.set('add')"></p-button>
+        <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true); type.set('add')"></p-button>
       </div>
     }
   } @else {
@@ -102,7 +102,7 @@
       <div class="no-tasks">
         <img src="/assets/images/personal-task.webp" alt="no profits" draggable="false" width="200" height="200" priority>
         <div>Keep track of your personal tasks! <span style="font-size: 1rem;" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">(these are only visible to YOU)</span></div>
-        <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true)"></p-button>
+        <p-button label="Add Task +" (onClick)="showTaskFormDialog.set(true); type.set('add')"></p-button>
       </div>
     }
   }

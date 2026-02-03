@@ -1,5 +1,8 @@
 <p-dialog header="{{ type === 'edit' ? 'Edit Task' : 'Add Task' }}" [modal]="true" (onHide)="closeDialog()" (onShow)="editCheck()" [(visible)]="showTaskFormDialog" [style]="{ width: '26rem' }">
-  <form [formGroup]="taskForm" class="task-form" (ngSubmit)="type === 'edit' ? submitDialog('edit') : submitDialog('add')">
+  @if (this.sharedService.plan() === 'free' && ((sharedService.databaseType() === 'business') && sharedService.businessTasks().length >= 10 && type === 'add') || (sharedService.databaseType() === 'business') && sharedService.businessTasks().length >= 10 && type === 'add') {
+    <div class="limit-message" [style.color]="sharedService.darkMode() ? 'orange' : 'rgb(190, 123, 0)'">You have reached your limit with the FREE plan. Upgrade to continue.</div>
+  }
+  <form [formGroup]="taskForm" class="task-form" (ngSubmit)="type === 'edit' ? submitDialog('edit') : submitDialog('add')" [class.disabled]="this.sharedService.plan() === 'free' && ((sharedService.databaseType() === 'business') && sharedService.businessTasks().length >= 10 && type === 'add') || (sharedService.databaseType() === 'business') && sharedService.businessTasks().length >= 10 && type === 'add'">
     <div class="input-group" [class.disabled]="dialogLoading">
       <input id="name" type="text" pInputText variant="filled" placeholder="Name (optional)" formControlName="name" autocomplete="off" maxlength="40"/>
     </div>

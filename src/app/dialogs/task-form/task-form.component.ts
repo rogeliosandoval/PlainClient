@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { DialogModule } from 'primeng/dialog'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { ButtonModule } from 'primeng/button'
 import { InputTextModule } from 'primeng/inputtext'
 import { InputTextareaModule } from 'primeng/inputtextarea'
+import { SharedService } from '../../services/shared.service'
 
 @Component({
   selector: 'tcd-task-form',
@@ -23,6 +24,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
 })
 
 export class TaskFormDialog {
+  public sharedService = inject(SharedService)
   @Input() selectedTask: any
   @Input() type: string = ''
   @Input() showTaskFormDialog: boolean = false

@@ -31,6 +31,7 @@ export class SharedService {
   verifiedEmails = signal<string[]>([])
   plan = signal<string>('')
   clientNumber = signal<number>(0)
+  databaseType = signal<string>('business')
 
   constructor(
       @Inject(PLATFORM_ID)

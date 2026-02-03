@@ -68,6 +68,7 @@ export class TaskManager implements OnInit {
         command: () => {
           this.showBusinessTasks.set(true)
           this.databaseType.set('business')
+          this.sharedService.databaseType.set('business')
         }
       },
       {
@@ -76,6 +77,7 @@ export class TaskManager implements OnInit {
         command: () => {
           this.showBusinessTasks.set(false)
           this.databaseType.set('personal')
+          this.sharedService.databaseType.set('personal')
         }
       }
     ]
@@ -198,6 +200,12 @@ export class TaskManager implements OnInit {
         }
       } else {
         try {
+          if (this.sharedService.plan() === 'free' && this.sharedService.businessTasks().length >= 10) {
+            this.dialogLoading.set(false)
+            this.addingTask.set(false)
+            alert('You have reached your limit with the FREE plan. Upgrade to continue.')
+            return
+          }
           await this.authService.addBusinessTask(data.formData)
           this.showTaskFormDialog.set(false)
           this.dialogLoading.set(false)
@@ -248,6 +256,12 @@ export class TaskManager implements OnInit {
         }
       } else {
         try {
+          if (this.sharedService.plan() === 'free' && this.sharedService.personalTasks().length >= 10) {
+            this.dialogLoading.set(false)
+            this.addingTask.set(false)
+            alert('You have reached your limit with the FREE plan. Upgrade to continue.')
+            return
+          }
           await this.authService.addPersonalTask(data.formData)
           this.showTaskFormDialog.set(false)
           this.dialogLoading.set(false)
