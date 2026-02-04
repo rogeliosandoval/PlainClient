@@ -2,15 +2,19 @@
 
 .signup-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  flex-direction: column;
   min-height: 100vh;
+  gap: 5rem;
   animation: fadeIn 0.2s linear;
 
   @include variables.media('phone') {
     justify-content: flex-start;
     align-items: normal;
+  }
+
+  @media screen and (max-width: 1015px) {
+    flex-direction: column;
   }
 }
 
@@ -181,4 +185,27 @@
   font-family: "Outfit", sans-serif;
   font-weight: 500;
   color: rgb(217, 105, 105);
+}
+
+.info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4rem;
+
+  img {
+    max-width: 420px;
+  }
+
+  @media screen and (max-width: 1015px) {
+    display: none;
+  }
+}
+
+.info-text {
+  font-size: 1.4rem;
+  font-family: "Outfit", sans-serif;
+  text-align: center;
+  max-width: 500px;
 }

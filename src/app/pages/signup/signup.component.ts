@@ -6,7 +6,7 @@ import { RouterLink, Router } from '@angular/router'
 import { PasswordModule } from 'primeng/password'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { SharedService } from '../../services/shared.service'
-import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms'
 import { AuthService } from '../../services/auth.service'
 import { Footer } from '../../components/footer/footer.component'
 import { lastValueFrom } from 'rxjs'
@@ -39,15 +39,40 @@ export class Signup implements OnInit {
   public sharedService = inject(SharedService)
   public primengConfig = inject(PrimeNGConfig)
   public errorMessage = signal<string>('')
-  public registerForm = new FormGroup({
-    name: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.email, Validators.required]),
-    password: new FormControl('', Validators.required)
-  })
+  public registerForm = new FormGroup(
+    {
+      name: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.email, Validators.required]),
+      password: new FormControl('', Validators.required),
+      confirmPassword: new FormControl('', Validators.required)
+    },
+    { validators: this.passwordsMatchValidator }
+  )
 
   ngOnInit(): void {
     this.primengConfig.ripple = true
     this.authService.clearAllAppCaches()
+  }
+
+  private passwordsMatchValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const password = control.get('password')?.value
+    const confirmPassword = control.get('confirmPassword')?.value
+
+    if (!password || !confirmPassword) return null
+
+    return password === confirmPassword
+      ? null
+      : { passwordsMismatch: true }
+  }
+
+  public onConfirmPasswordBlur(): void {
+    if (this.registerForm.hasError('passwordsMismatch')) {
+      this.errorMessage.set('Passwords do not match.')
+    } else {
+      this.errorMessage.set('')
+    }
   }
 
   public register(): void {

@@ -18,7 +18,25 @@
         <label for="password">Create Password:</label>
         <p-password inputId="password" [toggleMask]="true" variant="filled" placeholder="Password" feedback="false" formControlName="password" minlength="4" autocomplete="off"/>
       </div>
-      <p-button label="Register" type="submit" [disabled]="registerForm.invalid || sharedService.loading()"></p-button>
+      <div class="input-container" [class.disabled]="sharedService.loading()">
+        <label for="confirmPassword">Confirm Password:</label>
+        <p-password
+          inputId="confirmPassword"
+          [toggleMask]="true"
+          variant="filled"
+          placeholder="Confirm Password"
+          feedback="false"
+          formControlName="confirmPassword"
+          minlength="4"
+          autocomplete="off"
+          (onBlur)="onConfirmPasswordBlur()"
+        />
+      </div>
+      <p-button
+        label="Register"
+        type="submit"
+        [disabled]="registerForm.invalid || sharedService.loading()">
+      </p-button>
       @if (sharedService.loading()) {
         <p-progressSpinner ariaLabel="loading" strokeWidth="3"/>
       }
@@ -35,5 +53,9 @@
     </div>
     <span class="action" routerLink="/login" [class.disabled]="sharedService.loading()">Already registered?</span>
   </div>
-  <tc-footer/>
+  <div class="info-container">
+    <div class="info-text" [style.color]="sharedService.darkMode() ? '#37b6ff' : '#004aad'">Join and manage your business and personal finances all in one! Simple and effective 😎</div>
+    <img src="/assets/images/working.svg" alt="manage clients">
+    <tc-footer/>
+  </div>
 </div>

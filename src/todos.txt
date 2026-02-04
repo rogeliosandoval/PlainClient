@@ -1,7 +1,5 @@
 TODOS: 
 
-- redesign register page
-
 - implement delete account in settings
 
 - for reset password logic, maybe add a check to see if an email is valid within database
