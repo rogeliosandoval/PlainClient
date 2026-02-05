@@ -10,7 +10,9 @@
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/signup">Register</div>
     <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/login">Login</div>
     <!-- <div [ngClass]="sharedService.darkMode() ? 'nav-link-dark' : 'nav-link'" routerLink="/docs">Docs</div> -->
-    <i class="pi pi-github"></i>
+    <a style="color: inherit;" href="https://github.com/rogeliosandoval/PlainClient" target="_blank">
+      <i class="pi pi-github"></i>
+    </a>
     @if (sharedService.darkMode() === false) {
       <i class="pi pi-moon" (click)="sharedService.toggleTheme()"></i>
     } @else {

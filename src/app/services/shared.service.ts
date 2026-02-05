@@ -129,15 +129,27 @@ export class SharedService {
     this.applyTheme()
   }
 
-  private applyTheme() {
-    if (isPlatformBrowser(this.platformId)) {
-      const themeLink = document.getElementById('theme-link') as HTMLLinkElement
+  private applyTheme(): void {
+    if (!isPlatformBrowser(this.platformId)) return
 
-      if (themeLink) {
-        themeLink.href = this.darkMode()
-          ? 'assets/themes/lara-dark-blue/theme.css'
-          : 'assets/themes/lara-light-blue/theme.css'
-      }
+    const themeLink = document.getElementById('theme-link') as HTMLLinkElement
+    const themeMeta = document.querySelector(
+      'meta[name="theme-color"]'
+    ) as HTMLMetaElement
+
+    const isDark = this.darkMode()
+
+    if (themeLink) {
+      themeLink.href = isDark
+        ? 'assets/themes/lara-dark-blue/theme.css'
+        : 'assets/themes/lara-light-blue/theme.css'
+    }
+
+    if (themeMeta) {
+      themeMeta.setAttribute(
+        'content',
+        isDark ? '#181818' : '#cdecfd'
+      )
     }
   }
 }
