@@ -62,7 +62,7 @@ export class Overview implements OnInit, AfterViewInit {
   public weatherLocation: any
   public weatherToday: any
   public weatherTwoDayForecast: any
-  public weatherAPI = 'http://api.weatherapi.com/v1/forecast.json?key=31aacf09836e489ba9230739261701&q=78217&days=3&aqi=no&alerts=no'
+  public weatherAPI = 'https://api.weatherapi.com/v1/forecast.json?key=31aacf09836e489ba9230739261701&q=78217&days=3&aqi=no&alerts=no'
 
   constructor() {
     // ✅ effect is created in injection context here
