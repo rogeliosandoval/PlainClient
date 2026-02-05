@@ -1,7 +1,7 @@
 <h1 align="center">PlainClient</h1>
 
 <p align="center">
-  A clean, intuitive CRM designed to help individuals and small businesses manage personal and business data separately — without complexity, clutter, or enterprise bloat.
+  A clean, intuitive CRM designed to help freelancers and small businesses manage personal and business data separately — without complexity, clutter, or enterprise bloat.
 </p>
 
 <h2>✨ Key Features</h2>
