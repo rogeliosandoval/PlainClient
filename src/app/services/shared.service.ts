@@ -133,10 +133,6 @@ export class SharedService {
     if (!isPlatformBrowser(this.platformId)) return
 
     const themeLink = document.getElementById('theme-link') as HTMLLinkElement
-    const themeMeta = document.querySelector(
-      'meta[name="theme-color"]'
-    ) as HTMLMetaElement
-
     const isDark = this.darkMode()
 
     if (themeLink) {
@@ -145,11 +141,13 @@ export class SharedService {
         : 'assets/themes/lara-light-blue/theme.css'
     }
 
-    if (themeMeta) {
-      themeMeta.setAttribute(
-        'content',
-        isDark ? '#181818' : '#cdecfd'
-      )
+    const oldMeta = document.querySelector('meta[name="theme-color"]')
+    if (oldMeta) {
+      oldMeta.remove()
     }
+    const newMeta = document.createElement('meta')
+    newMeta.name = 'theme-color'
+    newMeta.content = isDark ? '#181818' : '#cdecfd'
+    document.head.appendChild(newMeta)
   }
 }
