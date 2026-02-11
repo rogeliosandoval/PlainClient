@@ -25,6 +25,14 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-title" content="PlainClient" />
   <link rel="manifest" href="/site.webmanifest" />
+  <script>
+    (function() {
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      if (darkMode) {
+        document.documentElement.classList.add('app-dark');
+      }
+    })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

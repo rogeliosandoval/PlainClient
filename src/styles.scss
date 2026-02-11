@@ -85,6 +85,10 @@ body {
   background-color: #f9f9f9;
 }
 
+html.app-dark body {
+  background-color: #181818;
+}
+
 p-progressSpinner {
   z-index: 5;
 }

@@ -135,19 +135,17 @@ export class SharedService {
     const themeLink = document.getElementById('theme-link') as HTMLLinkElement
     const isDark = this.darkMode()
 
+    // 1️⃣ Swap PrimeNG theme
     if (themeLink) {
       themeLink.href = isDark
         ? 'assets/themes/lara-dark-blue/theme.css'
         : 'assets/themes/lara-light-blue/theme.css'
     }
 
-    const oldMeta = document.querySelector('meta[name="theme-color"]')
-    if (oldMeta) {
-      oldMeta.remove()
-    }
-    const newMeta = document.createElement('meta')
-    newMeta.name = 'theme-color'
-    newMeta.content = isDark ? '#181818' : '#cdecfd'
-    document.head.appendChild(newMeta)
+    // 2️⃣ Toggle html class (this updates body immediately)
+    document.documentElement.classList.toggle('app-dark', isDark)
+
+    // 3️⃣ Persist state (keeps index.html preload in sync)
+    localStorage.setItem('darkMode', String(isDark))
   }
 }

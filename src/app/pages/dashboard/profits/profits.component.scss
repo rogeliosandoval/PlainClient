@@ -320,7 +320,8 @@
 
   @include variables.media('phone') {
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 0.5rem;
     width: 100%;
   }
 }
