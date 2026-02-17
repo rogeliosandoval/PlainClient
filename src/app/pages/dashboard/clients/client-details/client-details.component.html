@@ -1,4 +1,4 @@
-<div class="route-container" [style.position]="loadingClient() ? 'relative' : ''">
+<div class="route-container" [style.position]="loadingClient() ? 'relative' : ''" [style.background-color]="sharedService.darkMode() ? 'rgb(24, 24, 24)' : ''">
   @if (loadingClient()) {
     <p-progressSpinner ariaLabel="loading" strokeWidth="3" [class.disabled]="sharedService.loading()"/>
   } @else {
