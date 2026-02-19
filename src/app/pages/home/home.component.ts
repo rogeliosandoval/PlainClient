@@ -36,16 +36,6 @@ export class Home implements OnInit {
 
   scrollToDetails(): void {
     if (!this.detailsSection) return
-
-    const scrollContainer = document.querySelector('main') as HTMLElement | null
-    if (!scrollContainer) return
-
-    const targetOffset =
-      this.detailsSection.nativeElement.offsetTop
-
-    scrollContainer.scrollTo({
-      top: targetOffset - 20, // small offset for spacing
-      behavior: 'smooth'
-    })
+    this.detailsSection.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 }
