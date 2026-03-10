@@ -145,6 +145,14 @@ textarea,
   font-family: "Outfit", sans-serif;
 }
 
+.p-dialog {
+  overflow: hidden;
+}
+
+.p-dialog .p-dialog-content {
+  overscroll-behavior: none;
+}
+
 .p-text-secondary {
   font-family: "Outfit", sans-serif;
 }
