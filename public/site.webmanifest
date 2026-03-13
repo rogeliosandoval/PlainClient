@@ -1,6 +1,6 @@
 {
   "name": "PlainClient",
-  "short_name": "TClient",
+  "short_name": "PClient",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
